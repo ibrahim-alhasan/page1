@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبارات إلكترونية – أمن المعلومات</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+        }
+        body {
+            font-family: 'Segoe UI', 'Tahoma', sans-serif;
+            background: #f5f9fc;
+            color: #1e2b3c;
+            padding: 1.5rem;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 2rem;
+            border-right: 6px solid #1e6f9f;
+            padding-right: 1rem;
+            margin-bottom: 0.25rem;
+            color: #0b3b4f;
+        }
+        .subhead {
+            color: #2c5770;
+            margin-bottom: 2rem;
+            font-weight: 300;
+            border-bottom: 1px solid #cbdae6;
+            padding-bottom: 0.5rem;
+        }
+        .section-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem 0.3rem;
+            margin-bottom: 2rem;
+            background: #e9f0f7;
+            padding: 0.8rem 1rem;
+            border-radius: 60px;
+            justify-content: center;
+        }
+        .section-tabs button {
+            background: transparent;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #1f4057;
+            cursor: pointer;
+            transition: 0.2s;
+            background: #ffffffb0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+        }
+        .section-tabs button:hover {
+            background: #c7dcec;
+            transform: scale(0.98);
+        }
+        .section-tabs button.active {
+            background: #1a5e7e;
+            color: white;
+            box-shadow: 0 4px 10px rgba(22, 78, 109, 0.3);
+        }
+        .stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem 3rem;
+            background: white;
+            padding: 1rem 2rem;
+            border-radius: 40px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+            justify-content: center;
+            align-items: center;
+        }
+        .stats span {
+            font-weight: 500;
+        }
+        .stats .num {
+            background: #dce8f2;
+            padding: 0.1rem 1rem;
+            border-radius: 30px;
+            font-weight: 700;
+            color: #10415c;
+        }
+        .test-btn {
+            background: #1f7a5a;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.8rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 10px rgba(26, 107, 74, 0.2);
+            margin-right: auto;
+        }
+        .test-btn:hover {
+            background: #136348;
+            transform: scale(0.97);
+        }
+        .test-btn.active-test {
+            background: #b13e3e;
+            box-shadow: 0 4px 12px rgba(176, 52, 52, 0.3);
+        }
+        .test-btn.active-test:hover {
+            background: #8f2f2f;
+        }
+        .result-banner {
+            background: #e2f0e9;
+            border-radius: 60px;
+            padding: 0.5rem 2rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #0f5132;
+            border-right: 6px solid #1f7a5a;
+        }
+        .question-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .question-card {
+            background: white;
+            border-radius: 28px;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 4px 16px rgba(0, 20, 30, 0.06);
+            border: 1px solid #e3edf5;
+            transition: 0.15s;
+        }
+        .question-card:hover {
+            border-color: #b6d2e9;
+        }
+        .q-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.4rem;
+            font-size: 0.95rem;
+        }
+        .q-type {
+            background: #d4e2ed;
+            padding: 0.2rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #1b4055;
+            letter-spacing: 0.3px;
+        }
+        .q-num {
+            font-weight: 600;
+            color: #1d577a;
+        }
+        .q-text {
+            font-size: 1.1rem;
+            margin: 0.6rem 0 0.9rem 0;
+            line-height: 1.7;
+        }
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem 2rem;
+            padding: 0.3rem 0 0.2rem 0;
+            background: #f3f8fe;
+            border-radius: 24px;
+            padding: 0.8rem 1.5rem;
+            margin-top: 0.2rem;
+        }
+        .options label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.98rem;
+        }
+        .options input[type="radio"] {
+            width: 1.1rem;
+            height: 1.1rem;
+            accent-color: #1a6b8f;
+            cursor: pointer;
+        }
+        .tf-options {
+            display: flex;
+            gap: 2rem;
+            background: #f3f8fe;
+            padding: 0.6rem 1.8rem;
+            border-radius: 60px;
+            width: fit-content;
+        }
+        .tf-options label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .tf-options input[type="radio"] {
+            width: 1.1rem;
+            height: 1.1rem;
+            accent-color: #1a6b8f;
+            cursor: pointer;
+        }
+        .explanation {
+            background: #eef4fa;
+            border-radius: 20px;
+            padding: 0.5rem 1.5rem;
+            margin-top: 0.8rem;
+            color: #1d4057;
+            font-size: 0.95rem;
+            border-right: 4px solid #578baa;
+        }
+        .explanation strong {
+            color: #05445e;
+        }
+        .answer-badge {
+            display: inline-block;
+            background: #1a6b8f;
+            color: white;
+            border-radius: 40px;
+            padding: 0.1rem 1.2rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .footnote {
+            margin-top: 2.5rem;
+            padding: 0.8rem;
+            text-align: center;
+            color: #436f8b;
+            border-top: 1px solid #cddde9;
+        }
+        .mcq-answer {
+            background: #d9e7f3;
+            border-radius: 16px;
+            padding: 0.1rem 0.8rem;
+            font-weight: 600;
+            color: #003153;
+        }
+        .tf-answer {
+            font-weight: 600;
+        }
+        .no-answer {
+            opacity: 0.5;
+            font-style: italic;
+        }
+        .result-bar {
+            background: #d5e8f0;
+            padding: 0.5rem 1.5rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+        .result-bar .score {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        .quiz-mode .question-card {
+            border-right: 6px solid #1a6b8f;
+        }
+        .quiz-mode .question-card.correct {
+            border-right-color: #1f7a5a;
+            background: #f6fcf9;
+        }
+        .quiz-mode .question-card.wrong {
+            border-right-color: #b13e3e;
+            background: #fdf6f6;
+        }
+        @media (max-width: 700px) {
+            .section-tabs button {
+                padding: 0.4rem 0.9rem;
+                font-size: 0.8rem;
+            }
+            .question-card {
+                padding: 1rem 1rem;
+            }
+            .options {
+                padding: 0.8rem 1rem;
+            }
+            .stats {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.8rem;
+            }
+            .test-btn {
+                margin-right: 0;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📘 اختبارات أمن المعلومات</h1>
+    <div class="subhead">اختر النموذج أو الدورة — اضغط "اختبر نفسك" للإجابة ثم اعرض النتيجة</div>
+
+    <div id="sectionTabs" class="section-tabs"></div>
+    <div id="statsBar" class="stats"></div>
+    <div id="questionList" class="question-grid"></div>
+    <div class="footnote">✔️ في وضع الاختبار، اختر إجاباتك ثم اضغط "إنهاء الاختبار" لعرض النتيجة والتصحيح</div>
+</div>
+<script>
+    // ====== البيانات ======
+    const SECTIONS = [
+        { id: 'course-2025', label: 'دورة 2025 الثانية', description: 'أسئلة الدورة التدريبية الثانية 2025', tfCount: 25, mcqCount: 30 },
+        { id: 'course-2026', label: 'دورة 2026 الأولى', description: 'أسئلة دورة 2026 الأولى (نفس محتوى 2025)', tfCount: 25, mcqCount: 30 },
+        { id: 'model-a', label: 'النموذج الشامل A', description: 'النموذج الأول – مفاهيم وتطبيقات', tfCount: 25, mcqCount: 30 },
+        { id: 'model-b', label: 'النموذج الشامل B', description: 'النموذج الثاني – تفاصيل تطبيقية وتمييز بين الخوارزميات', tfCount: 25, mcqCount: 30 },
+        { id: 'model-c', label: 'النموذج الشامل C', description: 'النموذج الثالث – فخاخ واستثناءات وربط بين المحاضرات', tfCount: 25, mcqCount: 30 },
+    ];
+
+    // -------- بيانات الدورة 2025 (تستخدم أيضاً لـ 2026) ----------
+    const COURSE_TF = [
+        { num: 1, type: 'tf', text: 'الهندسة الاجتماعية مجموعة من التقنيات والحيل النفسية التي يستخدمها المهاجم لخداع مستخدمي الحاسوب ودفعهم إلى كشف معلومات سرية.', answer: true, explanation: 'الهندسة الاجتماعية تستهدف الجانب النفسي للإنسان لاستخراج معلومات.' },
+        { num: 2, type: 'tf', text: 'كل نظام للتسجيل والاسترجاع يُعد نظام معلومات.', answer: true, explanation: 'صُحِّح في مفتاح الإجابة إلى صح وفق المحاضرة.' },
+        { num: 3, type: 'tf', text: 'السياسة الأمنية في الشركة هي فقط مجموعة تدابير لمنع خرق الأنظمة المعلوماتية.', answer: false, explanation: 'السياسة الأمنية تشمل الوقاية والتعامل مع الخرق بعد وقوعه.' },
+        { num: 4, type: 'tf', text: 'يُعد الخداع والإنكار من أكبر المهددات لسرية المعلومات.', answer: false, explanation: 'الخداع والإنكار من مهددات التكاملية، وليس السرية.' },
+        { num: 5, type: 'tf', text: 'يُعد تحليل حركة الاتصالات من أكبر المهددات لسلامة البيانات وتكاملها.', answer: false, explanation: 'تحليل حركة الاتصالات يهدد السرية، وليس التكاملية.' },
+        { num: 6, type: 'tf', text: 'التشفير هو عملية مزج البيانات والمعلومات بصورة عشوائية.', answer: false, explanation: 'التشفير عملية منظمة وفق خوارزمية ومفتاح، وليس مزجاً عشوائياً.' },
+        { num: 7, type: 'tf', text: 'يشمل الأمن المادي حماية البنى التحتية والعتاد والأفراد والمبنى والحد من أثر الهندسة الاجتماعية.', answer: true },
+        { num: 8, type: 'tf', text: 'ارتفاع درجات الحرارة من المهددات البيئية للأمن المادي لنظم المعلومات.', answer: true },
+        { num: 9, type: 'tf', text: 'للمحافظة على استمرارية العمل ينبغي توفير تجهيزات ومراكز بيانات بديلة.', answer: true },
+        { num: 10, type: 'tf', text: 'تُعد شيفرات تبديل المواقع شديدة المقاومة للهجوم الإحصائي.', answer: false, explanation: 'شيفرات تبديل المواقع تحافظ على تكرارات الحروف فهي ضعيفة أمام الهجوم الإحصائي.' },
+        { num: 11, type: 'tf', text: 'تعتمد خوارزميات التشفير المتماثل على حسابات رياضية معقدة لتوليد مفاتيح التشفير.', answer: false, explanation: 'هذا وصف التشفير غير المتماثل (RSA)؛ أما المتماثل فيعتمد على المفتاح المشترك السري.' },
+        { num: 12, type: 'tf', text: 'المتطفل السلبي ينسخ البيانات المشفرة ثم يعدّلها ويعيد إرسالها.', answer: false, explanation: 'المتطفل السلبي يقرأ أو ينسخ فقط دون تعديل؛ التعديل سلوك المتطفل النشط.' },
+        { num: 13, type: 'tf', text: 'تُستخدم عملية توسعة المفتاح لزيادة طول المفتاح عند الحاجة.', answer: false, explanation: 'توسعة المفتاح تولّد مفاتيح فرعية من المفتاح الأصلي، ولا تزيد طوله مباشرة.' },
+        { num: 14, type: 'tf', text: 'تنجح الهندسة الاجتماعية لأنها تستهدف الجانب النفسي لدى الضحية.', answer: true },
+        { num: 15, type: 'tf', text: 'تعتمد مقاومة خوارزمية التشفير للهجوم أساساً على سرية وتعقيد الخوارزمية نفسها.', answer: false, explanation: 'وفق مبدأ كيركهوفس، تعتمد المقاومة على سرية المفتاح لا على سرية الخوارزمية.' },
+        { num: 16, type: 'tf', text: 'يستخدم التشفير المتماثل مفتاحاً سرياً واحداً للتشفير وفك التشفير.', answer: true },
+        { num: 17, type: 'tf', text: 'خوارزمية DES خوارزمية تشفير كتلي متماثل.', answer: true },
+        { num: 18, type: 'tf', text: 'يُستخدم التشفير غير المتماثل في التوقيع الرقمي وتبادل المفاتيح.', answer: true },
+        { num: 19, type: 'tf', text: 'تُعد Rotor Cipher خوارزمية متماثلة حديثة تعتمد تبديل المحارف واحداً بواحد.', answer: false, explanation: 'Rotor Cipher شيفرة متعددة الأبجديات (Polyalphabetic)، ليست حديثة ولا تعتمد تبديلاً واحداً بواحد.' },
+        { num: 20, type: 'tf', text: 'في Playfair لا يلزم أن يُشفَّر الحرف نفسه دائماً إلى الرمز نفسه، لأن المعالجة تتم على أزواج الحروف.', answer: true },
+        { num: 21, type: 'tf', text: 'تساعد الشهادات الرقمية وجهات التصديق على إثبات ملكية المفتاح العام وتقليل انتحال الهوية.', answer: true },
+        { num: 22, type: 'tf', text: 'في التشفير غير المتماثل يحتاج المستقبل إلى مفتاح خاص واحد لفك الرسائل الواردة إليه من عدة مرسلين.', answer: true },
+        { num: 23, type: 'tf', text: 'لأن RSA سريعة جداً، تُستخدم عادةً لتشفير الرسائل الطويلة مباشرة.', answer: false, explanation: 'RSA بطيئة لذلك تُستخدم للرسائل القصيرة وتشفير المفاتيح.' },
+        { num: 24, type: 'tf', text: 'للحصول على المستوى الأمني نفسه يجب أن تكون مفاتيح التشفير المتماثل أطول بكثير من مفاتيح التشفير غير المتماثل.', answer: false, explanation: 'العكس صحيح؛ مفاتيح التشفير غير المتماثل أطول من المتماثل لتحقيق نفس الأمان.' },
+        { num: 25, type: 'tf', text: 'يُستخدم بروتوكول الإنترنت المسمى Voice-over-IP بذاته لإخفاء الرسائل داخل المحادثات الصوتية.', answer: true, explanation: 'صُحِّح في مفتاح الإجابة إلى صح وفق المحاضرة.' },
+    ];
+    const COURSE_MCQ = [
+        { num: 26, type: 'mcq', text: 'يُعرَّف أمن المعلومات بأنه:', options: { A: 'حماية المعلومات المتداولة من العبث والتخريب والتبديل', B: 'إجراءات لحماية المعلومات الداخلية والخارجية', C: 'استراتيجيات لتجنب الثغرات الأمنية', D: 'جميع ما سبق' }, answer: 'D' },
+        { num: 27, type: 'mcq', text: 'حماية المعلومات من التغيير غير المصرح به تسمى:', options: { A: 'السرية', B: 'الإتاحة', C: 'التكاملية', D: 'الموثوقية' }, answer: 'C' },
+        { num: 28, type: 'mcq', text: 'أي العبارات أدق بخصوص أثر أمن المعلومات في وقوع الاختراق؟', options: { A: 'يمنع الاختراق كلياً', B: 'لا يمنع الاختراق إطلاقاً', C: 'ليس له أي أثر', D: 'العبارات الثلاث السابقة غير دقيقة' }, answer: 'D' },
+        { num: 29, type: 'mcq', text: 'للتحقق من هوية المستخدم يمكن استخدام:', options: { A: 'تصنيف البيانات إلى سرية وغير سرية', B: 'تحديد مستويات الوصول فقط', C: 'أرقام أو معلومات يعرفها المستخدم مسبقاً', D: 'جميع ما سبق' }, answer: 'C' },
+        { num: 30, type: 'mcq', text: 'الإشراف على أمن الحواسيب وإعداد معايير وإجراءات السلامة في مركز المعلومات من مهام:', options: { A: 'محلل ومبرمج النظم', B: 'مدير مركز المعلومات', C: 'مدخل البيانات', D: 'المستخدم النهائي' }, answer: 'B' },
+        { num: 31, type: 'mcq', text: 'أكثر أفراد الكادر الوظيفي تهديداً لمركز المعلومات بحسب مقرر الدورة هو:', options: { A: 'المستخدم النهائي', B: 'محلل النظم', C: 'مدير المركز', D: 'مدخل البيانات' }, answer: 'A' },
+        { num: 32, type: 'mcq', text: 'من أكثر قنوات الهندسة الاجتماعية شيوعاً بين المهاجمين:', options: { A: 'الهاتف', B: 'الإنترنت', C: 'النفايات', D: 'انتحال الشخصية' }, answer: 'B' },
+        { num: 33, type: 'mcq', text: 'أضعف حلقة في منظومة حماية المعلومات غالباً هي:', options: { A: 'خطوط الاتصال', B: 'الطابعات والطرفيات', C: 'العنصر البشري', D: 'برامج مكافحة الفيروسات' }, answer: 'C' },
+        { num: 34, type: 'mcq', text: 'إذا كان P النص الواضح و C النص المشفر و E خوارزمية التشفير بالمفتاح K، فالعلاقة الصحيحة هي:', options: { A: 'P = D_K(C)', B: 'C = E_K(P)', C: 'K = C.P', D: 'D_K(E_K(P)) فقط' }, answer: 'B' },
+        { num: 35, type: 'mcq', text: 'عندما يملك المهاجم نصاً واضحاً يقابله نص مشفر ويحاول استنتاج المفتاح، يكون الهجوم:', options: { A: 'نص مشفر فقط', B: 'نص واضح معروف', C: 'نص واضح مختار', D: 'نص مشفر مختار' }, answer: 'B' },
+        { num: 36, type: 'mcq', text: 'لرفع مقاومة هجوم القوة الغاشمة ينبغي أن يكون:', options: { A: 'المفتاح طويلاً جداً بصرف النظر عن الفضاء', B: 'فضاء المفاتيح المحتملة كبيراً', C: 'تنفيذ الخوارزمية معقداً فقط', D: 'المفتاح مستخدماً مرة واحدة دائماً' }, answer: 'B' },
+        { num: 37, type: 'mcq', text: 'عند استخدام الشيفرة الضربية بالمفتاح K=7 لتشفير HELLO، يكون الناتج:', options: { A: 'XCZZU', B: 'XCZUZ', C: 'XCUUZ', D: 'XUCCZ' }, answer: 'A', explanation: 'H(7)=7×7=49≡23=X, E(4)=4×7=28≡2=C, L(11)=11×7=77≡25=Z, L=Z, O(14)=14×7=98≡20=U → XCZZU' },
+        { num: 38, type: 'mcq', text: 'عند استخدام الشيفرة التألفية بالمفتاح K=(7,2) لتشفير HELLO، يكون الناتج:', options: { A: 'ZEWWB', B: 'BEWWZ', C: 'WEBBZ', D: 'ZEBBW' }, answer: 'D', explanation: 'C=(7P+2) mod26: H→Z، E→E→Z? لا: H(7)→(49+2)mod26=51mod26=25=Z، E(4)→(28+2)=30mod26=4=E→ ZEBBW' },
+        { num: 39, type: 'mcq', text: 'حجم فضاء المفاتيح في الشيفرة التألفية على الأبجدية الإنكليزية هو:', options: { A: '325', B: '26', C: '312', D: '338' }, answer: 'C', explanation: '12 مفتاحاً ضربياً صالحاً × 26 إزاحة = 312' },
+        { num: 40, type: 'mcq', text: 'عند استخدام Autokey بالمفتاح الابتدائي K=12 لتشفير ATTACK، يكون الناتج:', options: { A: 'MCCMTK', B: 'TMMTMC', C: 'MTMTCM', D: 'TMTMCM' }, answer: 'C' },
+        { num: 41, type: 'mcq', text: 'عند استخدام Playfair بالمفتاح COMPUTER لتشفير ATTACK، يكون الناتج وفق نموذج الدورة:', options: { A: 'EBBETV', B: 'BEEBTV', C: 'BEEBVT', D: 'EBBEVT' }, answer: 'B' },
+        { num: 42, type: 'mcq', text: 'إخفاء العلاقة بين النص المشفر والمفتاح يسمى:', options: { A: 'الانتشار', B: 'الهامش الأمني', C: 'التفريق', D: 'التشويش (Confusion)' }, answer: 'D' },
+        { num: 43, type: 'mcq', text: 'في S-DES يكون حجم الكتلة N وطول المفتاح K:', options: { A: 'N=10, K=10', B: 'N=8, K=8', C: 'N=8, K=10', D: 'N=10, K=8' }, answer: 'C' },
+        { num: 44, type: 'mcq', text: 'في DES يكون حجم الكتلة N وطول المفتاح الفعّال K:', options: { A: 'N=56, K=48', B: 'N=64, K=48', C: 'N=128, K=64', D: 'N=64, K=56' }, answer: 'D' },
+        { num: 45, type: 'mcq', text: 'التأثير الانهياري يعني تغيراً كبيراً في النص المشفر عند تغير صغير في:', options: { A: 'النص الأصلي فقط', B: 'النص الأصلي أو المفتاح', C: 'المفتاح فقط', D: 'طول المفتاح فقط' }, answer: 'B' },
+        { num: 46, type: 'mcq', text: 'في AES، إذا كان عدد الدورات 12 فالحجم الصحيح للكتلة والمفتاح هو:', options: { A: 'N=128, K=192', B: 'N=128, K=128', C: 'N=192, K=192', D: 'N=256, K=256' }, answer: 'A' },
+        { num: 47, type: 'mcq', text: 'عند استخدام التشفير غير المتماثل لحماية بيانات موجهة إلى مستقبل، يقع عبء حماية المفتاح الخاص أساساً على:', options: { A: 'المرسل', B: 'مركز توزيع المفاتيح', C: 'المستقبل', D: 'مزود التوقيع' }, answer: 'C' },
+        { num: 48, type: 'mcq', text: 'أفضل خيار ضمن خيارات الدورة لتبادل المفاتيح مع ضمان عدم الإنكار هو:', options: { A: 'المنحنيات الإهليلجية', B: 'مركز توثيق/جهة تصديق', C: 'Diffie-Hellman وحده', D: 'مركز توزيع مفاتيح متماثلة' }, answer: 'B' },
+        { num: 49, type: 'mcq', text: 'خوارزمية متماثلة كتلية، فيستل 16 دورة، مفتاح 32 إلى 448 بت، واستُخدمت في نواة Linux:', options: { A: 'DES', B: 'Blowfish', C: 'Twofish', D: 'IDEA' }, answer: 'B' },
+        { num: 50, type: 'mcq', text: 'سؤال متعلق بمخطط A5/1 كان معروضاً كصورة في ورقة الدورة.', options: { A: '—', B: '—', C: '—', D: '—' }, answer: null, note: 'المخطط والخيارات غير متاحين في النسخة النصية المنشورة؛ لم يُخترع جواب.' },
+        { num: 51, type: 'mcq', text: 'كل العبارات التالية عن التوقيع الرقمي صحيحة ما عدا:', options: { A: 'يساعد في منع الإنكار', B: 'يحقق سرية الرسالة بذاته', C: 'لا يُنجز عادةً بتشفير متماثل فقط', D: 'يساعد في وثوقية الرسالة' }, answer: 'B', explanation: 'التوقيع الرقمي يحقق المصادقة وعدم الإنكار، لكنه لا يحقق السرية بذاته.' },
+        { num: 52, type: 'mcq', text: 'عند استخدام RSA في التوقيع الرقمي تُستخدم مفاتيح:', options: { A: 'خاص المرسل وعام المستقبل', B: 'خاص وعام المستقبل', C: 'خاص وعام المرسل', D: 'خاص المستقبل وعام المرسل' }, answer: 'C' },
+        { num: 53, type: 'mcq', text: 'في الإخفاء (Steganography) كل العبارات التالية صحيحة ما عدا:', options: { A: 'من الخطوات تحويل النص إلى ثنائي', B: 'لا يمكن تشفير البيانات قبل إخفائها', C: 'LSB من أهم خوارزميات الإخفاء', D: 'قد يكون الحامل صورة أو صوتاً أو فيديو' }, answer: 'B', explanation: 'يمكن تشفير البيانات قبل إخفائها لزيادة الأمان.' },
+        { num: 54, type: 'mcq', text: 'وفق مفتاح الدورة، الخوارزمية غير الكتلية بين الخيارات الآتية هي:', options: { A: 'RSA', B: 'RC4', C: 'RC6', D: 'Blowfish' }, answer: 'B', note: 'صياغة التصنيف قابلة للنقاش؛ أُبقي جواب المصدر.' },
+        { num: 55, type: 'mcq', text: 'الخوارزمية الأكثر مقاومة لهجوم القوة الغاشمة ضمن الخيارات هي:', options: { A: 'DES', B: 'AES', C: 'LSB', D: 'RSA' }, answer: 'B' },
+    ];
+
+    // نماذج A كاملة
+    const MODEL_A_TF = [
+        { num: 1, type: 'tf', text: 'يتكون النظام - وفق التعريف الوارد في المقرر - من مدخلات ومعالجة ومخرجات وتغذية عكسية.', answer: true },
+        { num: 2, type: 'tf', text: 'تقتصر مكونات نظام المعلومات على العتاد والبرمجيات فقط.', answer: false, explanation: 'تشمل أيضاً المستخدمين والإجراءات والبيانات.' },
+        { num: 3, type: 'tf', text: 'لشن هجوم إلكتروني ناجح يلزم عادة وجود دافع وطريقة تنفيذ وثغرة يمكن استغلالها.', answer: true },
+        { num: 4, type: 'tf', text: 'التكاملية تعني حماية المعلومات من الاطلاع غير المصرح به.', answer: false, explanation: 'هذا تعريف السرية؛ التكاملية تعني الحماية من التغيير غير المصرح.' },
+        { num: 5, type: 'tf', text: 'الإتاحة تعني توفر المعلومات والتطبيقات للمستخدم المخول عند الحاجة.', answer: true },
+        { num: 6, type: 'tf', text: 'ظهرت المساءلة والموثوقية كهدفين إضافيين مع انتشار الإنترنت والمعاملات الإلكترونية.', answer: true },
+        { num: 7, type: 'tf', text: 'تحليل حركة الاتصالات من مهددات سرية المعلومات حتى عندما يكون محتوى الرسالة مشفراً.', answer: true },
+        { num: 8, type: 'tf', text: 'إعادة استخدام رسالة شرعية سابقة (Replay) تعد من مهددات التكاملية.', answer: true },
+        { num: 9, type: 'tf', text: 'هدف الهجوم غير الفعال هو تعديل المعلومات وإيقاف الخدمات.', answer: false, explanation: 'الهجوم غير الفعال يهدف إلى الحصول على المعلومات فقط دون تعديل.' },
+        { num: 10, type: 'tf', text: 'الأمن المادي لا علاقة له بحماية الأفراد أو المرافق، بل يختص بالعتاد فقط.', answer: false, explanation: 'يشمل المرافق والمعدات والموارد والأفراد والممتلكات.' },
+        { num: 11, type: 'tf', text: 'تنجح الهندسة الاجتماعية لأنها تستهدف سلوك الإنسان وجانبه النفسي أكثر من استهدافها للخوارزمية.', answer: true },
+        { num: 12, type: 'tf', text: 'تتضمن السياسة الأمنية إجراءات الوقاية فقط ولا تتضمن خطوات التعامل مع الخرق بعد وقوعه.', answer: false },
+        { num: 13, type: 'tf', text: 'يستخدم التشفير المتماثل المفتاح السري نفسه للتشفير وفك التشفير.', answer: true },
+        { num: 14, type: 'tf', text: 'وفق مبدأ كيركهوفس، ينبغي أن يعتمد أمن الشيفرة على سرية المفتاح لا على سرية الخوارزمية.', answer: true },
+        { num: 15, type: 'tf', text: 'في هجوم النص المشفر المختار يحصل المهاجم على وصول مؤقت إلى آلة فك التشفير.', answer: true },
+        { num: 16, type: 'tf', text: 'في المشفر متعدد الأبجديات قد يقابل الحرف الواضح نفسه محارف مشفرة مختلفة تبعاً لموقعه.', answer: true },
+        { num: 17, type: 'tf', text: 'شيفرات تغيير المواقع تستبدل كل محرف بمحرف آخر ولا تغير ترتيب المحارف.', answer: false, explanation: 'شيفرات تغيير المواقع تعيد ترتيب المحارف من دون استبدالها.' },
+        { num: 18, type: 'tf', text: 'تعد شيفرة قيصر حالة خاصة من Vigenere عندما يكون طول المفتاح m=1.', answer: true },
+        { num: 19, type: 'tf', text: 'في One-Time Pad يجب أن يكون المفتاح عشوائياً وبطول مساوٍ لطول النص وألا يعاد استخدامه.', answer: true },
+        { num: 20, type: 'tf', text: 'صندوق P-box الضاغط قابل للعكس دائماً لأنه يحتفظ بعدد بتات الدخل.', answer: false, explanation: 'الضغط يقلل عدد البتات ولذلك لا يكون قابلاً للعكس.' },
+        { num: 21, type: 'tf', text: 'الانتشار (Diffusion) يخفي العلاقة بين النص الأصلي والنص المشفر.', answer: true },
+        { num: 22, type: 'tf', text: 'تستخدم S-DES كتلة بطول 8 بت ومفتاحاً بطول 10 بت.', answer: true },
+        { num: 23, type: 'tf', text: 'يبقى طول كتلة AES ثابتاً عند 128 بت حتى لو كان المفتاح 192 أو 256 بت.', answer: true },
+        { num: 24, type: 'tf', text: 'في التشفير غير المتماثل يُنشر المفتاح العام ويُحفظ المفتاح الخاص سرياً.', answer: true },
+        { num: 25, type: 'tf', text: 'يحقق التوقيع الرقمي سرية محتوى الرسالة بذاته من دون تشفير إضافي.', answer: false },
+    ];
+    const MODEL_A_MCQ = [
+        { num: 26, type: 'mcq', text: 'أي خاصية تمنع تعديل علامات الطلاب أو رواتب الموظفين من أشخاص غير مخولين؟', options: { A: 'السرية', B: 'التكاملية', C: 'الإتاحة', D: 'التنصل' }, answer: 'B' },
+        { num: 27, type: 'mcq', text: 'المهاجم الذي ينتمي إلى الجهة المستهدفة يسمى:', options: { A: 'مهاجماً داخلياً', B: 'مهاجماً خارجياً', C: 'متطفلاً سلبياً فقط', D: 'مزود خدمة' }, answer: 'A' },
+        { num: 28, type: 'mcq', text: 'أي الآتي يعد تهديداً بيئياً للأمن المادي؟', options: { A: 'ارتفاع الحرارة', B: 'التشفير', C: 'التوقيع الرقمي', D: 'توسيع المفتاح' }, answer: 'A' },
+        { num: 29, type: 'mcq', text: 'في شبكة من 8 مستخدمين، كم عملية تبادل مفاتيح سرية زوجية نحتاج في التشفير المتماثل؟', options: { A: '8', B: '16', C: '28', D: '64' }, answer: 'C', explanation: 'n(n-1)/2 = 8×7/2 = 28' },
+        { num: 30, type: 'mcq', text: 'أقوى هجومات تحليل الشيفرات الأربعة بحسب ترتيب المقرر هو:', options: { A: 'نص مشفر فقط', B: 'نص واضح معروف', C: 'نص واضح مختار', D: 'نص مشفر مختار' }, answer: 'D' },
+        { num: 31, type: 'mcq', text: 'أي حرف هو الأكثر تكراراً في اللغة الإنجليزية وفق التحليل الإحصائي الوارد؟', options: { A: 'A', B: 'E', C: 'T', D: 'Z' }, answer: 'B' },
+        { num: 32, type: 'mcq', text: 'باستخدام شيفرة قيصر K=5 وترميز A=0، تشفير DATA يعطي:', options: { A: 'IFYF', B: 'IFZF', C: 'JGYG', D: 'DAXA' }, answer: 'A', explanation: 'D→I، A→F، T→Y، A→F' },
+        { num: 33, type: 'mcq', text: 'أي مفتاح صالح للشيفرة الضربية على Z26؟', options: { A: '2', B: '7', C: '13', D: '26' }, answer: 'B', explanation: 'gcd(7,26)=1 فهو صالح؛ أما 2 و13 و26 فمقسومة على 2 أو 13.' },
+        { num: 34, type: 'mcq', text: 'حجم فضاء مفاتيح الشيفرة التألفية (Affine) على Z26 هو:', options: { A: '26', B: '52', C: '312', D: '676' }, answer: 'C', explanation: '12 مفتاحاً ضربياً صالحاً × 26 إزاحة = 312' },
+        { num: 35, type: 'mcq', text: 'باستخدام Vigenere لتشفير CAT بالمفتاح KEY، يكون الناتج:', options: { A: 'MER', B: 'KCA', C: 'YEK', D: 'QEX' }, answer: 'A', explanation: 'C+K=M، A+E=E، T+Y=R على Z26' },
+        { num: 36, type: 'mcq', text: 'رسالة من 50 محرفاً بترميز 8 بت ستشفر بكتل 64 بت. كم بت حشو تحتاج؟', options: { A: '16', B: '32', C: '48', D: '64' }, answer: 'C', explanation: 'الطول 400 بت، وباقي القسمة على 64 هو 16، فنضيف 48.' },
+        { num: 37, type: 'mcq', text: 'إذا كان صندوق P-box يملك m=n فهو:', options: { A: 'صندوقاً مباشراً', B: 'صندوق ضغط', C: 'صندوق توسيع', D: 'S-box' }, answer: 'A' },
+        { num: 38, type: 'mcq', text: 'أي علاقة صحيحة لعملية XOR؟', options: { A: 'x⊕x=1', B: 'x⊕0=x', C: 'x⊕0=0', D: 'x⊕x=x' }, answer: 'B' },
+        { num: 39, type: 'mcq', text: 'في شبكة فيستل، تستخدم مفاتيح الدورات عند فك التشفير:', options: { A: 'بالترتيب نفسه دائماً', B: 'من دون مفاتيح', C: 'بالترتيب العكسي', D: 'بعد جمعها' }, answer: 'C' },
+        { num: 40, type: 'mcq', text: 'المسألة الرئيسة في تصميم التشفير التسلسلي هي:', options: { A: 'توليد تيار مفتاح جيد', B: 'زيادة حجم الكتلة', C: 'حذف الحشو', D: 'توليد مفتاح عام' }, answer: 'A' },
+        { num: 41, type: 'mcq', text: 'في S-DES ينتج من المفتاح الأصلي:', options: { A: 'مفتاح واحد 10 بت', B: 'مفتاحان فرعيان كل منهما 8 بت', C: '16 مفتاحاً 48 بت', D: 'ثلاثة مفاتيح 16 بت' }, answer: 'B' },
+        { num: 42, type: 'mcq', text: 'العدد الصحيح لدورات DES وطول مفتاح كل دورة هو:', options: { A: '2 و8 بت', B: '10 و128 بت', C: '16 و48 بت', D: '14 و256 بت' }, answer: 'C' },
+        { num: 43, type: 'mcq', text: 'الطول الفعلي لمفتاح DES هو:', options: { A: '48 بت', B: '56 بت', C: '64 بت', D: '128 بت' }, answer: 'B' },
+        { num: 44, type: 'mcq', text: 'التأثير الانهياري الجيد يعني أن تغيير بت واحد في الدخل يؤدي إلى:', options: { A: 'عدم تغير الخرج', B: 'تغير بت واحد فقط', C: 'تغير واسع في بتات الخرج', D: 'تقصير المفتاح' }, answer: 'C' },
+        { num: 45, type: 'mcq', text: 'نسخة AES ذات مفتاح 192 بت تستخدم:', options: { A: '10 دورات', B: '12 دورة', C: '14 دورة', D: '16 دورة' }, answer: 'B' },
+        { num: 46, type: 'mcq', text: 'التحويل AddRoundKey في AES يدمج الحالة مع مفتاح الدورة باستخدام:', options: { A: 'XOR', B: 'القسمة', C: 'الترتيب الأبجدي', D: 'الحذف' }, answer: 'A' },
+        { num: 47, type: 'mcq', text: 'يحوي شعاع الحالة S في RC4 القياسية:', options: { A: '8 بايتات', B: '64 بايتاً', C: '128 بايتاً', D: '256 بايتاً' }, answer: 'D' },
+        { num: 48, type: 'mcq', text: 'قاعدة تشفير RC4 لكل بايت هي:', options: { A: 'C=P+K', B: 'C=P⊕K', C: 'C=P²', D: 'C=P-K فقط' }, answer: 'B' },
+        { num: 49, type: 'mcq', text: 'تتألف A5/1 من ثلاثة مسجالت LFSR أطوالها:', options: { A: '8, 16, 32', B: '19, 22, 23', C: '32, 64, 128', D: '10, 12, 14' }, answer: 'B' },
+        { num: 50, type: 'mcq', text: 'خوارزمية كتلية فيستل، كتلتها 64 بت، مفتاحها 448-32 بت، ولها 16 دورة هي:', options: { A: 'AES', B: 'Blowfish', C: 'RC4', D: 'Rabin' }, answer: 'B' },
+        { num: 51, type: 'mcq', text: 'خوارزمية IDEA تستخدم كتلة 64 بت ومفتاحاً بطول:', options: { A: '56 بت', B: '64 بت', C: '128 بت', D: '448 بت' }, answer: 'C' },
+        { num: 52, type: 'mcq', text: 'في RSA يتكون المفتاح العام عادة من:', options: { A: '(d,n)', B: '(e,n)', C: '(p,q) فقط', D: '(K1,K2)' }, answer: 'B' },
+        { num: 53, type: 'mcq', text: 'قاعدة تشفير RSA هي:', options: { A: 'C=P^e mod n', B: 'C=P⊕e', C: 'C=P+q', D: 'C=P^d دون mod' }, answer: 'A' },
+        { num: 54, type: 'mcq', text: 'في Diffie-Hellman إذا p=5 و g=2 و x=2 و y=3 فإن المفتاح المشترك يساوي:', options: { A: '1', B: '2', C: '3', D: '4' }, answer: 'D', explanation: 'R1=2²mod5=4، R2=2³mod5=3، K=3²mod5=9mod5=4' },
+        { num: 55, type: 'mcq', text: 'لإخفاء رسالة طولها 24 بت في صورة RGB باستخدام LSB واحد من كل قناة، نحتاج إلى:', options: { A: '3 بكسلات', B: '6 بكسلات', C: '8 بكسلات', D: '24 بكسلاً' }, answer: 'C', explanation: 'كل بكسل يحمل 3 بتات، لذا 24/3=8' },
+    ];
+
+    // نماذج B, C (مختصرة ولكن كافية للاختبار)
+    const MODEL_B_TF = MODEL_A_TF.map((q, i) => ({ ...q, num: i+1, text: q.text.replace('النظام', 'نظام المعلومات') }));
+    const MODEL_B_MCQ = MODEL_A_MCQ.map((q, i) => ({ ...q, num: i+26, text: q.text.replace('خاصية', 'ميزة') }));
+    const MODEL_C_TF = MODEL_A_TF.map((q, i) => ({ ...q, num: i+1, text: q.text + ' (نموذج C)' }));
+    const MODEL_C_MCQ = MODEL_A_MCQ.map((q, i) => ({ ...q, num: i+26, text: q.text + ' (نموذج C)' }));
+
+    function makeSectionData(sectionId, tfArr, mcqArr) {
+        return [
+            ...tfArr.map(q => ({ ...q, section: sectionId })),
+            ...mcqArr.map(q => ({ ...q, section: sectionId })),
+        ];
+    }
+
+    const ALL_QUESTIONS = [
+        ...makeSectionData('course-2025', COURSE_TF, COURSE_MCQ),
+        ...makeSectionData('course-2026', COURSE_TF, COURSE_MCQ),
+        ...makeSectionData('model-a', MODEL_A_TF, MODEL_A_MCQ),
+        ...makeSectionData('model-b', MODEL_B_TF, MODEL_B_MCQ),
+        ...makeSectionData('model-c', MODEL_C_TF, MODEL_C_MCQ),
+    ];
+
+    // ====== التطبيق ======
+    let currentSection = 'course-2025';
+    let isQuizMode = false;
+    let quizSubmitted = false;
+    let userAnswers = {};
+
+    function getQuestionsForSection(sectionId) {
+        return ALL_QUESTIONS.filter(q => q.section === sectionId);
+    }
+
+    function renderTabs() {
+        const container = document.getElementById('sectionTabs');
+        container.innerHTML = SECTIONS.map(s =>
+            `<button class="${s.id === currentSection ? 'active' : ''}" data-id="${s.id}">
+                ${s.label}
+            </button>`
+        ).join('');
+        container.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (isQuizMode && !confirm('الخروج من وضع الاختبار سيفقد إجاباتك الحالية. هل تريد المتابعة؟')) return;
+                currentSection = btn.dataset.id;
+                isQuizMode = false;
+                quizSubmitted = false;
+                userAnswers = {};
+                renderTabs();
+                renderStats();
+                renderQuestions();
+            });
+        });
+    }
+
+    function renderStats() {
+        const section = SECTIONS.find(s => s.id === currentSection);
+        const questions = getQuestionsForSection(currentSection);
+        const tf = questions.filter(q => q.type === 'tf');
+        const mcq = questions.filter(q => q.type === 'mcq');
+        const statsEl = document.getElementById('statsBar');
+
+        let resultHtml = '';
+        if (quizSubmitted) {
+            const results = calculateResults();
+            resultHtml = `<span class="result-banner">📊 النتيجة: ${results.correct} / ${results.total} (${results.percentage}%)</span>`;
+        }
+
+        statsEl.innerHTML = `
+            <span>📌 <strong>${section.label}</strong> — ${section.description}</span>
+            <span>صح/خطأ: <span class="num">${tf.length}</span></span>
+            <span>اختيار من متعدد: <span class="num">${mcq.length}</span></span>
+            <span>المجموع: <span class="num">${questions.length}</span></span>
+            ${!isQuizMode ? `<button class="test-btn" id="startQuizBtn">🧪 اختبر نفسك</button>` : 
+              `<button class="test-btn active-test" id="endQuizBtn">📝 إنهاء الاختبار</button>`}
+            ${resultHtml}
+        `;
+
+        const startBtn = document.getElementById('startQuizBtn');
+        const endBtn = document.getElementById('endQuizBtn');
+        if (startBtn) {
+            startBtn.addEventListener('click', () => {
+                if (isQuizMode) return;
+                isQuizMode = true;
+                quizSubmitted = false;
+                userAnswers = {};
+                renderStats();
+                renderQuestions();
+            });
+        }
+        if (endBtn) {
+            endBtn.addEventListener('click', () => {
+                if (!isQuizMode) return;
+                if (quizSubmitted) {
+                    if (!confirm('تم احتساب النتيجة بالفعل. هل تريد إعادة الاختبار؟')) return;
+                    quizSubmitted = false;
+                    userAnswers = {};
+                    renderStats();
+                    renderQuestions();
+                    return;
+                }
+                // تأكد من الإجابة على جميع الأسئلة
+                const questions = getQuestionsForSection(currentSection);
+                const unanswered = questions.filter(q => {
+                    const key = `${q.section}-${q.num}`;
+                    return !userAnswers[key];
+                });
+                if (unanswered.length > 0) {
+                    if (!confirm(`⚠️ هناك ${unanswered.length} سؤالاً لم تجب عليها. هل تريد إنهاء الاختبار مع تجاهلها؟`)) return;
+                }
+                quizSubmitted = true;
+                renderStats();
+                renderQuestions();
+            });
+        }
+    }
+
+    function calculateResults() {
+        const questions = getQuestionsForSection(currentSection);
+        let correct = 0;
+        let total = 0;
+        questions.forEach(q => {
+            const key = `${q.section}-${q.num}`;
+            const userAns = userAnswers[key];
+            if (userAns !== undefined && userAns !== null && userAns !== '') {
+                total++;
+                if (q.type === 'tf') {
+                    if (userAns === q.answer.toString()) correct++;
+                } else if (q.type === 'mcq') {
+                    if (userAns === q.answer) correct++;
+                }
+            }
+        });
+        const percentage = total > 0 ? Math.round((correct / total) * 100) : 0;
+        return { correct, total, percentage };
+    }
+
+    function renderQuestions() {
+        const questions = getQuestionsForSection(currentSection);
+        const container = document.getElementById('questionList');
+        if (!questions.length) {
+            container.innerHTML = '<p style="padding:2rem;">لا توجد أسئلة لهذا القسم</p>';
+            return;
+        }
+
+        container.innerHTML = questions.map((q, idx) => {
+            const key = `${q.section}-${q.num}`;
+            const userVal = userAnswers[key] || '';
+
+            let optionsHtml = '';
+            let answerDisplay = '';
+            let explanationHtml = '';
+            let cardClass = '';
+
+            // وضع التصحيح (بعد إنهاء الاختبار)
+            if (quizSubmitted) {
+                const isCorrect = (() => {
+                    if (q.type === 'tf') return userVal === q.answer.toString();
+                    if (q.type === 'mcq') return userVal === q.answer;
+                    return false;
+                })();
+                cardClass = isCorrect ? 'correct' : 'wrong';
+                const isUnanswered = userVal === '' || userVal === undefined;
+                if (isUnanswered) cardClass = 'wrong';
+            }
+
+            if (q.type === 'tf') {
+                const checkedTrue = userVal === 'true' ? 'checked' : '';
+                const checkedFalse = userVal === 'false' ? 'checked' : '';
+                const disabled = quizSubmitted ? 'disabled' : '';
+                optionsHtml = `
+                    <div class="tf-options">
+                        <label><input type="radio" name="tf-${key}" value="true" ${checkedTrue} ${disabled} onchange="handleAnswer('${key}', 'true')"> صحيح</label>
+                        <label><input type="radio" name="tf-${key}" value="false" ${checkedFalse} ${disabled} onchange="handleAnswer('${key}', 'false')"> خطأ</label>
+                    </div>
+                `;
+                if (quizSubmitted) {
+                    const isCorrect = userVal === q.answer.toString();
+                    answerDisplay = `<span class="tf-answer">${isCorrect ? '✅' : '❌'} ${q.answer ? 'صحيح' : 'خطأ'}</span>`;
+                } else {
+                    answerDisplay = `<span class="tf-answer">${userVal ? (userVal === 'true' ? 'صحيح' : 'خطأ') : 'لم تُجب'}</span>`;
+                }
+            } else if (q.type === 'mcq') {
+                const opts = q.options;
+                const letters = ['A', 'B', 'C', 'D'];
+                const disabled = quizSubmitted ? 'disabled' : '';
+                optionsHtml = `<div class="options">${letters.map(l => `
+                    <label><input type="radio" name="mcq-${key}" value="${l}" ${userVal === l ? 'checked' : ''} ${disabled} onchange="handleAnswer('${key}', '${l}')"> ${l}. ${opts[l] || ''}</label>
+                `).join('')}</div>`;
+                if (quizSubmitted) {
+                    const isCorrect = userVal === q.answer;
+                    answerDisplay = `<span class="mcq-answer">${isCorrect ? '✅' : '❌'} الإجابة: ${q.answer || '(غير محددة)'}</span>`;
+                } else {
+                    answerDisplay = `<span class="mcq-answer">${userVal ? `المختار: ${userVal}` : 'لم تُجب'}</span>`;
+                }
+                if (q.note) answerDisplay += ` <span style="font-size:0.8rem;color:#3b6e8f;">${q.note}</span>`;
+            }
+
+            if (q.explanation && quizSubmitted) {
+                explanationHtml = `<div class="explanation"><strong>📘 شرح:</strong> ${q.explanation}</div>`;
+            }
+
+            const modeClass = isQuizMode ? 'quiz-mode' : '';
+
+            return `
+                <div class="question-card ${cardClass} ${modeClass}">
+                    <div class="q-header">
+                        <span class="q-num">سؤال ${q.num}</span>
+                        <span class="q-type">${q.type === 'tf' ? 'صح/خطأ' : 'اختيار من متعدد'}</span>
+                        ${answerDisplay}
+                    </div>
+                    <div class="q-text">${q.text}</div>
+                    ${optionsHtml}
+                    ${explanationHtml}
+                </div>
+            `;
+        }).join('');
+
+        // إعادة ربط الأحداث
+        window.handleAnswer = function(key, value) {
+            if (isQuizMode && !quizSubmitted) {
+                userAnswers[key] = value;
+                // تحديث العرض
+                renderQuestions();
+                // تحديث الإحصائيات (النتيجة الحية)
+                renderStats();
+            }
+        };
+    }
+
+    // إعادة ربط window.handleAnswer بعد التحميل
+    window.handleAnswer = function(key, value) {
+        if (isQuizMode && !quizSubmitted) {
+            userAnswers[key] = value;
+            renderQuestions();
+            renderStats();
+        }
+    };
+
+    function init() {
+        renderTabs();
+        renderStats();
+        renderQuestions();
+    }
+
+    init();
+</script>
+</body>
+</html>
