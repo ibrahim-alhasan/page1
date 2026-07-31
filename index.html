@@ -97,6 +97,7 @@
             justify-content: center;
             align-items: center;
             border: 1px solid #e3edf5;
+            transition: all 0.3s ease;
         }
 
         .stats span {
@@ -148,6 +149,12 @@
             font-size: 1rem;
             color: #0f5132;
             border-right: 6px solid #1f7a5a;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Question Grid */
@@ -203,12 +210,12 @@
             font-weight: 500;
         }
 
-        /* Options */
+        /* Options - تم تعديلها لتكون عمودية */
         .options {
             display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem 1.5rem;
-            padding: 0.6rem 1rem;
+            flex-direction: column;
+            gap: 0.6rem;
+            padding: 0.8rem 1rem;
             background: #f3f8fe;
             border-radius: 20px;
             margin-top: 0.2rem;
@@ -217,11 +224,17 @@
         .options label {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.7rem;
             cursor: pointer;
             font-weight: 500;
-            font-size: 0.92rem;
-            padding: 0.2rem 0;
+            font-size: 0.95rem;
+            padding: 0.3rem 0.5rem;
+            border-radius: 12px;
+            transition: background 0.15s;
+        }
+
+        .options label:hover {
+            background: #e3eef9;
         }
 
         .options input[type="radio"] {
@@ -232,28 +245,37 @@
             flex-shrink: 0;
         }
 
+        /* TF Options - مسافة أكبر بين صحيح وخطأ */
         .tf-options {
             display: flex;
-            gap: 1.5rem;
+            gap: 2.5rem;
             background: #f3f8fe;
-            padding: 0.5rem 1.5rem;
+            padding: 0.6rem 2rem;
             border-radius: 60px;
             width: fit-content;
             flex-wrap: wrap;
+            justify-content: center;
         }
 
         .tf-options label {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.6rem;
             font-weight: 600;
             cursor: pointer;
-            font-size: 0.95rem;
+            font-size: 1rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            transition: background 0.15s;
+        }
+
+        .tf-options label:hover {
+            background: #e3eef9;
         }
 
         .tf-options input[type="radio"] {
-            width: 1.2rem;
-            height: 1.2rem;
+            width: 1.3rem;
+            height: 1.3rem;
             accent-color: #1a6b8f;
             cursor: pointer;
             flex-shrink: 0;
@@ -267,20 +289,11 @@
             color: #1d4057;
             font-size: 0.9rem;
             border-right: 4px solid #578baa;
+            animation: fadeIn 0.4s ease;
         }
 
         .explanation strong {
             color: #05445e;
-        }
-
-        .answer-badge {
-            display: inline-block;
-            background: #1a6b8f;
-            color: white;
-            border-radius: 40px;
-            padding: 0.1rem 1rem;
-            font-size: 0.75rem;
-            font-weight: 600;
         }
 
         .mcq-answer {
@@ -411,24 +424,30 @@
             }
 
             .options {
-                padding: 0.5rem 0.8rem;
-                gap: 0.3rem 0.8rem;
+                padding: 0.6rem 0.8rem;
+                gap: 0.5rem;
             }
 
             .options label {
-                font-size: 0.85rem;
-                gap: 0.3rem;
+                font-size: 0.88rem;
+                padding: 0.2rem 0.4rem;
             }
 
             .tf-options {
-                padding: 0.4rem 1rem;
-                gap: 1rem;
+                padding: 0.5rem 1.2rem;
+                gap: 1.8rem;
                 width: 100%;
                 justify-content: center;
             }
 
             .tf-options label {
-                font-size: 0.9rem;
+                font-size: 0.95rem;
+                padding: 0.2rem 0.5rem;
+            }
+
+            .tf-options input[type="radio"] {
+                width: 1.2rem;
+                height: 1.2rem;
             }
 
             .test-actions .test-btn {
@@ -463,7 +482,12 @@
             }
 
             .options label {
-                font-size: 0.8rem;
+                font-size: 0.82rem;
+            }
+
+            .tf-options {
+                gap: 1.2rem;
+                padding: 0.4rem 0.8rem;
             }
         }
     </style>
@@ -730,19 +754,14 @@
                     renderTestActions();
                     return;
                 }
-                // تأكد من الإجابة على جميع الأسئلة
-                const questions = getQuestionsForSection(currentSection);
-                const unanswered = questions.filter(q => {
-                    const key = `${q.section}-${q.num}`;
-                    return !userAnswers[key];
-                });
-                if (unanswered.length > 0) {
-                    if (!confirm(`⚠️ هناك ${unanswered.length} سؤالاً لم تجب عليها. هل تريد إنهاء الاختبار مع تجاهلها؟`)) return;
-                }
+                // إنهاء الاختبار وعرض النتيجة فوراً
                 quizSubmitted = true;
                 renderStats();
                 renderQuestions();
                 renderTestActions();
+                
+                // التمرير إلى أعلى الصفحة لمشاهدة النتيجة
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             });
         }
     }
