@@ -2,91 +2,116 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>اختبارات إلكترونية – أمن المعلومات</title>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
+            padding: 0;
         }
+
         body {
-            font-family: 'Segoe UI', 'Tahoma', sans-serif;
-            background: #f5f9fc;
+            font-family: 'Segoe UI', 'Tahoma', 'Helvetica Neue', sans-serif;
+            background: #f4f8fc;
             color: #1e2b3c;
-            padding: 1.5rem;
+            padding: 1rem;
+            line-height: 1.6;
         }
+
         .container {
-            max-width: 1100px;
+            max-width: 820px;
             margin: 0 auto;
         }
+
+        /* Header */
         h1 {
-            font-size: 2rem;
+            font-size: 1.8rem;
             border-right: 6px solid #1e6f9f;
             padding-right: 1rem;
             margin-bottom: 0.25rem;
             color: #0b3b4f;
+            letter-spacing: -0.5px;
         }
+
         .subhead {
             color: #2c5770;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             font-weight: 300;
             border-bottom: 1px solid #cbdae6;
             padding-bottom: 0.5rem;
+            font-size: 0.95rem;
         }
+
+        /* Tabs */
         .section-tabs {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.5rem 0.3rem;
-            margin-bottom: 2rem;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
             background: #e9f0f7;
-            padding: 0.8rem 1rem;
-            border-radius: 60px;
+            padding: 0.8rem;
+            border-radius: 50px;
             justify-content: center;
+            box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.03);
         }
+
         .section-tabs button {
             background: transparent;
             border: none;
             padding: 0.5rem 1.2rem;
             border-radius: 40px;
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             color: #1f4057;
             cursor: pointer;
             transition: 0.2s;
             background: #ffffffb0;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+            flex: 1 0 auto;
+            max-width: 180px;
+            white-space: nowrap;
         }
+
         .section-tabs button:hover {
             background: #c7dcec;
-            transform: scale(0.98);
+            transform: scale(0.97);
         }
+
         .section-tabs button.active {
             background: #1a5e7e;
             color: white;
-            box-shadow: 0 4px 10px rgba(22, 78, 109, 0.3);
+            box-shadow: 0 4px 12px rgba(22, 78, 109, 0.25);
         }
+
+        /* Stats Bar */
         .stats {
             display: flex;
             flex-wrap: wrap;
-            gap: 1.5rem 3rem;
+            gap: 0.8rem 1.5rem;
             background: white;
-            padding: 1rem 2rem;
+            padding: 1rem 1.5rem;
             border-radius: 40px;
             margin-bottom: 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
             justify-content: center;
             align-items: center;
+            border: 1px solid #e3edf5;
         }
+
         .stats span {
             font-weight: 500;
+            font-size: 0.9rem;
         }
+
         .stats .num {
             background: #dce8f2;
-            padding: 0.1rem 1rem;
+            padding: 0.1rem 0.9rem;
             border-radius: 30px;
             font-weight: 700;
             color: #10415c;
         }
+
         .test-btn {
             background: #1f7a5a;
             color: white;
@@ -94,204 +119,351 @@
             padding: 0.5rem 1.8rem;
             border-radius: 60px;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 0.95rem;
             cursor: pointer;
             transition: 0.2s;
             box-shadow: 0 4px 10px rgba(26, 107, 74, 0.2);
             margin-right: auto;
         }
+
         .test-btn:hover {
             background: #136348;
             transform: scale(0.97);
         }
+
         .test-btn.active-test {
             background: #b13e3e;
             box-shadow: 0 4px 12px rgba(176, 52, 52, 0.3);
         }
+
         .test-btn.active-test:hover {
             background: #8f2f2f;
         }
+
         .result-banner {
             background: #e2f0e9;
             border-radius: 60px;
-            padding: 0.5rem 2rem;
+            padding: 0.3rem 1.5rem;
             font-weight: 700;
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #0f5132;
             border-right: 6px solid #1f7a5a;
         }
+
+        /* Question Grid */
         .question-grid {
             display: flex;
             flex-direction: column;
             gap: 1rem;
+            margin-bottom: 2rem;
         }
+
         .question-card {
             background: white;
-            border-radius: 28px;
-            padding: 1.5rem 2rem;
-            box-shadow: 0 4px 16px rgba(0, 20, 30, 0.06);
+            border-radius: 24px;
+            padding: 1.2rem 1.5rem;
+            box-shadow: 0 4px 16px rgba(0, 20, 30, 0.04);
             border: 1px solid #e3edf5;
             transition: 0.15s;
         }
+
         .question-card:hover {
             border-color: #b6d2e9;
         }
+
         .q-header {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: baseline;
-            margin-bottom: 0.4rem;
-            font-size: 0.95rem;
+            margin-bottom: 0.3rem;
+            font-size: 0.85rem;
+            gap: 0.3rem;
         }
+
         .q-type {
             background: #d4e2ed;
-            padding: 0.2rem 1.2rem;
+            padding: 0.15rem 1rem;
             border-radius: 40px;
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #1b4055;
             letter-spacing: 0.3px;
         }
+
         .q-num {
             font-weight: 600;
             color: #1d577a;
         }
+
         .q-text {
-            font-size: 1.1rem;
-            margin: 0.6rem 0 0.9rem 0;
+            font-size: 1rem;
+            margin: 0.4rem 0 0.8rem 0;
             line-height: 1.7;
+            font-weight: 500;
         }
+
+        /* Options */
         .options {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.8rem 2rem;
-            padding: 0.3rem 0 0.2rem 0;
+            gap: 0.5rem 1.5rem;
+            padding: 0.6rem 1rem;
             background: #f3f8fe;
-            border-radius: 24px;
-            padding: 0.8rem 1.5rem;
+            border-radius: 20px;
             margin-top: 0.2rem;
         }
+
         .options label {
             display: flex;
             align-items: center;
             gap: 0.5rem;
             cursor: pointer;
             font-weight: 500;
-            font-size: 0.98rem;
+            font-size: 0.92rem;
+            padding: 0.2rem 0;
         }
+
         .options input[type="radio"] {
-            width: 1.1rem;
-            height: 1.1rem;
+            width: 1.2rem;
+            height: 1.2rem;
             accent-color: #1a6b8f;
             cursor: pointer;
+            flex-shrink: 0;
         }
+
         .tf-options {
             display: flex;
-            gap: 2rem;
+            gap: 1.5rem;
             background: #f3f8fe;
-            padding: 0.6rem 1.8rem;
+            padding: 0.5rem 1.5rem;
             border-radius: 60px;
             width: fit-content;
+            flex-wrap: wrap;
         }
+
         .tf-options label {
             display: flex;
             align-items: center;
             gap: 0.5rem;
             font-weight: 600;
             cursor: pointer;
+            font-size: 0.95rem;
         }
+
         .tf-options input[type="radio"] {
-            width: 1.1rem;
-            height: 1.1rem;
+            width: 1.2rem;
+            height: 1.2rem;
             accent-color: #1a6b8f;
             cursor: pointer;
+            flex-shrink: 0;
         }
+
         .explanation {
             background: #eef4fa;
-            border-radius: 20px;
-            padding: 0.5rem 1.5rem;
+            border-radius: 16px;
+            padding: 0.5rem 1.2rem;
             margin-top: 0.8rem;
             color: #1d4057;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             border-right: 4px solid #578baa;
         }
+
         .explanation strong {
             color: #05445e;
         }
+
         .answer-badge {
             display: inline-block;
             background: #1a6b8f;
             color: white;
             border-radius: 40px;
-            padding: 0.1rem 1.2rem;
-            font-size: 0.8rem;
+            padding: 0.1rem 1rem;
+            font-size: 0.75rem;
             font-weight: 600;
         }
-        .footnote {
-            margin-top: 2.5rem;
-            padding: 0.8rem;
-            text-align: center;
-            color: #436f8b;
-            border-top: 1px solid #cddde9;
-        }
+
         .mcq-answer {
             background: #d9e7f3;
             border-radius: 16px;
             padding: 0.1rem 0.8rem;
             font-weight: 600;
             color: #003153;
+            font-size: 0.8rem;
         }
+
         .tf-answer {
             font-weight: 600;
+            font-size: 0.85rem;
         }
-        .no-answer {
-            opacity: 0.5;
-            font-style: italic;
-        }
-        .result-bar {
-            background: #d5e8f0;
-            padding: 0.5rem 1.5rem;
-            border-radius: 60px;
-            display: flex;
-            align-items: center;
-            gap: 1.2rem;
-            flex-wrap: wrap;
-        }
-        .result-bar .score {
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
+
         .quiz-mode .question-card {
             border-right: 6px solid #1a6b8f;
         }
+
         .quiz-mode .question-card.correct {
             border-right-color: #1f7a5a;
             background: #f6fcf9;
         }
+
         .quiz-mode .question-card.wrong {
             border-right-color: #b13e3e;
             background: #fdf6f6;
         }
-        @media (max-width: 700px) {
+
+        /* Footer / End Test Button */
+        .test-actions {
+            display: flex;
+            justify-content: center;
+            padding: 1.5rem 0 2rem 0;
+            border-top: 1px solid #cddde9;
+            margin-top: 0.5rem;
+        }
+
+        .test-actions .test-btn {
+            font-size: 1.2rem;
+            padding: 0.8rem 3rem;
+            margin-right: 0;
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+            border-radius: 60px;
+            box-shadow: 0 6px 18px rgba(26, 107, 74, 0.25);
+        }
+
+        .test-actions .test-btn.active-test {
+            background: #b13e3e;
+            box-shadow: 0 6px 18px rgba(176, 52, 52, 0.3);
+        }
+
+        .test-actions .test-btn.active-test:hover {
+            background: #8f2f2f;
+        }
+
+        .footnote {
+            margin-top: 1rem;
+            padding: 0.8rem;
+            text-align: center;
+            color: #436f8b;
+            border-top: 1px solid #cddde9;
+            font-size: 0.85rem;
+        }
+
+        /* Mobile First Improvements */
+        @media (max-width: 640px) {
+            body {
+                padding: 0.8rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+                padding-right: 0.8rem;
+            }
+
+            .section-tabs {
+                padding: 0.6rem;
+                gap: 0.4rem;
+                border-radius: 30px;
+            }
+
             .section-tabs button {
-                padding: 0.4rem 0.9rem;
-                font-size: 0.8rem;
+                font-size: 0.75rem;
+                padding: 0.4rem 0.8rem;
+                max-width: 140px;
+                flex: 1 1 auto;
+                white-space: normal;
             }
-            .question-card {
-                padding: 1rem 1rem;
-            }
-            .options {
-                padding: 0.8rem 1rem;
-            }
+
             .stats {
+                padding: 0.8rem 1rem;
+                gap: 0.6rem;
+                border-radius: 30px;
                 flex-direction: column;
                 align-items: stretch;
-                gap: 0.8rem;
-            }
-            .test-btn {
-                margin-right: 0;
                 text-align: center;
+            }
+
+            .stats span {
+                font-size: 0.85rem;
+            }
+
+            .test-btn {
+                font-size: 0.9rem;
+                padding: 0.4rem 1.2rem;
+                margin-right: 0;
+                width: 100%;
+                text-align: center;
+            }
+
+            .result-banner {
+                font-size: 0.9rem;
+                padding: 0.2rem 1rem;
+                text-align: center;
+            }
+
+            .question-card {
+                padding: 1rem;
+                border-radius: 18px;
+            }
+
+            .q-text {
+                font-size: 0.95rem;
+            }
+
+            .options {
+                padding: 0.5rem 0.8rem;
+                gap: 0.3rem 0.8rem;
+            }
+
+            .options label {
+                font-size: 0.85rem;
+                gap: 0.3rem;
+            }
+
+            .tf-options {
+                padding: 0.4rem 1rem;
+                gap: 1rem;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .tf-options label {
+                font-size: 0.9rem;
+            }
+
+            .test-actions .test-btn {
+                font-size: 1rem;
+                padding: 0.7rem 1.5rem;
+                max-width: 100%;
+            }
+
+            .explanation {
+                font-size: 0.85rem;
+                padding: 0.4rem 1rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .section-tabs button {
+                font-size: 0.7rem;
+                padding: 0.3rem 0.6rem;
+                max-width: 120px;
+            }
+
+            .stats {
+                padding: 0.6rem 0.8rem;
+            }
+
+            .question-card {
+                padding: 0.8rem;
+            }
+
+            .q-text {
+                font-size: 0.9rem;
+            }
+
+            .options label {
+                font-size: 0.8rem;
             }
         }
     </style>
@@ -304,8 +476,13 @@
     <div id="sectionTabs" class="section-tabs"></div>
     <div id="statsBar" class="stats"></div>
     <div id="questionList" class="question-grid"></div>
+
+    <!-- زر إنهاء الاختبار في الأسفل -->
+    <div id="testActions" class="test-actions"></div>
+
     <div class="footnote">✔️ في وضع الاختبار، اختر إجاباتك ثم اضغط "إنهاء الاختبار" لعرض النتيجة والتصحيح</div>
 </div>
+
 <script>
     // ====== البيانات ======
     const SECTIONS = [
@@ -344,6 +521,8 @@
         { num: 24, type: 'tf', text: 'للحصول على المستوى الأمني نفسه يجب أن تكون مفاتيح التشفير المتماثل أطول بكثير من مفاتيح التشفير غير المتماثل.', answer: false, explanation: 'العكس صحيح؛ مفاتيح التشفير غير المتماثل أطول من المتماثل لتحقيق نفس الأمان.' },
         { num: 25, type: 'tf', text: 'يُستخدم بروتوكول الإنترنت المسمى Voice-over-IP بذاته لإخفاء الرسائل داخل المحادثات الصوتية.', answer: false, explanation: 'يُستخدم لنقل المكالمات الصوتية عبر الإنترنت، لكنه لا يُستخدم بذاته لإخفاء الرسائل داخل المحادثات الصوتية.' },
     ];
+
+    // تم تعديل السؤال 32: الإجابة الصحيحة هي C (النفايات)
     const COURSE_MCQ = [
         { num: 26, type: 'mcq', text: 'يُعرَّف أمن المعلومات بأنه:', options: { A: 'حماية المعلومات المتداولة من العبث والتخريب والتبديل', B: 'إجراءات لحماية المعلومات الداخلية والخارجية', C: 'استراتيجيات لتجنب الثغرات الأمنية', D: 'جميع ما سبق' }, answer: 'D' },
         { num: 27, type: 'mcq', text: 'حماية المعلومات من التغيير غير المصرح به تسمى:', options: { A: 'السرية', B: 'الإتاحة', C: 'التكاملية', D: 'الموثوقية' }, answer: 'C' },
@@ -351,6 +530,7 @@
         { num: 29, type: 'mcq', text: 'للتحقق من هوية المستخدم يمكن استخدام:', options: { A: 'تصنيف البيانات إلى سرية وغير سرية', B: 'تحديد مستويات الوصول فقط', C: 'أرقام أو معلومات يعرفها المستخدم مسبقاً', D: 'جميع ما سبق' }, answer: 'C' },
         { num: 30, type: 'mcq', text: 'الإشراف على أمن الحواسيب وإعداد معايير وإجراءات السلامة في مركز المعلومات من مهام:', options: { A: 'محلل ومبرمج النظم', B: 'مدير مركز المعلومات', C: 'مدخل البيانات', D: 'المستخدم النهائي' }, answer: 'B' },
         { num: 31, type: 'mcq', text: 'أكثر أفراد الكادر الوظيفي تهديداً لمركز المعلومات بحسب مقرر الدورة هو:', options: { A: 'المستخدم النهائي', B: 'محلل النظم', C: 'مدير المركز', D: 'مدخل البيانات' }, answer: 'A' },
+        // السؤال 32: تم تصحيح الإجابة إلى C
         { num: 32, type: 'mcq', text: 'من أكثر قنوات الهندسة الاجتماعية شيوعاً بين المهاجمين:', options: { A: 'الهاتف', B: 'الإنترنت', C: 'النفايات', D: 'انتحال الشخصية' }, answer: 'C' },
         { num: 33, type: 'mcq', text: 'أضعف حلقة في منظومة حماية المعلومات غالباً هي:', options: { A: 'خطوط الاتصال', B: 'الطابعات والطرفيات', C: 'العنصر البشري', D: 'برامج مكافحة الفيروسات' }, answer: 'C' },
         { num: 34, type: 'mcq', text: 'إذا كان P النص الواضح و C النص المشفر و E خوارزمية التشفير بالمفتاح K، فالعلاقة الصحيحة هي:', options: { A: 'P = D_K(C)', B: 'C = E_K(P)', C: 'K = C.P', D: 'D_K(E_K(P)) فقط' }, answer: 'B' },
@@ -486,6 +666,7 @@
                 renderTabs();
                 renderStats();
                 renderQuestions();
+                renderTestActions();
             });
         });
     }
@@ -508,13 +689,11 @@
             <span>صح/خطأ: <span class="num">${tf.length}</span></span>
             <span>اختيار من متعدد: <span class="num">${mcq.length}</span></span>
             <span>المجموع: <span class="num">${questions.length}</span></span>
-            ${!isQuizMode ? `<button class="test-btn" id="startQuizBtn">🧪 اختبر نفسك</button>` : 
-              `<button class="test-btn active-test" id="endQuizBtn">📝 إنهاء الاختبار</button>`}
+            ${!isQuizMode ? `<button class="test-btn" id="startQuizBtn">🧪 اختبر نفسك</button>` : ''}
             ${resultHtml}
         `;
 
         const startBtn = document.getElementById('startQuizBtn');
-        const endBtn = document.getElementById('endQuizBtn');
         if (startBtn) {
             startBtn.addEventListener('click', () => {
                 if (isQuizMode) return;
@@ -523,8 +702,22 @@
                 userAnswers = {};
                 renderStats();
                 renderQuestions();
+                renderTestActions();
             });
         }
+    }
+
+    function renderTestActions() {
+        const container = document.getElementById('testActions');
+        if (!isQuizMode) {
+            container.innerHTML = '';
+            return;
+        }
+
+        const endBtnHtml = `<button class="test-btn active-test" id="endQuizBtn">📝 إنهاء الاختبار</button>`;
+        container.innerHTML = endBtnHtml;
+
+        const endBtn = document.getElementById('endQuizBtn');
         if (endBtn) {
             endBtn.addEventListener('click', () => {
                 if (!isQuizMode) return;
@@ -534,6 +727,7 @@
                     userAnswers = {};
                     renderStats();
                     renderQuestions();
+                    renderTestActions();
                     return;
                 }
                 // تأكد من الإجابة على جميع الأسئلة
@@ -548,6 +742,7 @@
                 quizSubmitted = true;
                 renderStats();
                 renderQuestions();
+                renderTestActions();
             });
         }
     }
@@ -657,9 +852,7 @@
         window.handleAnswer = function(key, value) {
             if (isQuizMode && !quizSubmitted) {
                 userAnswers[key] = value;
-                // تحديث العرض
                 renderQuestions();
-                // تحديث الإحصائيات (النتيجة الحية)
                 renderStats();
             }
         };
@@ -678,6 +871,7 @@
         renderTabs();
         renderStats();
         renderQuestions();
+        renderTestActions();
     }
 
     init();
