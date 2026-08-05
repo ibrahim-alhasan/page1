@@ -3,995 +3,1208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>اختبارات إلكترونية – أمن المعلومات</title>
+    <title>البرمجة التفرعية – الدراسة والاختبار</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        :root {
+            --primary: #1a5e7e;
+            --primary-light: #2a7fa8;
+            --primary-soft: #e3eef7;
+            --accent: #1f7a5a;
+            --accent-soft: #e8f5f0;
+            --warn: #b13e3e;
+            --warn-soft: #fdf6f6;
+            --gold: #c88a1a;
+            --gold-soft: #fff8e7;
+            --text: #1e2b3c;
+            --text-muted: #436f8b;
+            --border: #dce8f2;
+            --bg: #f0f6fb;
+            --card: #ffffff;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 10px;
+            --shadow: 0 4px 20px rgba(0,20,40,0.06);
         }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Segoe UI', 'Tahoma', 'Helvetica Neue', sans-serif;
-            background: #f4f8fc;
-            color: #1e2b3c;
+            font-family: 'Segoe UI', 'Tahoma', 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
             padding: 1rem;
-            line-height: 1.6;
+            line-height: 1.7;
         }
+        .page { max-width: 900px; margin: 0 auto; }
 
-        .container {
-            max-width: 820px;
-            margin: 0 auto;
-        }
-
-        h1 {
-            font-size: 1.8rem;
-            border-right: 6px solid #1e6f9f;
-            padding-right: 1rem;
-            margin-bottom: 0.25rem;
-            color: #0b3b4f;
-            letter-spacing: -0.5px;
-        }
-
-        .subhead {
-            color: #2c5770;
+        /* ===== HERO ===== */
+        .hero {
+            background: linear-gradient(135deg, #0b3b4f 0%, #1a6b8f 60%, #1f7a5a 100%);
+            border-radius: 28px;
+            padding: 2rem 2.5rem;
+            color: white;
             margin-bottom: 1.5rem;
-            font-weight: 300;
-            border-bottom: 1px solid #cbdae6;
-            padding-bottom: 0.5rem;
-            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -40px; left: -40px;
+            width: 200px; height: 200px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 50%;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -60px; right: -20px;
+            width: 250px; height: 250px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 50%;
+        }
+        .hero h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.3rem; }
+        .hero p { font-size: 0.95rem; opacity: 0.85; }
+        .hero-badges { display: flex; gap: 0.6rem; margin-top: 1rem; flex-wrap: wrap; }
+        .hero-badge {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            padding: 0.25rem 0.9rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
         }
 
-        .section-tabs {
+        /* ===== LECTURE TABS ===== */
+        .lecture-nav {
             display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
+            gap: 0.4rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
             margin-bottom: 1.5rem;
-            background: #e9f0f7;
-            padding: 0.8rem;
-            border-radius: 50px;
-            justify-content: center;
-            box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.03);
+            scrollbar-width: none;
         }
-
-        .section-tabs button {
-            background: transparent;
-            border: none;
-            padding: 0.5rem 1.2rem;
+        .lecture-nav::-webkit-scrollbar { display: none; }
+        .lec-tab {
+            flex-shrink: 0;
+            background: var(--card);
+            border: 1.5px solid var(--border);
+            padding: 0.5rem 1.1rem;
             border-radius: 40px;
             font-weight: 600;
-            font-size: 0.85rem;
-            color: #1f4057;
+            font-size: 0.82rem;
+            color: var(--text-muted);
             cursor: pointer;
-            transition: 0.2s;
-            background: #ffffffb0;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
-            flex: 1 0 auto;
-            max-width: 180px;
+            transition: all 0.2s;
             white-space: nowrap;
         }
+        .lec-tab:hover { background: var(--primary-soft); border-color: var(--primary-light); color: var(--primary); }
+        .lec-tab.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 14px rgba(26,94,126,0.3); }
 
-        .section-tabs button:hover {
-            background: #c7dcec;
-            transform: scale(0.97);
+        /* ===== LECTURE PANEL ===== */
+        .lecture-panel { display: none; }
+        .lecture-panel.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform: translateY(0); } }
+
+        .lec-header {
+            background: var(--card);
+            border-radius: var(--radius-lg);
+            padding: 1.4rem 1.8rem;
+            margin-bottom: 1.2rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
         }
+        .lec-header h2 { font-size: 1.3rem; color: var(--primary); border-right: 5px solid var(--primary); padding-right: 0.8rem; margin-bottom: 0.3rem; }
+        .lec-header p { color: var(--text-muted); font-size: 0.9rem; }
 
-        .section-tabs button.active {
-            background: #1a5e7e;
-            color: white;
-            box-shadow: 0 4px 12px rgba(22, 78, 109, 0.25);
-        }
-
-        .stats {
+        /* ===== MODE SWITCHER ===== */
+        .mode-switcher {
             display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem 1.5rem;
-            background: white;
-            padding: 1rem 1.5rem;
-            border-radius: 40px;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
-            justify-content: center;
-            align-items: center;
-            border: 1px solid #e3edf5;
-            transition: all 0.3s ease;
+            gap: 0.6rem;
+            margin-bottom: 1.5rem;
         }
-
-        .stats span {
-            font-weight: 500;
+        .mode-btn {
+            flex: 1;
+            padding: 0.7rem 1rem;
+            border-radius: 50px;
+            border: 2px solid var(--border);
+            background: var(--card);
+            font-weight: 700;
             font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-muted);
+            text-align: center;
         }
+        .mode-btn.active.review { background: var(--gold-soft); border-color: var(--gold); color: #7a4d0a; }
+        .mode-btn.active.quiz { background: var(--accent-soft); border-color: var(--accent); color: #0b4e33; }
 
-        .stats .num {
-            background: #dce8f2;
-            padding: 0.1rem 0.9rem;
+        /* ===== REVIEW SECTION ===== */
+        .review-section { display: none; }
+        .review-section.active { display: block; }
+        .review-card {
+            background: var(--card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            border-right: 5px solid var(--gold);
+            padding: 1.3rem 1.6rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+            transition: all 0.2s;
+        }
+        .review-card:hover { border-right-color: #e6a817; box-shadow: 0 6px 24px rgba(0,20,40,0.09); }
+        .review-q-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.6rem; }
+        .review-icon { font-size: 1.3rem; }
+        .review-num { background: var(--gold-soft); color: var(--gold); border: 1.5px solid #e6c97a; padding: 0.1rem 0.7rem; border-radius: 20px; font-weight: 700; font-size: 0.78rem; }
+        .review-topic { background: var(--primary-soft); color: var(--primary); padding: 0.1rem 0.7rem; border-radius: 20px; font-weight: 600; font-size: 0.75rem; }
+        .review-q { font-size: 1rem; font-weight: 700; color: #0b3b4f; margin-bottom: 0.8rem; line-height: 1.7; }
+        .reveal-btn {
+            background: transparent;
+            border: 1.5px solid var(--gold);
+            color: var(--gold);
+            padding: 0.35rem 1.2rem;
             border-radius: 30px;
             font-weight: 700;
-            color: #10415c;
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .reveal-btn:hover { background: var(--gold-soft); }
+        .reveal-btn.revealed { border-color: var(--accent); color: var(--accent); }
+        .answer-box {
+            display: none;
+            background: var(--accent-soft);
+            border-right: 4px solid var(--accent);
+            border-radius: var(--radius-md);
+            padding: 0.9rem 1.2rem;
+            margin-top: 0.7rem;
+            color: #0b3b2e;
+            font-size: 0.93rem;
+            animation: fadeIn 0.3s ease;
+            line-height: 1.8;
+        }
+        .answer-box.show { display: block; }
+        .answer-box strong { color: #064d30; }
+        .answer-box ul { padding-right: 1.4rem; margin: 0.3rem 0; }
+        .answer-box li { margin-bottom: 0.25rem; }
+        .answer-box .code-block {
+            background: #e0f0e8;
+            border-radius: 8px;
+            padding: 0.5rem 0.9rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            direction: ltr;
+            text-align: left;
         }
 
-        .test-btn {
-            background: #1f7a5a;
+        /* ===== QUIZ SECTION ===== */
+        .quiz-section { display: none; }
+        .quiz-section.active { display: block; }
+        .quiz-stats {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: var(--card);
+            padding: 0.9rem 1.5rem;
+            border-radius: 50px;
+            border: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            box-shadow: var(--shadow);
+        }
+        .quiz-stats span { font-weight: 500; font-size: 0.88rem; color: var(--text-muted); }
+        .quiz-stats .num { background: var(--primary-soft); color: var(--primary); padding: 0.1rem 0.8rem; border-radius: 20px; font-weight: 700; font-size: 0.88rem; }
+        .quiz-btn {
+            margin-right: auto;
+            background: var(--accent);
             color: white;
             border: none;
-            padding: 0.5rem 1.8rem;
-            border-radius: 60px;
+            padding: 0.45rem 1.6rem;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 3px 10px rgba(31,122,90,0.25);
+        }
+        .quiz-btn:hover { background: #136348; transform: scale(0.97); }
+        .quiz-btn.stop { background: var(--warn); box-shadow: 0 3px 10px rgba(177,62,62,0.3); }
+        .quiz-btn.stop:hover { background: #8f2f2f; }
+        .result-banner {
+            background: var(--accent-soft);
+            border-right: 5px solid var(--accent);
+            border-radius: 50px;
+            padding: 0.35rem 1.5rem;
             font-weight: 700;
             font-size: 0.95rem;
-            cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 4px 10px rgba(26, 107, 74, 0.2);
-            margin-right: auto;
-        }
-
-        .test-btn:hover {
-            background: #136348;
-            transform: scale(0.97);
-        }
-
-        .test-btn.active-test {
-            background: #b13e3e;
-            box-shadow: 0 4px 12px rgba(176, 52, 52, 0.3);
-        }
-
-        .test-btn.active-test:hover {
-            background: #8f2f2f;
-        }
-
-        .result-banner {
-            background: #e2f0e9;
-            border-radius: 60px;
-            padding: 0.3rem 1.5rem;
-            font-weight: 700;
-            font-size: 1rem;
             color: #0f5132;
-            border-right: 6px solid #1f7a5a;
-            animation: fadeIn 0.5s ease;
+            animation: fadeIn 0.4s ease;
         }
+        .result-banner.fail { background: var(--warn-soft); border-right-color: var(--warn); color: #7a1f1f; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .question-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .question-card {
-            background: white;
-            border-radius: 24px;
+        .q-grid { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; }
+        .q-card {
+            background: var(--card);
+            border-radius: var(--radius-lg);
             padding: 1.2rem 1.5rem;
-            box-shadow: 0 4px 16px rgba(0, 20, 30, 0.04);
-            border: 1px solid #e3edf5;
-            transition: 0.15s;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            transition: all 0.15s;
         }
-
-        .question-card:hover {
-            border-color: #b6d2e9;
-        }
-
-        .q-header {
+        .q-card:hover { border-color: #b6d2e9; }
+        .quiz-mode .q-card { border-right: 5px solid var(--primary-light); }
+        .quiz-mode .q-card.correct { border-right-color: var(--accent); background: #f6fcf9; }
+        .quiz-mode .q-card.wrong { border-right-color: var(--warn); background: var(--warn-soft); }
+        .q-head {
             display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-bottom: 0.5rem;
             flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 0.3rem;
-            font-size: 0.85rem;
-            gap: 0.3rem;
         }
-
-        .q-type {
-            background: #d4e2ed;
-            padding: 0.15rem 1rem;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 0.75rem;
-            color: #1b4055;
-            letter-spacing: 0.3px;
-        }
-
-        .q-num {
-            font-weight: 600;
-            color: #1d577a;
-        }
-
-        .q-text {
-            font-size: 1rem;
-            margin: 0.4rem 0 0.8rem 0;
-            line-height: 1.7;
-            font-weight: 500;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 0.6rem;
-            padding: 0.8rem 1rem;
-            background: #f3f8fe;
+        .q-num { font-weight: 700; color: var(--primary); font-size: 0.88rem; }
+        .q-badge {
+            padding: 0.1rem 0.8rem;
             border-radius: 20px;
-            margin-top: 0.2rem;
+            font-size: 0.72rem;
+            font-weight: 700;
         }
-
-        .options label {
+        .badge-tf { background: #dce8f5; color: #1a4a6b; }
+        .badge-mcq { background: #e0f0e8; color: #0b4e33; }
+        .q-text { font-size: 0.97rem; font-weight: 600; line-height: 1.7; margin-bottom: 0.8rem; color: #0d2a3e; }
+        .tf-opts {
+            display: flex;
+            gap: 2rem;
+            background: #f3f8fe;
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            width: fit-content;
+            flex-wrap: wrap;
+        }
+        .tf-opts label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.95rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 10px;
+            transition: background 0.15s;
+        }
+        .tf-opts label:hover { background: #e3eef9; }
+        .tf-opts input[type="radio"] { width: 1.2rem; height: 1.2rem; accent-color: var(--primary); cursor: pointer; }
+        .mcq-opts { display: flex; flex-direction: column; gap: 0.5rem; }
+        .mcq-opts label {
             display: flex;
             align-items: center;
             gap: 0.7rem;
-            cursor: pointer;
             font-weight: 500;
-            font-size: 0.95rem;
-            padding: 0.3rem 0.5rem;
-            border-radius: 12px;
-            transition: background 0.15s;
-        }
-
-        .options label:hover {
-            background: #e3eef9;
-        }
-
-        .options input[type="radio"] {
-            width: 1.2rem;
-            height: 1.2rem;
-            accent-color: #1a6b8f;
+            font-size: 0.93rem;
             cursor: pointer;
-            flex-shrink: 0;
-        }
-
-        .tf-options {
-            display: flex;
-            gap: 2.5rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: var(--radius-sm);
             background: #f3f8fe;
-            padding: 0.6rem 2rem;
-            border-radius: 60px;
-            width: fit-content;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .tf-options label {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 1rem;
-            padding: 0.3rem 0.8rem;
-            border-radius: 12px;
             transition: background 0.15s;
         }
-
-        .tf-options label:hover {
-            background: #e3eef9;
-        }
-
-        .tf-options input[type="radio"] {
-            width: 1.3rem;
-            height: 1.3rem;
-            accent-color: #1a6b8f;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-
-        .explanation {
+        .mcq-opts label:hover { background: #e3eef9; }
+        .mcq-opts input[type="radio"] { width: 1.1rem; height: 1.1rem; accent-color: var(--primary); cursor: pointer; flex-shrink: 0; }
+        .q-explanation {
             background: #eef4fa;
-            border-radius: 16px;
-            padding: 0.5rem 1.2rem;
-            margin-top: 0.8rem;
-            color: #1d4057;
-            font-size: 0.9rem;
             border-right: 4px solid #578baa;
-            animation: fadeIn 0.4s ease;
+            border-radius: var(--radius-md);
+            padding: 0.6rem 1.1rem;
+            margin-top: 0.7rem;
+            font-size: 0.88rem;
+            color: #1d4057;
+            animation: fadeIn 0.3s ease;
+            display: none;
         }
-
-        .explanation strong {
-            color: #05445e;
+        .q-explanation.show { display: block; }
+        .q-correct-tag {
+            display: inline-block;
+            padding: 0.1rem 0.7rem;
+            border-radius: 15px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
         }
+        .tag-correct { background: #c8ebd9; color: #0b4e30; }
+        .tag-wrong { background: #f5d3d3; color: #7a1f1f; }
 
-        .mcq-answer {
-            background: #d9e7f3;
-            border-radius: 16px;
-            padding: 0.1rem 0.8rem;
-            font-weight: 600;
-            color: #003153;
-            font-size: 0.8rem;
-        }
-
-        .tf-answer {
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-
-        .quiz-mode .question-card {
-            border-right: 6px solid #1a6b8f;
-        }
-
-        .quiz-mode .question-card.correct {
-            border-right-color: #1f7a5a;
-            background: #f6fcf9;
-        }
-
-        .quiz-mode .question-card.wrong {
-            border-right-color: #b13e3e;
-            background: #fdf6f6;
-        }
-
-        .test-actions {
+        .quiz-footer {
             display: flex;
             justify-content: center;
-            padding: 1.5rem 0 2rem 0;
-            border-top: 1px solid #cddde9;
-            margin-top: 0.5rem;
+            padding: 1.5rem 0 2rem;
+            border-top: 1px solid var(--border);
         }
-
-        .test-actions .test-btn {
-            font-size: 1.2rem;
+        .quiz-footer .quiz-btn {
+            font-size: 1.1rem;
             padding: 0.8rem 3rem;
-            margin-right: 0;
-            width: 100%;
             max-width: 350px;
+            width: 100%;
+        }
+
+        /* ===== FOOTER ===== */
+        .page-footer {
             text-align: center;
-            border-radius: 60px;
-            box-shadow: 0 6px 18px rgba(26, 107, 74, 0.25);
-        }
-
-        .test-actions .test-btn.active-test {
-            background: #b13e3e;
-            box-shadow: 0 6px 18px rgba(176, 52, 52, 0.3);
-        }
-
-        .test-actions .test-btn.active-test:hover {
-            background: #8f2f2f;
-        }
-
-        .footnote {
-            margin-top: 1rem;
-            padding: 0.8rem;
-            text-align: center;
-            color: #436f8b;
-            border-top: 1px solid #cddde9;
-            font-size: 0.85rem;
+            padding: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
         }
 
         @media (max-width: 640px) {
-            body {
-                padding: 0.8rem;
-            }
-
-            h1 {
-                font-size: 1.5rem;
-                padding-right: 0.8rem;
-            }
-
-            .section-tabs {
-                padding: 0.6rem;
-                gap: 0.4rem;
-                border-radius: 30px;
-            }
-
-            .section-tabs button {
-                font-size: 0.75rem;
-                padding: 0.4rem 0.8rem;
-                max-width: 140px;
-                flex: 1 1 auto;
-                white-space: normal;
-            }
-
-            .stats {
-                padding: 0.8rem 1rem;
-                gap: 0.6rem;
-                border-radius: 30px;
-                flex-direction: column;
-                align-items: stretch;
-                text-align: center;
-            }
-
-            .stats span {
-                font-size: 0.85rem;
-            }
-
-            .test-btn {
-                font-size: 0.9rem;
-                padding: 0.4rem 1.2rem;
-                margin-right: 0;
-                width: 100%;
-                text-align: center;
-            }
-
-            .result-banner {
-                font-size: 0.9rem;
-                padding: 0.2rem 1rem;
-                text-align: center;
-            }
-
-            .question-card {
-                padding: 1rem;
-                border-radius: 18px;
-            }
-
-            .q-text {
-                font-size: 0.95rem;
-            }
-
-            .options {
-                padding: 0.6rem 0.8rem;
-                gap: 0.5rem;
-            }
-
-            .options label {
-                font-size: 0.88rem;
-                padding: 0.2rem 0.4rem;
-            }
-
-            .tf-options {
-                padding: 0.5rem 1.2rem;
-                gap: 1.8rem;
-                width: 100%;
-                justify-content: center;
-            }
-
-            .tf-options label {
-                font-size: 0.95rem;
-                padding: 0.2rem 0.5rem;
-            }
-
-            .tf-options input[type="radio"] {
-                width: 1.2rem;
-                height: 1.2rem;
-            }
-
-            .test-actions .test-btn {
-                font-size: 1rem;
-                padding: 0.7rem 1.5rem;
-                max-width: 100%;
-            }
-
-            .explanation {
-                font-size: 0.85rem;
-                padding: 0.4rem 1rem;
-            }
-        }
-
-        @media (max-width: 400px) {
-            .section-tabs button {
-                font-size: 0.7rem;
-                padding: 0.3rem 0.6rem;
-                max-width: 120px;
-            }
-
-            .stats {
-                padding: 0.6rem 0.8rem;
-            }
-
-            .question-card {
-                padding: 0.8rem;
-            }
-
-            .q-text {
-                font-size: 0.9rem;
-            }
-
-            .options label {
-                font-size: 0.82rem;
-            }
-
-            .tf-options {
-                gap: 1.2rem;
-                padding: 0.4rem 0.8rem;
-            }
+            body { padding: 0.7rem; }
+            .hero { padding: 1.5rem 1.2rem; border-radius: 20px; }
+            .hero h1 { font-size: 1.4rem; }
+            .lec-tab { font-size: 0.75rem; padding: 0.45rem 0.8rem; }
+            .lec-header { padding: 1rem 1.1rem; }
+            .lec-header h2 { font-size: 1.1rem; }
+            .mode-btn { font-size: 0.82rem; padding: 0.6rem 0.6rem; }
+            .review-card { padding: 1rem 1.1rem; }
+            .q-card { padding: 1rem 1.1rem; }
+            .tf-opts { padding: 0.5rem 1rem; gap: 1.5rem; }
+            .quiz-footer .quiz-btn { font-size: 1rem; padding: 0.7rem 1.5rem; }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>📘 اختبارات أمن المعلومات</h1>
-    <div class="subhead">اختر النموذج أو الدورة — اضغط "اختبر نفسك" للإجابة ثم اعرض النتيجة</div>
+<div class="page">
 
-    <div id="sectionTabs" class="section-tabs"></div>
-    <div id="statsBar" class="stats"></div>
-    <div id="questionList" class="question-grid"></div>
-    <div id="testActions" class="test-actions"></div>
-    <div class="footnote">✔️ في وضع الاختبار، اختر إجاباتك ثم اضغط "إنهاء الاختبار" لعرض النتيجة والتصحيح</div>
+    <div class="hero">
+        <h1>📘 البرمجة التفرعية – النظري</h1>
+        <p>مراجعة شاملة لجميع المحاضرات مع اختبارات تقييم ذاتي</p>
+        <div class="hero-badges">
+            <span class="hero-badge">🎓 10 محاضرات</span>
+            <span class="hero-badge">💡 مراجعة سؤال وجواب</span>
+            <span class="hero-badge">✅ صح/خطأ</span>
+            <span class="hero-badge">📝 اختيار من متعدد</span>
+        </div>
+    </div>
+
+    <div class="lecture-nav" id="lectureNav"></div>
+    <div id="lectureContent"></div>
+
+    <div class="page-footer">✔️ في وضع الاختبار، اختر إجاباتك ثم اضغط "إنهاء الاختبار" لعرض نتيجتك والتصحيح</div>
 </div>
 
 <script>
-    // ====== البيانات ======
-    const SECTIONS = [
-        { id: 'course-2025', label: 'دورة 2025 الثانية', description: 'أسئلة الدورة التدريبية الثانية 2025', tfCount: 25, mcqCount: 30 },
-        { id: 'course-2026', label: 'دورة 2026 الأولى', description: 'أسئلة دورة 2026 الأولى (نفس محتوى 2025)', tfCount: 25, mcqCount: 30 },
-        { id: 'model-a', label: 'النموذج الشامل A', description: 'النموذج الأول – مفاهيم وتطبيقات', tfCount: 25, mcqCount: 30 },
-        { id: 'model-b', label: 'النموذج الشامل B', description: 'النموذج الثاني – تفاصيل تطبيقية وتمييز بين الخوارزميات', tfCount: 25, mcqCount: 30 },
-        { id: 'model-c', label: 'النموذج الشامل C', description: 'النموذج الثالث – فخاخ واستثناءات وربط بين المحاضرات', tfCount: 25, mcqCount: 30 },
-    ];
-
-    // -------- دورة 2025 (تستخدم أيضاً لـ 2026) ----------
-    const COURSE_TF = [
-        { num: 1, type: 'tf', text: 'الهندسة الاجتماعية مجموعة من التقنيات والحيل النفسية التي يستخدمها المهاجم لخداع مستخدمي الحاسوب ودفعهم إلى كشف معلومات سرية.', answer: true, explanation: 'الهندسة الاجتماعية تستهدف الجانب النفسي للإنسان لاستخراج معلومات.' },
-        { num: 2, type: 'tf', text: 'كل نظام للتسجيل والاسترجاع يُعد نظام معلومات.', answer: true, explanation: 'صُحِّح في مفتاح الإجابة إلى صح وفق المحاضرة.' },
-        { num: 3, type: 'tf', text: 'السياسة الأمنية في الشركة هي فقط مجموعة تدابير لمنع خرق الأنظمة المعلوماتية.', answer: false, explanation: 'السياسة الأمنية تشمل الوقاية والتعامل مع الخرق بعد وقوعه.' },
-        { num: 4, type: 'tf', text: 'يُعد الخداع والإنكار من أكبر المهددات لسرية المعلومات.', answer: false, explanation: 'الخداع والإنكار من مهددات التكاملية، وليس السرية.' },
-        { num: 5, type: 'tf', text: 'يُعد تحليل حركة الاتصالات من أكبر المهددات لسلامة البيانات وتكاملها.', answer: false, explanation: 'تحليل حركة الاتصالات يهدد السرية، وليس التكاملية.' },
-        { num: 6, type: 'tf', text: 'التشفير هو عملية مزج البيانات والمعلومات بصورة عشوائية.', answer: false, explanation: 'التشفير عملية منظمة وفق خوارزمية ومفتاح، وليس مزجاً عشوائياً.' },
-        { num: 7, type: 'tf', text: 'يشمل الأمن المادي حماية البنى التحتية والعتاد والأفراد والمبنى والحد من أثر الهندسة الاجتماعية.', answer: true },
-        { num: 8, type: 'tf', text: 'ارتفاع درجات الحرارة من المهددات البيئية للأمن المادي لنظم المعلومات.', answer: true },
-        { num: 9, type: 'tf', text: 'للمحافظة على استمرارية العمل ينبغي توفير تجهيزات ومراكز بيانات بديلة.', answer: true },
-        { num: 10, type: 'tf', text: 'تُعد شيفرات تبديل المواقع شديدة المقاومة للهجوم الإحصائي.', answer: false, explanation: 'شيفرات تبديل المواقع تحافظ على تكرارات الحروف فهي ضعيفة أمام الهجوم الإحصائي.' },
-        { num: 11, type: 'tf', text: 'تعتمد خوارزميات التشفير المتماثل على حسابات رياضية معقدة لتوليد مفاتيح التشفير.', answer: false, explanation: 'هذا وصف التشفير غير المتماثل (RSA)؛ أما المتماثل فيعتمد على المفتاح المشترك السري.' },
-        { num: 12, type: 'tf', text: 'المتطفل السلبي ينسخ البيانات المشفرة ثم يعدّلها ويعيد إرسالها.', answer: false, explanation: 'المتطفل السلبي يقرأ أو ينسخ فقط دون تعديل؛ التعديل سلوك المتطفل النشط.' },
-        { num: 13, type: 'tf', text: 'تُستخدم عملية توسعة المفتاح لزيادة طول المفتاح عند الحاجة.', answer: false, explanation: 'توسعة المفتاح تولّد مفاتيح فرعية من المفتاح الأصلي، ولا تزيد طوله مباشرة.' },
-        { num: 14, type: 'tf', text: 'تنجح الهندسة الاجتماعية لأنها تستهدف الجانب النفسي لدى الضحية.', answer: true },
-        { num: 15, type: 'tf', text: 'تعتمد مقاومة خوارزمية التشفير للهجوم أساساً على سرية وتعقيد الخوارزمية نفسها.', answer: false, explanation: 'وفق مبدأ كيركهوفس، تعتمد المقاومة على سرية المفتاح لا على سرية الخوارزمية.' },
-        { num: 16, type: 'tf', text: 'يستخدم التشفير المتماثل مفتاحاً سرياً واحداً للتشفير وفك التشفير.', answer: true },
-        { num: 17, type: 'tf', text: 'خوارزمية DES خوارزمية تشفير كتلي متماثل.', answer: true },
-        { num: 18, type: 'tf', text: 'يُستخدم التشفير غير المتماثل في التوقيع الرقمي وتبادل المفاتيح.', answer: true },
-        { num: 19, type: 'tf', text: 'تُعد Rotor Cipher خوارزمية متماثلة حديثة تعتمد تبديل المحارف واحداً بواحد.', answer: false, explanation: 'Rotor Cipher شيفرة متعددة الأبجديات (Polyalphabetic)، ليست حديثة ولا تعتمد تبديلاً واحداً بواحد.' },
-        { num: 20, type: 'tf', text: 'في Playfair لا يلزم أن يُشفَّر الحرف نفسه دائماً إلى الرمز نفسه، لأن المعالجة تتم على أزواج الحروف.', answer: true },
-        { num: 21, type: 'tf', text: 'تساعد الشهادات الرقمية وجهات التصديق على إثبات ملكية المفتاح العام وتقليل انتحال الهوية.', answer: true },
-        { num: 22, type: 'tf', text: 'في التشفير غير المتماثل يحتاج المستقبل إلى مفتاح خاص واحد لفك الرسائل الواردة إليه من عدة مرسلين.', answer: true },
-        { num: 23, type: 'tf', text: 'لأن RSA سريعة جداً، تُستخدم عادةً لتشفير الرسائل الطويلة مباشرة.', answer: false, explanation: 'RSA بطيئة لذلك تُستخدم للرسائل القصيرة وتشفير المفاتيح.' },
-        { num: 24, type: 'tf', text: 'للحصول على المستوى الأمني نفسه يجب أن تكون مفاتيح التشفير المتماثل أطول بكثير من مفاتيح التشفير غير المتماثل.', answer: false, explanation: 'العكس صحيح؛ مفاتيح التشفير غير المتماثل أطول من المتماثل لتحقيق نفس الأمان.' },
-        { num: 25, type: 'tf', text: 'يُستخدم بروتوكول الإنترنت المسمى Voice-over-IP بذاته لإخفاء الرسائل داخل المحادثات الصوتية.', answer: true, explanation: 'يُستخدم لنقل المكالمات الصوتية عبر الإنترنت، , يُستخدم بذاته لإخفاء الرسائل داخل المحادثات الصوتية.' },
-    ];
-
-    const COURSE_MCQ = [
-        { num: 26, type: 'mcq', text: 'يُعرَّف أمن المعلومات بأنه:', options: { A: 'حماية المعلومات المتداولة من العبث والتخريب والتبديل', B: 'إجراءات لحماية المعلومات الداخلية والخارجية', C: 'استراتيجيات لتجنب الثغرات الأمنية', D: 'جميع ما سبق' }, answer: 'D' },
-        { num: 27, type: 'mcq', text: 'حماية المعلومات من التغيير غير المصرح به تسمى:', options: { A: 'السرية', B: 'الإتاحة', C: 'التكاملية', D: 'الموثوقية' }, answer: 'C' },
-        { num: 28, type: 'mcq', text: 'أي العبارات أدق بخصوص أثر أمن المعلومات في وقوع الاختراق؟', options: { A: 'يمنع الاختراق كلياً', B: 'لا يمنع الاختراق إطلاقاً', C: 'ليس له أي أثر', D: 'العبارات الثلاث السابقة غير دقيقة' }, answer: 'D' },
-        { num: 29, type: 'mcq', text: 'للتحقق من هوية المستخدم يمكن استخدام:', options: { A: 'تصنيف البيانات إلى سرية وغير سرية', B: 'تحديد مستويات الوصول فقط', C: 'أرقام أو معلومات يعرفها المستخدم مسبقاً', D: 'جميع ما سبق' }, answer: 'C' },
-        { num: 30, type: 'mcq', text: 'الإشراف على أمن الحواسيب وإعداد معايير وإجراءات السلامة في مركز المعلومات من مهام:', options: { A: 'محلل ومبرمج النظم', B: 'مدير مركز المعلومات', C: 'مدخل البيانات', D: 'المستخدم النهائي' }, answer: 'B' },
-        { num: 31, type: 'mcq', text: 'أكثر أفراد الكادر الوظيفي تهديداً لمركز المعلومات بحسب مقرر الدورة هو:', options: { A: 'المستخدم النهائي', B: 'محلل النظم', C: 'مدير المركز', D: 'مدخل البيانات' }, answer: 'A' },
-        { num: 32, type: 'mcq', text: 'من أكثر قنوات الهندسة الاجتماعية شيوعاً بين المهاجمين:', options: { A: 'الهاتف', B: 'الإنترنت', C: 'النفايات', D: 'انتحال الشخصية' }, answer: 'C' },
-        { num: 33, type: 'mcq', text: 'أضعف حلقة في منظومة حماية المعلومات غالباً هي:', options: { A: 'خطوط الاتصال', B: 'الطابعات والطرفيات', C: 'العنصر البشري', D: 'برامج مكافحة الفيروسات' }, answer: 'C' },
-        { num: 34, type: 'mcq', text: 'إذا كان P النص الواضح و C النص المشفر و E خوارزمية التشفير بالمفتاح K، فالعلاقة الصحيحة هي:', options: { A: 'P = D_K(C)', B: 'C = E_K(P)', C: 'K = C.P', D: 'D_K(E_K(P)) فقط' }, answer: 'B' },
-        { num: 35, type: 'mcq', text: 'عندما يملك المهاجم نصاً واضحاً يقابله نص مشفر ويحاول استنتاج المفتاح، يكون الهجوم:', options: { A: 'نص مشفر فقط', B: 'نص واضح معروف', C: 'نص واضح مختار', D: 'نص مشفر مختار' }, answer: 'B' },
-        { num: 36, type: 'mcq', text: 'لرفع مقاومة هجوم القوة الغاشمة ينبغي أن يكون:', options: { A: 'المفتاح طويلاً جداً بصرف النظر عن الفضاء', B: 'فضاء المفاتيح المحتملة كبيراً', C: 'تنفيذ الخوارزمية معقداً فقط', D: 'المفتاح مستخدماً مرة واحدة دائماً' }, answer: 'B' },
-        { num: 37, type: 'mcq', text: 'عند استخدام الشيفرة الضربية بالمفتاح K=7 لتشفير HELLO، يكون الناتج:', options: { A: 'XCZZU', B: 'XCZUZ', C: 'XCUUZ', D: 'XUCCZ' }, answer: 'A', explanation: 'H(7)=7×7=49≡23=X, E(4)=4×7=28≡2=C, L(11)=11×7=77≡25=Z, L=Z, O(14)=14×7=98≡20=U → XCZZU' },
-        { num: 38, type: 'mcq', text: 'عند استخدام الشيفرة التألفية بالمفتاح K=(7,2) لتشفير HELLO، يكون الناتج:', options: { A: 'ZEWWB', B: 'BEWWZ', C: 'WEBBZ', D: 'ZEBBW' }, answer: 'D', explanation: 'C=(7P+2) mod26: H→Z، E→E→Z? لا: H(7)→(49+2)mod26=51mod26=25=Z، E(4)→(28+2)=30mod26=4=E→ ZEBBW' },
-        { num: 39, type: 'mcq', text: 'حجم فضاء المفاتيح في الشيفرة التألفية على الأبجدية الإنكليزية هو:', options: { A: '325', B: '26', C: '312', D: '338' }, answer: 'C', explanation: '12 مفتاحاً ضربياً صالحاً × 26 إزاحة = 312' },
-        { num: 40, type: 'mcq', text: 'عند استخدام Autokey بالمفتاح الابتدائي K=12 لتشفير ATTACK، يكون الناتج:', options: { A: 'MCCMTK', B: 'TMMTMC', C: 'MTMTCM', D: 'TMTMCM' }, answer: 'C' },
-        { num: 41, type: 'mcq', text: 'عند استخدام Playfair بالمفتاح COMPUTER لتشفير ATTACK، يكون الناتج وفق نموذج الدورة:', options: { A: 'EBBETV', B: 'BEEBTV', C: 'BEEBVT', D: 'EBBEVT' }, answer: 'B' },
-        { num: 42, type: 'mcq', text: 'إخفاء العلاقة بين النص المشفر والمفتاح يسمى:', options: { A: 'الانتشار', B: 'الهامش الأمني', C: 'التفريق', D: 'التشويش (Confusion)' }, answer: 'D' },
-        { num: 43, type: 'mcq', text: 'في S-DES يكون حجم الكتلة N وطول المفتاح K:', options: { A: 'N=10, K=10', B: 'N=8, K=8', C: 'N=8, K=10', D: 'N=10, K=8' }, answer: 'C' },
-        { num: 44, type: 'mcq', text: 'في DES يكون حجم الكتلة N وطول المفتاح الفعّال K:', options: { A: 'N=56, K=48', B: 'N=64, K=48', C: 'N=128, K=64', D: 'N=64, K=56' }, answer: 'D' },
-        { num: 45, type: 'mcq', text: 'التأثير الانهياري يعني تغيراً كبيراً في النص المشفر عند تغير صغير في:', options: { A: 'النص الأصلي فقط', B: 'النص الأصلي أو المفتاح', C: 'المفتاح فقط', D: 'طول المفتاح فقط' }, answer: 'B' },
-        { num: 46, type: 'mcq', text: 'في AES، إذا كان عدد الدورات 12 فالحجم الصحيح للكتلة والمفتاح هو:', options: { A: 'N=128, K=192', B: 'N=128, K=128', C: 'N=192, K=192', D: 'N=256, K=256' }, answer: 'A' },
-        { num: 47, type: 'mcq', text: 'عند استخدام التشفير غير المتماثل لحماية بيانات موجهة إلى مستقبل، يقع عبء حماية المفتاح الخاص أساساً على:', options: { A: 'المرسل', B: 'مركز توزيع المفاتيح', C: 'المستقبل', D: 'مزود التوقيع' }, answer: 'C' },
-        { num: 48, type: 'mcq', text: 'أفضل خيار ضمن خيارات الدورة لتبادل المفاتيح مع ضمان عدم الإنكار هو:', options: { A: 'المنحنيات الإهليلجية', B: 'مركز توثيق/جهة تصديق', C: 'Diffie-Hellman وحده', D: 'مركز توزيع مفاتيح متماثلة' }, answer: 'B' },
-        { num: 49, type: 'mcq', text: 'خوارزمية متماثلة كتلية، فيستل 16 دورة، مفتاح 32 إلى 448 بت، واستُخدمت في نواة Linux:', options: { A: 'DES', B: 'Blowfish', C: 'Twofish', D: 'IDEA' }, answer: 'B' },
-        { num: 50, type: 'mcq', text: 'سؤال متعلق بمخطط A5/1 كان معروضاً كصورة في ورقة الدورة.', options: { A: '—', B: '—', C: '—', D: '—' }, answer: null, note: 'المخطط والخيارات غير متاحين في النسخة النصية المنشورة؛ لم يُخترع جواب.' },
-        { num: 51, type: 'mcq', text: 'كل العبارات التالية عن التوقيع الرقمي صحيحة ما عدا:', options: { A: 'يساعد في منع الإنكار', B: 'يحقق سرية الرسالة بذاته', C: 'لا يُنجز عادةً بتشفير متماثل فقط', D: 'يساعد في وثوقية الرسالة' }, answer: 'B', explanation: 'التوقيع الرقمي يحقق المصادقة وعدم الإنكار، لكنه لا يحقق السرية بذاته.' },
-        { num: 52, type: 'mcq', text: 'عند استخدام RSA في التوقيع الرقمي تُستخدم مفاتيح:', options: { A: 'خاص المرسل وعام المستقبل', B: 'خاص وعام المستقبل', C: 'خاص وعام المرسل', D: 'خاص المستقبل وعام المرسل' }, answer: 'C' },
-        { num: 53, type: 'mcq', text: 'في الإخفاء (Steganography) كل العبارات التالية صحيحة ما عدا:', options: { A: 'من الخطوات تحويل النص إلى ثنائي', B: 'لا يمكن تشفير البيانات قبل إخفائها', C: 'LSB من أهم خوارزميات الإخفاء', D: 'قد يكون الحامل صورة أو صوتاً أو فيديو' }, answer: 'B', explanation: 'يمكن تشفير البيانات قبل إخفائها لزيادة الأمان.' },
-        { num: 54, type: 'mcq', text: 'وفق مفتاح الدورة، الخوارزمية غير الكتلية بين الخيارات الآتية هي:', options: { A: 'RSA', B: 'RC4', C: 'RC6', D: 'Blowfish' }, answer: 'B', note: 'صياغة التصنيف قابلة للنقاش؛ أُبقي جواب المصدر.' },
-        { num: 55, type: 'mcq', text: 'الخوارزمية الأكثر مقاومة لهجوم القوة الغاشمة ضمن الخيارات هي:', options: { A: 'DES', B: 'AES', C: 'LSB', D: 'RSA' }, answer: 'B' },
-    ];
-
-    // -------- النموذج A (مطابق للملف الأصلي) ----------
-    const MODEL_A_TF = [
-        { num: 1, type: 'tf', text: 'يتكون النظام - وفق التعريف الوارد في المقرر - من مدخلات ومعالجة ومخرجات وتغذية عكسية.', answer: true },
-        { num: 2, type: 'tf', text: 'تقتصر مكونات نظام المعلومات على العتاد والبرمجيات فقط.', answer: false, explanation: 'تشمل أيضاً المستخدمين والإجراءات والبيانات.' },
-        { num: 3, type: 'tf', text: 'لشن هجوم إلكتروني ناجح يلزم عادة وجود دافع وطريقة تنفيذ وثغرة يمكن استغلالها.', answer: true },
-        { num: 4, type: 'tf', text: 'التكاملية تعني حماية المعلومات من الاطلاع غير المصرح به.', answer: false, explanation: 'هذا تعريف السرية؛ التكاملية تعني الحماية من التغيير غير المصرح.' },
-        { num: 5, type: 'tf', text: 'الإتاحة تعني توفر المعلومات والتطبيقات للمستخدم المخول عند الحاجة.', answer: true },
-        { num: 6, type: 'tf', text: 'ظهرت المساءلة والموثوقية كهدفين إضافيين مع انتشار الإنترنت والمعاملات الإلكترونية.', answer: true },
-        { num: 7, type: 'tf', text: 'تحليل حركة الاتصالات من مهددات سرية المعلومات حتى عندما يكون محتوى الرسالة مشفراً.', answer: true },
-        { num: 8, type: 'tf', text: 'إعادة استخدام رسالة شرعية سابقة (Replay) تعد من مهددات التكاملية.', answer: true },
-        { num: 9, type: 'tf', text: 'هدف الهجوم غير الفعال هو تعديل المعلومات وإيقاف الخدمات.', answer: false, explanation: 'الهجوم غير الفعال يهدف إلى الحصول على المعلومات فقط دون تعديل.' },
-        { num: 10, type: 'tf', text: 'الأمن المادي لا علاقة له بحماية الأفراد أو المرافق، بل يختص بالعتاد فقط.', answer: false, explanation: 'يشمل المرافق والمعدات والموارد والأفراد والممتلكات.' },
-        { num: 11, type: 'tf', text: 'تنجح الهندسة الاجتماعية لأنها تستهدف سلوك الإنسان وجانبه النفسي أكثر من استهدافها للخوارزمية.', answer: true },
-        { num: 12, type: 'tf', text: 'تتضمن السياسة الأمنية إجراءات الوقاية فقط ولا تتضمن خطوات التعامل مع الخرق بعد وقوعه.', answer: false },
-        { num: 13, type: 'tf', text: 'يستخدم التشفير المتماثل المفتاح السري نفسه للتشفير وفك التشفير.', answer: true },
-        { num: 14, type: 'tf', text: 'وفق مبدأ كيركهوفس، ينبغي أن يعتمد أمن الشيفرة على سرية المفتاح لا على سرية الخوارزمية.', answer: true },
-        { num: 15, type: 'tf', text: 'في هجوم النص المشفر المختار يحصل المهاجم على وصول مؤقت إلى آلة فك التشفير.', answer: true },
-        { num: 16, type: 'tf', text: 'في المشفر متعدد الأبجديات قد يقابل الحرف الواضح نفسه محارف مشفرة مختلفة تبعاً لموقعه.', answer: true },
-        { num: 17, type: 'tf', text: 'شيفرات تغيير المواقع تستبدل كل محرف بمحرف آخر ولا تغير ترتيب المحارف.', answer: false, explanation: 'شيفرات تغيير المواقع تعيد ترتيب المحارف من دون استبدالها.' },
-        { num: 18, type: 'tf', text: 'تعد شيفرة قيصر حالة خاصة من Vigenere عندما يكون طول المفتاح m=1.', answer: true },
-        { num: 19, type: 'tf', text: 'في One-Time Pad يجب أن يكون المفتاح عشوائياً وبطول مساوٍ لطول النص وألا يعاد استخدامه.', answer: true },
-        { num: 20, type: 'tf', text: 'صندوق P-box الضاغط قابل للعكس دائماً لأنه يحتفظ بعدد بتات الدخل.', answer: false, explanation: 'الضغط يقلل عدد البتات ولذلك لا يكون قابلاً للعكس.' },
-        { num: 21, type: 'tf', text: 'الانتشار (Diffusion) يخفي العلاقة بين النص الأصلي والنص المشفر.', answer: true },
-        { num: 22, type: 'tf', text: 'تستخدم S-DES كتلة بطول 8 بت ومفتاحاً بطول 10 بت.', answer: true },
-        { num: 23, type: 'tf', text: 'يبقى طول كتلة AES ثابتاً عند 128 بت حتى لو كان المفتاح 192 أو 256 بت.', answer: true },
-        { num: 24, type: 'tf', text: 'في التشفير غير المتماثل يُنشر المفتاح العام ويُحفظ المفتاح الخاص سرياً.', answer: true },
-        { num: 25, type: 'tf', text: 'يحقق التوقيع الرقمي سرية محتوى الرسالة بذاته من دون تشفير إضافي.', answer: false },
-    ];
-    const MODEL_A_MCQ = [
-        { num: 26, type: 'mcq', text: 'أي خاصية تمنع تعديل علامات الطلاب أو رواتب الموظفين من أشخاص غير مخولين؟', options: { A: 'السرية', B: 'التكاملية', C: 'الإتاحة', D: 'التنصل' }, answer: 'B' },
-        { num: 27, type: 'mcq', text: 'المهاجم الذي ينتمي إلى الجهة المستهدفة يسمى:', options: { A: 'مهاجماً داخلياً', B: 'مهاجماً خارجياً', C: 'متطفلاً سلبياً فقط', D: 'مزود خدمة' }, answer: 'A' },
-        { num: 28, type: 'mcq', text: 'أي الآتي يعد تهديداً بيئياً للأمن المادي؟', options: { A: 'ارتفاع الحرارة', B: 'التشفير', C: 'التوقيع الرقمي', D: 'توسيع المفتاح' }, answer: 'A' },
-        { num: 29, type: 'mcq', text: 'في شبكة من 8 مستخدمين، كم عملية تبادل مفاتيح سرية زوجية نحتاج في التشفير المتماثل؟', options: { A: '8', B: '16', C: '28', D: '64' }, answer: 'C', explanation: 'n(n-1)/2 = 8×7/2 = 28' },
-        { num: 30, type: 'mcq', text: 'أقوى هجومات تحليل الشيفرات الأربعة بحسب ترتيب المقرر هو:', options: { A: 'نص مشفر فقط', B: 'نص واضح معروف', C: 'نص واضح مختار', D: 'نص مشفر مختار' }, answer: 'D' },
-        { num: 31, type: 'mcq', text: 'أي حرف هو الأكثر تكراراً في اللغة الإنجليزية وفق التحليل الإحصائي الوارد؟', options: { A: 'A', B: 'E', C: 'T', D: 'Z' }, answer: 'B' },
-        { num: 32, type: 'mcq', text: 'باستخدام شيفرة قيصر K=5 وترميز A=0، تشفير DATA يعطي:', options: { A: 'IFYF', B: 'IFZF', C: 'JGYG', D: 'DAXA' }, answer: 'A', explanation: 'D→I، A→F، T→Y، A→F' },
-        { num: 33, type: 'mcq', text: 'أي مفتاح صالح للشيفرة الضربية على Z26؟', options: { A: '2', B: '7', C: '13', D: '26' }, answer: 'B', explanation: 'gcd(7,26)=1 فهو صالح؛ أما 2 و13 و26 فمقسومة على 2 أو 13.' },
-        { num: 34, type: 'mcq', text: 'حجم فضاء مفاتيح الشيفرة التألفية (Affine) على Z26 هو:', options: { A: '26', B: '52', C: '312', D: '676' }, answer: 'C', explanation: '12 مفتاحاً ضربياً صالحاً × 26 إزاحة = 312' },
-        { num: 35, type: 'mcq', text: 'باستخدام Vigenere لتشفير CAT بالمفتاح KEY، يكون الناتج:', options: { A: 'MER', B: 'KCA', C: 'YEK', D: 'QEX' }, answer: 'A', explanation: 'C+K=M، A+E=E، T+Y=R على Z26' },
-        { num: 36, type: 'mcq', text: 'رسالة من 50 محرفاً بترميز 8 بت ستشفر بكتل 64 بت. كم بت حشو تحتاج؟', options: { A: '16', B: '32', C: '48', D: '64' }, answer: 'C', explanation: 'الطول 400 بت، وباقي القسمة على 64 هو 16، فنضيف 48.' },
-        { num: 37, type: 'mcq', text: 'إذا كان صندوق P-box يملك m=n فهو:', options: { A: 'صندوقاً مباشراً', B: 'صندوق ضغط', C: 'صندوق توسيع', D: 'S-box' }, answer: 'A' },
-        { num: 38, type: 'mcq', text: 'أي علاقة صحيحة لعملية XOR؟', options: { A: 'x⊕x=1', B: 'x⊕0=x', C: 'x⊕0=0', D: 'x⊕x=x' }, answer: 'B' },
-        { num: 39, type: 'mcq', text: 'في شبكة فيستل، تستخدم مفاتيح الدورات عند فك التشفير:', options: { A: 'بالترتيب نفسه دائماً', B: 'من دون مفاتيح', C: 'بالترتيب العكسي', D: 'بعد جمعها' }, answer: 'C' },
-        { num: 40, type: 'mcq', text: 'المسألة الرئيسة في تصميم التشفير التسلسلي هي:', options: { A: 'توليد تيار مفتاح جيد', B: 'زيادة حجم الكتلة', C: 'حذف الحشو', D: 'توليد مفتاح عام' }, answer: 'A' },
-        { num: 41, type: 'mcq', text: 'في S-DES ينتج من المفتاح الأصلي:', options: { A: 'مفتاح واحد 10 بت', B: 'مفتاحان فرعيان كل منهما 8 بت', C: '16 مفتاحاً 48 بت', D: 'ثلاثة مفاتيح 16 بت' }, answer: 'B' },
-        { num: 42, type: 'mcq', text: 'العدد الصحيح لدورات DES وطول مفتاح كل دورة هو:', options: { A: '2 و8 بت', B: '10 و128 بت', C: '16 و48 بت', D: '14 و256 بت' }, answer: 'C' },
-        { num: 43, type: 'mcq', text: 'الطول الفعلي لمفتاح DES هو:', options: { A: '48 بت', B: '56 بت', C: '64 بت', D: '128 بت' }, answer: 'B' },
-        { num: 44, type: 'mcq', text: 'التأثير الانهياري الجيد يعني أن تغيير بت واحد في الدخل يؤدي إلى:', options: { A: 'عدم تغير الخرج', B: 'تغير بت واحد فقط', C: 'تغير واسع في بتات الخرج', D: 'تقصير المفتاح' }, answer: 'C' },
-        { num: 45, type: 'mcq', text: 'نسخة AES ذات مفتاح 192 بت تستخدم:', options: { A: '10 دورات', B: '12 دورة', C: '14 دورة', D: '16 دورة' }, answer: 'B' },
-        { num: 46, type: 'mcq', text: 'التحويل AddRoundKey في AES يدمج الحالة مع مفتاح الدورة باستخدام:', options: { A: 'XOR', B: 'القسمة', C: 'الترتيب الأبجدي', D: 'الحذف' }, answer: 'A' },
-        { num: 47, type: 'mcq', text: 'يحوي شعاع الحالة S في RC4 القياسية:', options: { A: '8 بايتات', B: '64 بايتاً', C: '128 بايتاً', D: '256 بايتاً' }, answer: 'D' },
-        { num: 48, type: 'mcq', text: 'قاعدة تشفير RC4 لكل بايت هي:', options: { A: 'C=P+K', B: 'C=P⊕K', C: 'C=P²', D: 'C=P-K فقط' }, answer: 'B' },
-        { num: 49, type: 'mcq', text: 'تتألف A5/1 من ثلاثة مسجالت LFSR أطوالها:', options: { A: '8, 16, 32', B: '19, 22, 23', C: '32, 64, 128', D: '10, 12, 14' }, answer: 'B' },
-        { num: 50, type: 'mcq', text: 'خوارزمية كتلية فيستل، كتلتها 64 بت، مفتاحها 448-32 بت، ولها 16 دورة هي:', options: { A: 'AES', B: 'Blowfish', C: 'RC4', D: 'Rabin' }, answer: 'B' },
-        { num: 51, type: 'mcq', text: 'خوارزمية IDEA تستخدم كتلة 64 بت ومفتاحاً بطول:', options: { A: '56 بت', B: '64 بت', C: '128 بت', D: '448 بت' }, answer: 'C' },
-        { num: 52, type: 'mcq', text: 'في RSA يتكون المفتاح العام عادة من:', options: { A: '(d,n)', B: '(e,n)', C: '(p,q) فقط', D: '(K1,K2)' }, answer: 'B' },
-        { num: 53, type: 'mcq', text: 'قاعدة تشفير RSA هي:', options: { A: 'C=P^e mod n', B: 'C=P⊕e', C: 'C=P+q', D: 'C=P^d دون mod' }, answer: 'A' },
-        { num: 54, type: 'mcq', text: 'في Diffie-Hellman إذا p=5 و g=2 و x=2 و y=3 فإن المفتاح المشترك يساوي:', options: { A: '1', B: '2', C: '3', D: '4' }, answer: 'D', explanation: 'R1=2²mod5=4، R2=2³mod5=3، K=3²mod5=9mod5=4' },
-        { num: 55, type: 'mcq', text: 'لإخفاء رسالة طولها 24 بت في صورة RGB باستخدام LSB واحد من كل قناة، نحتاج إلى:', options: { A: '3 بكسلات', B: '6 بكسلات', C: '8 بكسلات', D: '24 بكسلاً' }, answer: 'C', explanation: 'كل بكسل يحمل 3 بتات، لذا 24/3=8' },
-    ];
-
-    // -------- النموذج B (خاص كما في الملف) ----------
-    const MODEL_B_TF = [
-        { num: 1, type: 'tf', text: 'يشمل أمن المعلومات حماية النظام بمكوناته: العتاد والبرمجيات والبشر، وليس البيانات وحدها.', answer: true },
-        { num: 2, type: 'tf', text: 'المهاجم الداخلي هو شخص من خارج الجهة المستهدفة ويعمل غالباً بدافع التجسس الصناعي.', answer: false, explanation: 'المهاجم الداخلي ينتمي إلى الجهة المستهدفة؛ الوصف أقرب للخارجي.' },
-        { num: 3, type: 'tf', text: 'التوافرية تعني أن تكون الخدمة والمعلومة متاحتين للمستخدم المخول في الوقت المناسب.', answer: true },
-        { num: 4, type: 'tf', text: 'التطفل وتحليل حركة الاتصالات من مهددات السرية.', answer: true },
-        { num: 5, type: 'tf', text: 'التعديل والتنكر وإعادة الاستخدام من مهددات التكاملية.', answer: true },
-        { num: 6, type: 'tf', text: 'هجوم حجب الخدمة DoS يهدد الإتاحة.', answer: true },
-        { num: 7, type: 'tf', text: 'كلمات المرور والتشفير والإخفاء أمثلة على تقنيات يمكن دمجها لتحقيق أهداف أمن المعلومات.', answer: true },
-        { num: 8, type: 'tf', text: 'تقتصر مهددات الأمن المادي على المهددات البشرية ولا تشمل البيئة أو التجهيزات.', answer: false, explanation: 'تشمل مهددات بشرية وبيئية وتقنية وغيرها.' },
-        { num: 9, type: 'tf', text: 'أسلوب الإقناع من أهم أساليب الهندسة الاجتماعية لأنه يوظف سيكولوجيا الإقناع.', answer: true },
-        { num: 10, type: 'tf', text: 'Crimeware هي برمجيات تهدف إلى أتمتة الجرائم المعلوماتية وسرقة المعلومات.', answer: true },
-        { num: 11, type: 'tf', text: 'توسعة المفتاح تعني فقط زيادة عدد بتات المفتاح الأصلي الذي أدخله المستخدم.', answer: false, explanation: 'تعني توليد مفاتيح جزئية (مفاتيح دورات) من المفتاح السري.' },
-        { num: 12, type: 'tf', text: 'تزداد مشكلة توزيع المفاتيح المتماثلة كلما ازداد عدد الأطراف لأن عدد الأزواج ينمو وفق n(n-1)/2.', answer: true },
-        { num: 13, type: 'tf', text: 'يفترض هجوم القوة الغاشمة أن المهاجم يعرف الخوارزمية ومجال المفاتيح الممكنة.', answer: true },
-        { num: 14, type: 'tf', text: 'يطلق على الاستبدال Confusion وعلى تغيير المواقع Diffusion في عرض التشفير التقليدي.', answer: true },
-        { num: 15, type: 'tf', text: 'فضاء مفاتيح Playfair صغير، لذلك يعد هجوم القوة الغاشمة عليه سهلاً.', answer: false, explanation: 'فضاؤه !25 ولذلك يكون الهجوم القسري صعباً جداً.' },
-        { num: 16, type: 'tf', text: 'يمكن إعادة استخدام مفتاح One-Time Pad نفسه مع رسائل متعددة من دون التأثير في الأمان.', answer: false, explanation: 'إعادة استخدام المفتاح تهدم الأمان تماماً.' },
-        { num: 17, type: 'tf', text: 'تُصمم الشيفرات الكتلية الحديثة عادة كشيفرات استبدال، لأن التبديل وحده يحافظ على عدد الواحدات والأصفار.', answer: true },
-        { num: 18, type: 'tf', text: 'عملية XOR قابلة للعكس ذاتياً عند استخدام المفتاح نفسه.', answer: true },
-        { num: 19, type: 'tf', text: 'ينتج عن تكرار التحويلات في الشيفرات الكتلية ما يسمى بالهامش الأمني.', answer: true },
-        { num: 20, type: 'tf', text: 'فضاء مفاتيح S-DES يحوي 1024 مفتاحاً ممكناً.', answer: true, explanation: 'المفتاح 10 بت، أي 2^10=1024' },
-        { num: 21, type: 'tf', text: 'التبديلتان الابتدائية والنهائية في DES تضيفان وحدهما قوة تشفيرية جوهرية.', answer: false, explanation: 'هما P-box مباشرتان متعاكستان ولا قيمة تشفيرية جوهرية لهما.' },
-        { num: 22, type: 'tf', text: 'تستخدم S-AES كتلة 16 بت ومفتاحاً 16 بت لأغراض تعليمية.', answer: true },
-        { num: 23, type: 'tf', text: 'في RC4 يمكن أن ينتج النص المشفر نفسه عند استخدام تيار المفتاح نفسه مع النص نفسه.', answer: true },
-        { num: 24, type: 'tf', text: 'يوفر Diffie-Hellman وحده مصادقة مؤكدة لهوية الطرف الآخر.', answer: false, explanation: 'قد يتعرض لهجوم الرجل في الوسط ولا يضمن الهوية وحده.' },
-        { num: 25, type: 'tf', text: 'يمكن تشفير الرسالة قبل إخفائها داخل حامل رقمي لرفع الأمان، وهذه خطوة اختيارية.', answer: true },
-    ];
-    const MODEL_B_MCQ = [
-        { num: 26, type: 'mcq', text: 'أي هدف أمني يتيح تحديد المسؤوليات ويشمل منع الإنكار؟', options: { A: 'المساءلة', B: 'الإتاحة', C: 'السرية', D: 'الحشو' }, answer: 'A' },
-        { num: 27, type: 'mcq', text: 'مهاجم ينسخ البيانات من دون تعديلها يمثل غالباً:', options: { A: 'هجوماً غير فعال', B: 'هجوماً فعالاً', C: 'حجب خدمة', D: 'توقيعاً رقمياً' }, answer: 'A' },
-        { num: 28, type: 'mcq', text: 'انتحال المهاجم شخصية فني صيانة مثال على:', options: { A: 'التشفير الكتلي', B: 'الهندسة الاجتماعية', C: 'التجزئة', D: 'الحشو' }, answer: 'B' },
-        { num: 29, type: 'mcq', text: 'أضعف هجومات تحليل الشيفرات الأربعة هو:', options: { A: 'النص المشفر فقط', B: 'النص الواضح المعروف', C: 'النص الواضح المختار', D: 'النص المشفر المختار' }, answer: 'A' },
-        { num: 30, type: 'mcq', text: 'عندما يختار المهاجم نصاً واضحاً ويعطيه لآلة التشفير ليحصل على مقابله، يسمى الهجوم:', options: { A: 'Ciphertext-only', B: 'Known-plaintext', C: 'Chosen-plaintext', D: 'Chosen-ciphertext' }, answer: 'C' },
-        { num: 31, type: 'mcq', text: 'في شبكة من 10 مستخدمين، عدد أزواج المفاتيح المتماثلة اللازمة هو:', options: { A: '10', B: '20', C: '45', D: '100' }, answer: 'C', explanation: '10×9/2=45' },
-        { num: 32, type: 'mcq', text: 'فك تشفير WTAAD بشيفرة قيصر عند K=15 يعطي:', options: { A: 'WORLD', B: 'HELLO', C: 'ATTACK', D: 'CRYPT' }, answer: 'B', explanation: 'بطرح 15 على Z26 نحصل على HELLO' },
-        { num: 33, type: 'mcq', text: 'تشفير HELLO بشيفرة Affine ذات K=(7,2) يعطي:', options: { A: 'ZEBBW', B: 'XCZZU', C: 'HELLO', D: 'MTMTCM' }, answer: 'A', explanation: 'C=(7P+2) mod26: H→Z، E→E→Z? H(7): 7×7+2=51mod26=25=Z, E(4): 28+2=30mod26=4=E, L(11): 77+2=79mod26=1=B, L=B, O(14): 98+2=100mod26=22=W → ZEBBW' },
-        { num: 34, type: 'mcq', text: 'عدد الكلمات المفتاحية الممكنة في Vigenere عندما m=5 هو:', options: { A: '26', B: '26²', C: '26⁵', D: '!5' }, answer: 'C', explanation: 'كل موضع يملك 26 احتمالاً فيكون العدد 26^5' },
-        { num: 35, type: 'mcq', text: 'لكي تصلح مصفوفة K مفتاحاً في Hill يجب أن:', options: { A: 'تكون قطرية فقط', B: 'تملك معكوساً على Z26', C: 'تكون كل عناصرها صفراً', D: 'يكون حجمها 1 دائماً' }, answer: 'B' },
-        { num: 36, type: 'mcq', text: 'السبب الرئيس لضعف شيفرات تغيير المواقع أمام التحليل الإحصائي هو أنها:', options: { A: 'تحذف الحروف', B: 'تحافظ على ترددات الحروف', C: 'تستخدم مفاتيح عامة', D: 'لا تنتج نصاً مشفراً' }, answer: 'B' },
-        { num: 37, type: 'mcq', text: 'من مؤشرات أن الملف مشفر جيداً أنه:', options: { A: 'ينضغط بنسبة كبيرة', B: 'لا ينضغط بنسبة ملحوظة', C: 'يتحول إلى نص عربي', D: 'يفقد حجمه كلياً' }, answer: 'B' },
-        { num: 38, type: 'mcq', text: 'صندوق P-box من النوع 5×3 هو:', options: { A: 'مباشراً', B: 'ضغطاً', C: 'توسيعاً', D: 'S-box' }, answer: 'C', explanation: 'm<n يعني صندوق توسيع (5 مدخل < 3؟ لا: 5 خرج > 3 دخل = توسيع)' },
-        { num: 39, type: 'mcq', text: 'متى يكون S-box قابلاً للعكس وفق التبسيط الوارد في المقرر؟', options: { A: 'عندما m=n', B: 'عندما m<n فقط', C: 'عندما m>n فقط', D: 'لا يكون قابلاً للعكس أبداً' }, answer: 'A' },
-        { num: 40, type: 'mcq', text: 'إذا كان عدد دورات الخوارزمية R=16 والحد الأدنى الآمن M=12، فإن الهامش الأمني S تقريباً:', options: { A: '25%', B: '33.3%', C: '75%', D: '133%' }, answer: 'B', explanation: 'S=[(16/12)×100]-100≈33.3%' },
-        { num: 41, type: 'mcq', text: 'في مثال S-DES بالمفتاح 1010000010، المفتاح الفرعي K1 هو:', options: { A: '10100100', B: '01000011', C: '1000001100', D: '11111111' }, answer: 'A' },
-        { num: 42, type: 'mcq', text: 'العلاقة الصحيحة للتبديلة النهائية في S-DES هي:', options: { A: 'IP^-1(IP(X))=X', B: 'IP(IP(X))=0', C: 'IP^-1(X)=K', D: 'IP(X)=X دائماً' }, answer: 'A' },
-        { num: 43, type: 'mcq', text: 'دخل وخرج DES في كل عملية تشفير كتلية طولهما:', options: { A: '8 بت', B: '32 بت', C: '64 بت', D: '128 بت' }, answer: 'C' },
-        { num: 44, type: 'mcq', text: 'تابع DES يأخذ R بطول 32 بت ومفتاح دورة بطول 48 بت لينتج:', options: { A: '8 بت', B: '16 بت', C: '32 بت', D: '64 بت' }, answer: 'C' },
-        { num: 45, type: 'mcq', text: 'نسخة AES ذات مفتاح 256 بت تستخدم:', options: { A: '10 دورات', B: '12 دورة', C: '14 دورة', D: '20 دورة' }, answer: 'C' },
-        { num: 46, type: 'mcq', text: 'أي تحويل في AES يحقق الانتشار على مستوى البتات بين بايتات العمود؟', options: { A: 'SubBytes', B: 'ShiftRows', C: 'MixColumns', D: 'KeyGen فقط' }, answer: 'C' },
-        { num: 47, type: 'mcq', text: 'في مثال S-AES، تشفير plaintext=(1A23)16 بالمفتاح (2475)16 يعطي:', options: { A: '(3AD2)16', B: '(1A23)16', C: '(2475)16', D: '(0000)16' }, answer: 'A' },
-        { num: 48, type: 'mcq', text: 'يمتلئ الشعاع المؤقت T في RC4 عندما يكون المفتاح أقصر من 256 بايت بواسطة:', options: { A: 'الأصفار فقط', B: 'تكرار بايتات المفتاح', C: 'حذف S', D: 'مفتاح عام' }, answer: 'B' },
-        { num: 49, type: 'mcq', text: 'بعد انتهاء مرحلة KSA في RC4، يعتمد توليد تيار المفتاح أساساً على:', options: { A: 'شعاع الحالة S بعد تبديله', B: 'النص الواضح فقط', C: 'مفتاح RSA', D: 'عدد جوالت AES' }, answer: 'A' },
-        { num: 50, type: 'mcq', text: 'تنتج A5/1 سلسلة مفتاح بطول:', options: { A: '64 بت', B: '128 بت', C: '228 بت', D: '256 بايت' }, answer: 'C' },
-        { num: 51, type: 'mcq', text: 'عدد عناصر مصفوفة P للمفاتيح الفرعية في Blowfish هو:', options: { A: '4', B: '8', C: '16', D: '18' }, answer: 'D' },
-        { num: 52, type: 'mcq', text: 'أي جهة يمكن أن تساعد في توزيع مفاتيح متماثلة بين أطراف كثيرة؟', options: { A: 'KDC', B: 'LSB', C: 'S-box', D: 'Hash فقط' }, answer: 'A' },
-        { num: 53, type: 'mcq', text: 'أبرز ثغرة لـ Diffie-Hellman من دون توثيق إضافي هي:', options: { A: 'هجوم الرجل في الوسط', B: 'الحشو الزائد', C: 'ضغط الملف', D: 'تغيير حجم AES' }, answer: 'A' },
-        { num: 54, type: 'mcq', text: 'تستخدم RSA عادة للرسائل القصيرة أو لتشفير المفاتيح لأن:', options: { A: 'كتلتها 8 بت فقط', B: 'عملياتها أبطأ مع الرسائل الطويلة', C: 'لا تملك مفتاحاً عاماً', D: 'هي شيفرة استبدال تقليدية' }, answer: 'B' },
-        { num: 55, type: 'mcq', text: 'في التوقيع الرقمي بـ RSA يوقع المرسل باستخدام:', options: { A: 'مفتاحه الخاص', B: 'مفتاح المستقبل الخاص', C: 'مفتاحه العام', D: 'مفتاح متماثل مشترك فقط' }, answer: 'A' },
-    ];
-
-    // -------- النموذج C (خاص كما في الملف) ----------
-    const MODEL_C_TF = [
-        { num: 1, type: 'tf', text: 'قد يكون نظام المعلومات يدوياً أو آلياً؛ فكل نظام تسجيل واسترجاع يعد نظام معلومات.', answer: true },
-        { num: 2, type: 'tf', text: 'النظام المحوسب يعتمد بصورة أساسية على الحواسيب وشبكاتها في إنجاز مهامه.', answer: true },
-        { num: 3, type: 'tf', text: 'السرية تمنع وصول غير المخولين إلى المعلومات الحساسة.', answer: true },
-        { num: 4, type: 'tf', text: 'عدم الإنكار جزء من المساءلة ويساعد على منع طرفي المعاملة من إنكار الإرسال أو الاستقبال.', answer: true },
-        { num: 5, type: 'tf', text: 'الخداع والتنكر من مهددات السرية، بينما التطفل من مهددات التكاملية.', answer: false, explanation: 'العكس: التطفل للسرية، والتنكر للتكاملية.' },
-        { num: 6, type: 'tf', text: 'الهجوم الفعال أسهل اكتشافاً عادة لأنه يسبب خللاً أو تغييراً في النظام.', answer: true },
-        { num: 7, type: 'tf', text: 'التحكم بالدخول والخروج والمراقبة والإنذار من إجراءات الحد من خروقات الأمن المادي.', answer: true },
-        { num: 8, type: 'tf', text: 'سياسات استخدام تقنية المعلومات وكلمات المرور تطبق على الموظفين فقط إذا كانوا مبرمجين.', answer: false, explanation: 'تطبق السياسات على جميع الموظفين.' },
-        { num: 9, type: 'tf', text: 'التشفير المتماثل أسرع ومناسب لتشفير كميات كبيرة من البيانات.', answer: true },
-        { num: 10, type: 'tf', text: 'لمنع الهجوم الإحصائي ينبغي أن تخفي الشيفرة خصائص اللغة وتكراراتها.', answer: true },
-        { num: 11, type: 'tf', text: 'في المشفر وحيد الأبجدية يشفر الحرف نفسه إلى الرمز نفسه مهما كان موقعه.', answer: true },
-        { num: 12, type: 'tf', text: 'يعالج Playfair النص حرفاً حرفاً بصورة منفردة.', answer: false, explanation: 'يعالج أزواجاً من الحروف (Digraphs).' },
-        { num: 13, type: 'tf', text: 'حجم كتلة Hill يساوي رتبة مصفوفة المفتاح المربعة.', answer: true },
-        { num: 14, type: 'tf', text: 'One-Time Pad تعرف أيضاً باسم Vernam Cipher وظهرت عام 1919.', answer: true },
-        { num: 15, type: 'tf', text: 'Rotor Cipher مشفر وحيد الأبجدية لأن الحرف لا يتغير تمثيله مع دوران الآلة.', answer: false, explanation: 'الدوران يجعل الحرف يشفَّر بأشكال مختلفة؛ فهي واحد لمتعدد.' },
-        { num: 16, type: 'tf', text: 'صندوق P-box المباشر قابل للعكس ويستخدم معكوسه في فك التشفير.', answer: true },
-        { num: 17, type: 'tf', text: 'يمكن لشيفرات فيستل استخدام مكونات غير قابلة للعكس داخل تابع الجولة.', answer: true },
-        { num: 18, type: 'tf', text: 'تسمح الشيفرات غير فيستل باستخدام P-box الضغط والتوسيع داخل المسار من دون أي معالجة إضافية.', answer: false, explanation: 'الشيفرات غير فيستل تستخدم مكونات قابلة للعكس فقط.' },
-        { num: 19, type: 'tf', text: 'في التشفير التسلسلي تعالج وحدة واحدة في كل مرة، وقد تكون حرفاً أو بتاً أو بايتاً.', answer: true },
-        { num: 20, type: 'tf', text: 'يولد DES ستة عشر مفتاح دورة بطول 48 بت من مفتاح فعلي بطول 56 بت.', answer: true },
-        { num: 21, type: 'tf', text: 'AES خوارزمية كتلية حديثة غير فيستل.', answer: true },
-        { num: 22, type: 'tf', text: 'تطبق RC4 الاستبدالات والتبديلات مباشرة على بايتات النص الأصلي.', answer: false, explanation: 'دورها توليد تيار المفتاح؛ النص يدمج معه بـ XOR.' },
-        { num: 23, type: 'tf', text: 'احتلت Serpent المرتبة الثانية بعد Rijndael في نهائي مسابقة AES.', answer: true },
-        { num: 24, type: 'tf', text: 'التشفير غير المتماثل هو الخيار الأفضل عادة لتشفير ملفات ضخمة كاملة مباشرة.', answer: false, explanation: 'يستخدم للقطع الصغيرة مثل المفاتيح؛ والمتماثل للبيانات الكبيرة.' },
-        { num: 25, type: 'tf', text: 'يساعد الختم الزمني على الحد من إعادة إرسال رسالة موقعة سابقاً.', answer: true },
-    ];
-    const MODEL_C_MCQ = [
-        { num: 26, type: 'mcq', text: 'أي مجموعة تمثل مكونات نظام المعلومات كاملة؟', options: { A: 'عتاد وبرمجيات فقط', B: 'عتاد، برمجيات، مستخدمون، إجراءات، بيانات', C: 'بيانات ومفاتيح فقط', D: 'شبكة ومبنى فقط' }, answer: 'B' },
-        { num: 27, type: 'mcq', text: 'العناصر الضرورية لشن الهجوم الإلكتروني هي:', options: { A: 'الدافع فقط', B: 'الثغرة فقط', C: 'الدافع والطريقة والثغرة', D: 'التشفير والتوقيع' }, answer: 'C' },
-        { num: 28, type: 'mcq', text: 'أي هجوم يهدد الإتاحة مباشرة؟', options: { A: 'Traffic Analysis', B: 'Snooping', C: 'Denial of Service', D: 'Substitution' }, answer: 'C' },
-        { num: 29, type: 'mcq', text: 'أي إجراء يعد من التحكم الفيزيائي بالوصول؟', options: { A: 'كاميرات وبطاقات دخول', B: 'تشفير قيصر', C: 'تجزئة الرسالة', D: 'توسيع AES' }, answer: 'A' },
-        { num: 30, type: 'mcq', text: 'أضعف حلقة في منظومة الحماية غالباً هي:', options: { A: 'العنصر البشري', B: 'المصفوفة', C: 'عملية XOR', D: 'الكتلة' }, answer: 'A' },
-        { num: 31, type: 'mcq', text: 'وفق مبدأ كيركهوفس، العنصر الذي يجب إبقاؤه سرياً هو:', options: { A: 'اسم الخوارزمية', B: 'المفتاح', C: 'حجم الملف', D: 'نوع الحاسوب' }, answer: 'B' },
-        { num: 32, type: 'mcq', text: 'العلاقة الصحيحة في المشفر الجمعي هي:', options: { A: 'C=(P+K) mod26', B: 'C=P×P', C: 'P=C+K mod2 فقط', D: 'C=K/P' }, answer: 'A' },
-        { num: 33, type: 'mcq', text: 'أي مفتاح غير صالح للشيفرة الضربية على Z26؟', options: { A: '5', B: '7', C: '11', D: '13' }, answer: 'D', explanation: '13 ليس أولياً نسبياً مع 26 (gcd(13,26)=13≠1).' },
-        { num: 34, type: 'mcq', text: 'وفق نموذج الدورة، تشفير ATTACK بمشفر Autokey والمفتاح الابتدائي K=12 يعطي:', options: { A: 'MTMTCM', B: 'ATTACK', C: 'ZEBBW', D: 'XCZZU' }, answer: 'A' },
-        { num: 35, type: 'mcq', text: 'في Playfair يمكن أن يشفر الحرف نفسه إلى:', options: { A: 'رمز واحد دائماً', B: 'واحد من خمسة أحرف محتملة وفق موقع الزوج', C: 'كل الأبجدية بلا قيد', D: 'رقم فقط' }, answer: 'B' },
-        { num: 36, type: 'mcq', text: 'أي شرط أساسي يمنح One-Time Pad أمانه؟', options: { A: 'مفتاح ثابت قصير', B: 'مفتاح عشوائي بطول الرسالة يستخدم مرة واحدة', C: 'مفتاح عام منشور', D: 'كتلة 64 بت دائماً' }, answer: 'B' },
-        { num: 37, type: 'mcq', text: 'أي عبارة تميز شيفرة الكتلة عن شيفرة التيار؟', options: { A: 'الكتلة تعالج مجموعة رموز معاً', B: 'التيار لا يستخدم مفتاحاً', C: 'الكتلة لا تنتج نصاً مشفراً', D: 'التيار غير متماثل' }, answer: 'A' },
-        { num: 38, type: 'mcq', text: 'كم بت حشو تحتاج رسالة من 100 محرف بترميز 8 بت مع كتلة 64 بت؟', options: { A: '0', B: '16', C: '32', D: '64' }, answer: 'C', explanation: '100×8=800 بت، 800mod64=32، فنضيف 32 بت للوصول إلى 832.' },
-        { num: 39, type: 'mcq', text: 'صندوق P-box 3×5 هو:', options: { A: 'توسيعاً', B: 'ضغطاً', C: 'مباشراً', D: 'S-box' }, answer: 'B', explanation: 'm>n: 5 خرج < 3 دخل؟ P-box 3×5 يعني 3 دخل و5 خرج = توسيع... لا: notation 3×5 = 3 input, 5 output = توسيع؟ الجواب B=ضغطاً وفق مفتاح الإجابة (m>n=compression)' },
-        { num: 40, type: 'mcq', text: 'في فك تشفير شبكة فيستل ذات مفتاحي K1 وK2، الترتيب هو:', options: { A: 'K1 ثم K2', B: 'K2 ثم K1', C: 'K1 فقط', D: 'لا تستخدم مفاتيح' }, answer: 'B' },
-        { num: 41, type: 'mcq', text: 'عدد دورات S-DES هو:', options: { A: '2', B: '8', C: '10', D: '16' }, answer: 'A' },
-        { num: 42, type: 'mcq', text: 'عدد صناديق S-box داخل تابع DES هو:', options: { A: '2', B: '4', C: '8', D: '16' }, answer: 'C' },
-        { num: 43, type: 'mcq', text: 'أي عبارة صحيحة عن AES؟', options: { A: 'الكتلة تتغير مع طول المفتاح', B: 'الكتلة 128 بت دائماً', C: 'كل المفاتيح 56 بت', D: 'هي تشفير تسلسلي' }, answer: 'B' },
-        { num: 44, type: 'mcq', text: 'في AES-128، يولد Key Expansion عدد مفاتيح فرعية يساوي:', options: { A: '2', B: '10', C: '11', D: '16' }, answer: 'C', explanation: 'Nr=10 ولذلك يولد Nr+1=11 مفتاحاً فرعياً' },
-        { num: 45, type: 'mcq', text: 'الاختصار KSA في RC4 يعني:', options: { A: 'Key Scheduling Algorithm', B: 'Key Signature Authority', C: 'Known Stream Attack', D: 'Kernel Security AES' }, answer: 'A' },
-        { num: 46, type: 'mcq', text: 'استُخدمت عائلة A5/x تاريخياً في:', options: { A: 'تشفير مكالمات GSM', B: 'توقيع PDF فقط', C: 'شيفرة قيصر', D: 'ضغط الصور' }, answer: 'A' },
-        { num: 47, type: 'mcq', text: 'أي خوارزمية كتلية تستخدم أربعة مسجالت A,B,C,D و20 دورة؟', options: { A: 'RC6', B: 'RC4', C: 'RSA', D: 'LSB' }, answer: 'A' },
-        { num: 48, type: 'mcq', text: 'أي خوارزمية من مرشحي AES تستخدم كتلة 128 بت و32 دورة؟', options: { A: 'Serpent', B: 'Blowfish', C: 'IDEA', D: 'Rabin' }, answer: 'A' },
-        { num: 49, type: 'mcq', text: 'في شبكة تضم n مستخدمين، التشفير غير المتماثل يحتاج تقريباً إلى:', options: { A: 'n عملية أمنية/زوج مفاتيح لكل مستخدم', B: 'n(n-1)/2 مفاتيح خاصة مشتركة', C: 'مفتاح واحد للجميع بلا خاص', D: 'لا مفاتيح' }, answer: 'A' },
-        { num: 50, type: 'mcq', text: 'أي سلسلة تعد Superincreasing؟', options: { A: '[1,2,3,4]', B: '[2,3,6,12]', C: '[5,5,5,5]', D: '[4,3,2,1]' }, answer: 'B', explanation: 'كل عنصر أكبر من مجموع ما قبله: 3>2، 6>5، 12>11' },
-        { num: 51, type: 'mcq', text: 'عند توليد مفاتيح RSA يجب اختيار e بحيث:', options: { A: 'gcd(e,φ(n))=1', B: 'e=φ(n)', C: 'e=0', D: 'e=pq دائماً' }, answer: 'A' },
-        { num: 52, type: 'mcq', text: 'الميزة الأساسية لـ Diffie-Hellman هي:', options: { A: 'إنتاج مفتاح سري مشترك عبر قناة عامة دون KDC', B: 'تشفير الملفات مباشرة بلا مفتاح', C: 'منع MITM تلقائياً', D: 'إنشاء توقيع رقمي وحده' }, answer: 'A' },
-        { num: 53, type: 'mcq', text: 'تتضمن الشهادة الرقمية عادة:', options: { A: 'المفتاح العام وهوية صاحبه ومدة الصلاحية وتوقيع جهة الإصدار', B: 'المفتاح الخاص منشوراً', C: 'كلمة مرور المستخدم', D: 'النص الواضح فقط' }, answer: 'A' },
-        { num: 54, type: 'mcq', text: 'أي عبارة صحيحة في التوقيع الرقمي بـ RSA؟', options: { A: 'S=M^d mod n ويُتحقق بالمفتاح العام', B: 'S=M^e ويُتحقق بالخاص للمستقبل', C: 'لا تستخدم مفاتيح', D: 'يحقق السرية وحدها' }, answer: 'A' },
-        { num: 55, type: 'mcq', text: 'ما الفارق الأدق بين التشفير والإخفاء؟', options: { A: 'التشفير يخفي المعنى، والإخفاء يخفي وجود الرسالة', B: 'كلاهما الشيء نفسه', C: 'الإخفاء لا يستخدم ملفات', D: 'التشفير لا يستخدم مفاتيح' }, answer: 'A' },
-    ];
-
-    // -------- بناء البيانات الكاملة ----------
-    function makeSectionData(sectionId, tfArr, mcqArr) {
-        return [
-            ...tfArr.map(q => ({ ...q, section: sectionId })),
-            ...mcqArr.map(q => ({ ...q, section: sectionId })),
-        ];
-    }
-
-    const ALL_QUESTIONS = [
-        ...makeSectionData('course-2025', COURSE_TF, COURSE_MCQ),
-        ...makeSectionData('course-2026', COURSE_TF, COURSE_MCQ),
-        ...makeSectionData('model-a', MODEL_A_TF, MODEL_A_MCQ),
-        ...makeSectionData('model-b', MODEL_B_TF, MODEL_B_MCQ),
-        ...makeSectionData('model-c', MODEL_C_TF, MODEL_C_MCQ),
-    ];
-
-    // ====== التطبيق ======
-    let currentSection = 'course-2025';
-    let isQuizMode = false;
-    let quizSubmitted = false;
-    let userAnswers = {};
-
-    function getQuestionsForSection(sectionId) {
-        return ALL_QUESTIONS.filter(q => q.section === sectionId);
-    }
-
-    function renderTabs() {
-        const container = document.getElementById('sectionTabs');
-        container.innerHTML = SECTIONS.map(s =>
-            `<button class="${s.id === currentSection ? 'active' : ''}" data-id="${s.id}">
-                ${s.label}
-            </button>`
-        ).join('');
-        container.querySelectorAll('button').forEach(btn => {
-            btn.addEventListener('click', () => {
-                if (isQuizMode && !confirm('الخروج من وضع الاختبار سيفقد إجاباتك الحالية. هل تريد المتابعة؟')) return;
-                currentSection = btn.dataset.id;
-                isQuizMode = false;
-                quizSubmitted = false;
-                userAnswers = {};
-                renderTabs();
-                renderStats();
-                renderQuestions();
-                renderTestActions();
-            });
-        });
-    }
-
-    function renderStats() {
-        const section = SECTIONS.find(s => s.id === currentSection);
-        const questions = getQuestionsForSection(currentSection);
-        const tf = questions.filter(q => q.type === 'tf');
-        const mcq = questions.filter(q => q.type === 'mcq');
-        const statsEl = document.getElementById('statsBar');
-
-        let resultHtml = '';
-        if (quizSubmitted) {
-            const results = calculateResults();
-            resultHtml = `<span class="result-banner">📊 النتيجة: ${results.correct} / ${results.total} (${results.percentage}%)</span>`;
+// ================================================================
+//  بيانات المحاضرات
+// ================================================================
+const LECTURES = [
+{
+    id: 'l1',
+    title: 'المحاضرة 1',
+    subtitle: 'مقدمة في البرمجة التفرعية',
+    desc: 'تصنيفات Flynn، الفرق بين التوازي والتوزع، الخيط والعملية، الجدولة',
+    review: [
+        {
+            num: 1, icon: '🎯', topic: 'مفاهيم أساسية',
+            q: 'ما هي البرمجة التفرعية وما هدفها الأساسي؟',
+            a: 'البرمجة التفرعية هي تطبيق برمجي يُنفَّذ على عدة معالجات أو أنوية في نفس الوقت. <strong>هدفها الأساسي</strong>: تحسين الأداء وتقليل وقت التنفيذ مقارنةً بالتنفيذ التسلسلي على معالج واحد.'
+        },
+        {
+            num: 2, icon: '🔄', topic: 'التوازي والتوزع',
+            q: 'ما الفرق بين التوازي (Parallel) والتوزع (Distributed)؟',
+            a: '<strong>التوازي:</strong> معالجات متعددة تشترك في نفس الذاكرة (ذاكرة مشتركة) وتعمل على نفس المشكلة.<br><strong>التوزع:</strong> عناصر معالجة منفصلة لكل منها ذاكرتها الخاصة (ذاكرة موزعة)، لا تتشارك في الموارد، وتتواصل عبر تمرير الرسائل (Message Passing).'
+        },
+        {
+            num: 3, icon: '🧵', topic: 'مصطلحات',
+            q: 'ما الفرق بين الخيط (Thread) والعملية (Process)؟',
+            a: '<strong>العملية (Process):</strong> برنامج قيد التنفيذ، لها مساحة ذاكرة مستقلة خاصة بها.<br><strong>الخيط (Thread):</strong> وحدة تنفيذ أصغر داخل العملية، <strong>يشترك</strong> مع الخيوط الأخرى في مساحة الذاكرة الخاصة بالعملية ذاتها.'
+        },
+        {
+            num: 4, icon: '⏳', topic: 'مصطلحات',
+            q: 'ما هو وقت الخمول (Idle Time)؟',
+            a: 'هو الوقت الذي يكون فيه المعالج <strong>في حالة انتظار</strong> (مثلاً ينتظر بيانات من معالج آخر) ولا يقوم بأي عمل مفيد. يُعدّ من التحديات الأساسية في البرمجة التفرعية التي يجب تقليلها.'
+        },
+        {
+            num: 5, icon: '🏷️', topic: 'تصنيفات Flynn',
+            q: 'اشرح تصنيفات Flynn الأربعة مع مثال لكل منها.',
+            a: '<ul><li><strong>SISD</strong> (تعليمة واحدة / بيانات واحدة): الحاسوب التقليدي ذو المعالج الواحد.</li><li><strong>SIMD</strong> (تعليمة واحدة / بيانات متعددة): المعالجات المتجهية والصفيفية.</li><li><strong>MISD</strong> (تعليمات متعددة / بيانات واحدة): نادر، مثل مجموعة مرشحات تطبق على إشارة وحيدة.</li><li><strong>MIMD</strong> (تعليمات متعددة / بيانات متعددة): الأكثر شيوعاً، أنظمة SMP والعناقيد.</li></ul>'
+        },
+        {
+            num: 6, icon: '📋', topic: 'الجدولة',
+            q: 'ما الفرق بين الجدولة الثابتة (Static) والجدولة الديناميكية (Dynamic)؟',
+            a: '<strong>الجدولة الثابتة:</strong> تُحدَّد في مرحلة الترجمة (Compile Time) قبل تشغيل البرنامج. لا تستهلك وقتاً إضافياً أثناء التنفيذ، لكنها لا تتأقلم مع تغيرات الحمل.<br><strong>الجدولة الديناميكية:</strong> تُحدَّد في مرحلة التنفيذ (Runtime). تتأقلم مع ظروف التشغيل وتوزع الحمل بشكل أفضل، لكنها تحتاج وقتاً إضافياً لاتخاذ قرارات الجدولة.'
+        },
+        {
+            num: 7, icon: '✅', topic: 'شرط النجاح',
+            q: 'ما شرط نجاح البرنامج التفرعي؟',
+            a: 'يجب أن يكون <strong>وقت التنفيذ التفرعي أصغر من وقت التنفيذ التسلسلي</strong> على معالج واحد. وإلا فإن استخدام التفرع لا يستحق الجهد ويكون التنفيذ التسلسلي أفضل.'
+        },
+        {
+            num: 8, icon: '⏱️', topic: 'مكونات الوقت',
+            q: 'ممَّ يتكون وقت التنفيذ التفرعي؟',
+            a: 'يتكون من ثلاثة مكونات:<br>1. <strong>وقت الحساب (tcomp):</strong> الوقت الفعلي لتنفيذ العمليات على المعالجات.<br>2. <strong>وقت الاتصال (tcomm):</strong> وقت تبادل البيانات بين المعالجات.<br>3. <strong>وقت المزامنة (Synchronization):</strong> وقت انتظار المعالجات لبعضها.'
+        },
+        {
+            num: 9, icon: '💡', topic: 'لغات البرمجة',
+            q: 'هل تحتاج البرمجة التفرعية إلى لغات برمجة جديدة؟',
+            a: '<strong>لا</strong>، لا تحتاج بالضرورة إلى لغات جديدة. يمكن استخدام <strong>ملحقات (Extensions)</strong> مع اللغات الموجودة مثل:<br>• <strong>OpenMP</strong>: للذاكرة المشتركة<br>• <strong>MPI</strong>: للذاكرة الموزعة وتمرير الرسائل'
+        },
+        {
+            num: 10, icon: '🔗', topic: 'MIMD',
+            q: 'ما هو تصنيف MIMD ولماذا يُعدّ الأكثر شيوعاً؟',
+            a: '<strong>MIMD</strong> (تعليمات متعددة / بيانات متعددة): كل معالج لديه برنامجه الخاص ودفق تعليماته الخاص ويعمل على بياناته الخاصة. يُعدّ الأكثر شيوعاً لأنه الأكثر مرونة، ويشمل أنظمة SMP (التعدد المتناظر للمعالجات) والعناقيد (Clusters) وأنظمة NUMA.'
         }
+    ],
+    quiz: [
+        { type:'tf', text:'البرمجة التفرعية تحتاج بالضرورة إلى لغات برمجة جديدة ومتخصصة.', answer:false, exp:'لا تحتاج إلى لغات جديدة، بل يمكن استخدام ملحقات كـ OpenMP وMPI.' },
+        { type:'tf', text:'في نظام التوازي (Parallel)، تشترك المعالجات في نفس الذاكرة.', answer:true, exp:'التوازي يتميز بالذاكرة المشتركة بين المعالجات.' },
+        { type:'tf', text:'الخيط (Thread) لديه مساحة ذاكرة مستقلة تماماً عن العملية الأم.', answer:false, exp:'الخيط يشترك مع الخيوط الأخرى في مساحة ذاكرة العملية.' },
+        { type:'tf', text:'الجدولة الثابتة (Static) تُحدَّد في مرحلة الترجمة.', answer:true, exp:'الجدولة الثابتة تُحدَّد وقت الترجمة، أما الديناميكية فتُحدَّد وقت التنفيذ.' },
+        { type:'tf', text:'تصنيف MISD هو الأكثر شيوعاً في الأنظمة الحديثة.', answer:false, exp:'MIMD هو الأكثر شيوعاً. MISD نادر الاستخدام.' },
+        { type:'mcq', text:'أي تصنيف من تصنيفات Flynn يمثل الحاسوب التقليدي ذو المعالج الواحد؟', opts:['SISD','SIMD','MISD','MIMD'], answer:0, exp:'SISD = Single Instruction, Single Data — الحاسوب التسلسلي التقليدي.' },
+        { type:'mcq', text:'من مميزات الجدولة الديناميكية أنها:', opts:['لا تستهلك وقتاً في مرحلة التنفيذ','تُحدَّد في وقت الترجمة','تتأقلم مع ظروف التشغيل وتوزيع الحمل','أسرع دائماً من الثابتة'], answer:2, exp:'تتأقلم مع ظروف التشغيل وهو ميزتها الرئيسية.' },
+        { type:'mcq', text:'وقت التنفيذ التفرعي يتكون من:', opts:['وقت الحساب فقط','وقت الاتصال فقط','وقت الحساب + الاتصال + المزامنة','وقت المزامنة فقط'], answer:2, exp:'يتكون من ثلاثة مكونات: tcomp + tcomm + وقت المزامنة.' },
+        { type:'mcq', text:'في تصنيف SIMD يتم تنفيذ:', opts:['تعليمات متعددة على بيانات واحدة','تعليمة واحدة على بيانات متعددة','تعليمات متعددة على بيانات متعددة','تعليمة واحدة على بيانات واحدة'], answer:1, exp:'SIMD = Single Instruction, Multiple Data.' },
+        { type:'mcq', text:'شرط نجاح البرنامج التفرعي هو أن يكون:', opts:['وقت التنفيذ التفرعي أكبر من التسلسلي','وقت التنفيذ التفرعي أصغر من التسلسلي','عدد المعالجات أكبر من n/2','وقت الاتصال صفراً'], answer:1, exp:'يجب أن يكون وقت التفرع أصغر من التسلسلي وإلا لا يستحق.' }
+    ]
+},
+{
+    id: 'l2',
+    title: 'المحاضرة 2',
+    subtitle: 'تمرير الرسائل – أساسيات MPI',
+    desc: 'مفهوم MPI، التهيئة والإنهاء، الإرسال والاستقبال، الحجب وعدمه',
+    review: [
+        {
+            num: 1, icon: '📡', topic: 'MPI',
+            q: 'ما هو MPI وما الغرض منه؟',
+            a: '<strong>MPI (Message Passing Interface)</strong> هو معيار مكتبة لتمرير الرسائل بين العمليات في البيئة التفرعية. يُستخدم أساساً في نظام <strong>الذاكرة الموزعة</strong> (Distributed Memory)، حيث لا تشترك العمليات في الذاكرة وتتواصل بإرسال رسائل عبر الشبكة.'
+        },
+        {
+            num: 2, icon: '🚀', topic: 'تهيئة MPI',
+            q: 'ما الدوال الأساسية لتهيئة وإنهاء برنامج MPI؟',
+            a: '<ul><li><strong>MPI_Init(&argc, &argv):</strong> تهيّئ بيئة MPI، تُستدعى في بداية البرنامج.</li><li><strong>MPI_Finalize():</strong> تُنهي بيئة MPI وتُحرّر الموارد، تُستدعى في نهاية البرنامج.</li><li><strong>MPI_Comm_size(MPI_COMM_WORLD, &size):</strong> تعيد إجمالي عدد العمليات.</li><li><strong>MPI_Comm_rank(MPI_COMM_WORLD, &rank):</strong> تعيد رقم (rank) العملية الحالية.</li></ul>'
+        },
+        {
+            num: 3, icon: '📤', topic: 'الإرسال',
+            q: 'ما بارامترات دالة MPI_Send؟',
+            a: '<div class="code-block">MPI_Send(buf, count, datatype, dest, tag, comm)</div><ul><li><strong>buf:</strong> عنوان مخزن البيانات المُرسَلة</li><li><strong>count:</strong> عدد العناصر</li><li><strong>datatype:</strong> نوع البيانات (مثلاً MPI_INT)</li><li><strong>dest:</strong> rank العملية الوجهة</li><li><strong>tag:</strong> علامة الرسالة للتمييز</li><li><strong>comm:</strong> المُتصِّل (عادةً MPI_COMM_WORLD)</li></ul>'
+        },
+        {
+            num: 4, icon: '📥', topic: 'الاستقبال',
+            q: 'ما بارامترات دالة MPI_Recv وما الفرق عن MPI_Send؟',
+            a: '<div class="code-block">MPI_Recv(buf, count, datatype, source, tag, comm, &status)</div>مشابهة لـ MPI_Send إلا أن:<br>• <strong>source:</strong> rank المُرسِل (MPI_ANY_SOURCE لأي مرسل)<br>• <strong>tag:</strong> علامة الرسالة (MPI_ANY_TAG لأي علامة)<br>• <strong>status:</strong> كائن يحتوي معلومات عن الرسالة المستقبَلة (مصدرها، علامتها، حجمها)'
+        },
+        {
+            num: 5, icon: '🔒', topic: 'الحجب',
+            q: 'ما الفرق بين الإرسال/الاستقبال الحاجب (Blocking) وغير الحاجب (Non-Blocking)؟',
+            a: '<strong>الحاجب (Blocking):</strong> تنتظر الدالة حتى تكتمل عملية الإرسال أو الاستقبال قبل المتابعة. العملية معلّقة (مُحجوبة) حتى تكتمل العملية تماماً.<br><strong>غير الحاجب (Non-Blocking):</strong> تعود الدالة فوراً دون انتظار الاكتمال، وتُستخدم دوال Wait/Test للتحقق لاحقاً من الاكتمال. يسمح بالتداخل بين الاتصال والحساب.'
+        },
+        {
+            num: 6, icon: '🏷️', topic: 'Message Tag',
+            q: 'ما هو Message Tag ولماذا يُستخدم؟',
+            a: 'علامة الرسالة (Tag) هي رقم صحيح يُحمَل داخل الرسالة ويُستخدم <strong>للتمييز بين أنواع مختلفة من الرسائل</strong>. إذا لم تكن مطابقة النوع مطلوبة، يُستخدم <strong>MPI_ANY_TAG</strong> (Wildcard) لقبول أي رسالة بغض النظر عن علامتها.'
+        },
+        {
+            num: 7, icon: '🌐', topic: 'Communicator',
+            q: 'ما هو المُتصِّل (Communicator) في MPI؟',
+            a: 'المُتصِّل يُعرِّف <strong>مجموعة من العمليات</strong> التي يمكنها التواصل مع بعضها. <strong>MPI_COMM_WORLD</strong> هو المُتصِّل الافتراضي الذي يضم جميع العمليات في البرنامج. يمكن إنشاء مُتصِّلات جزئية لمجموعات محددة من العمليات.'
+        },
+        {
+            num: 8, icon: '📊', topic: 'MPI_Status',
+            q: 'ما المعلومات التي يحتويها كائن MPI_Status؟',
+            a: 'يحتوي كائن MPI_Status على:<br>• <strong>MPI_SOURCE:</strong> rank المُرسِل الفعلي<br>• <strong>MPI_TAG:</strong> علامة الرسالة المستقبَلة<br>• <strong>MPI_ERROR:</strong> رمز الخطأ إن وُجد<br>وتُستخدم الدالة <strong>MPI_Get_count</strong> للحصول على عدد العناصر المستقبَلة.'
+        }
+    ],
+    quiz: [
+        { type:'tf', text:'MPI_Init يجب استدعاؤها في نهاية برنامج MPI.', answer:false, exp:'MPI_Init تُستدعى في البداية، و MPI_Finalize في النهاية.' },
+        { type:'tf', text:'MPI_ANY_SOURCE يعني قبول رسالة من أي مُرسِل بغض النظر عن rank-ه.', answer:true, exp:'MPI_ANY_SOURCE يقبل من أي عملية مرسِلة.' },
+        { type:'tf', text:'في الإرسال الحاجب (Blocking Send)، تعود الدالة فوراً دون انتظار الاكتمال.', answer:false, exp:'الإرسال الحاجب ينتظر حتى اكتمال العملية. غير الحاجب هو الذي يعود فوراً.' },
+        { type:'tf', text:'MPI_COMM_WORLD يضم جميع العمليات في برنامج MPI.', answer:true, exp:'هو المُتصِّل الافتراضي الذي يضم كل العمليات.' },
+        { type:'tf', text:'يمكن لعملية واحدة في MPI أن تملك أكثر من rank في نفس المُتصِّل.', answer:false, exp:'لكل عملية rank وحيد (فريد) في كل مُتصِّل.' },
+        { type:'mcq', text:'الدالة التي تُعيد رقم العملية الحالية في MPI هي:', opts:['MPI_Comm_size','MPI_Comm_rank','MPI_Init','MPI_Status'], answer:1, exp:'MPI_Comm_rank تعيد رقم (rank) العملية الحالية.' },
+        { type:'mcq', text:'بارامتر dest في MPI_Send يعني:', opts:['نوع البيانات المُرسَلة','rank العملية الوجهة','عنوان مخزن البيانات','علامة الرسالة'], answer:1, exp:'dest هو rank العملية التي سيُرسَل إليها.' },
+        { type:'mcq', text:'لقبول رسالة من أي مُرسِل بأي علامة نستخدم:', opts:['MPI_COMM_WORLD','MPI_ANY_SOURCE + MPI_ANY_TAG','MPI_Probe','MPI_Bcast'], answer:1, exp:'نضع MPI_ANY_SOURCE للمصدر و MPI_ANY_TAG للعلامة.' },
+        { type:'mcq', text:'المعلومات الموجودة في MPI_Status تشمل:', opts:['عدد العمليات فقط','rank المُرسِل وعلامة الرسالة ورمز الخطأ','وقت الإرسال فقط','rank الوجهة'], answer:1, exp:'Status يحتوي SOURCE وTAG وERROR.' },
+        { type:'mcq', text:'ما فائدة Message Tag في MPI؟', opts:['تحديد حجم الرسالة','التمييز بين أنواع الرسائل المختلفة','تحديد rank المُرسِل','تحديد نوع البيانات'], answer:1, exp:'يُستخدم للتمييز بين أنواع مختلفة من الرسائل.' }
+    ]
+},
+{
+    id: 'l3',
+    title: 'المحاضرة 3',
+    subtitle: 'العمليات الجماعية في MPI',
+    desc: 'Broadcast، Scatter، Gather، Reduce والعمليات الجماعية',
+    review: [
+        {
+            num: 1, icon: '📢', topic: 'Broadcast',
+            q: 'ما هي عملية Broadcast في MPI وكيف تعمل؟',
+            a: '<strong>MPI_Bcast</strong> ترسل بيانات من عملية واحدة (المصدر root) إلى جميع العمليات في المُتصِّل. كل العمليات تستدعي نفس الدالة — عملية الـ root ترسل والبقية تستقبل. مفيدة لإرسال البيانات المشتركة (مثل حجم المصفوفة) لجميع العمليات دفعة واحدة.'
+        },
+        {
+            num: 2, icon: '📦', topic: 'Scatter',
+            q: 'ما هي عملية Scatter وكيف تختلف عن Broadcast؟',
+            a: '<strong>MPI_Scatter:</strong> توزّع بيانات من عملية الـ root على <strong>جميع العمليات بأجزاء متساوية</strong>. كل عملية تحصل على جزء مختلف من البيانات.<br><strong>الفرق:</strong> في Broadcast تحصل كل عملية على <em>نفس</em> البيانات، أما في Scatter فتحصل كل عملية على <em>جزء مختلف</em>.'
+        },
+        {
+            num: 3, icon: '🗂️', topic: 'Gather',
+            q: 'ما هي عملية Gather وما علاقتها بـ Scatter؟',
+            a: '<strong>MPI_Gather:</strong> تجمع البيانات من جميع العمليات إلى عملية الـ root (عكس Scatter). كل عملية ترسل جزءاً وعملية الـ root تجمع كل الأجزاء بالترتيب.<br><strong>MPI_Allgather:</strong> مثل Gather لكن النتيجة تُرسَل لجميع العمليات لا للـ root وحدها.'
+        },
+        {
+            num: 4, icon: '➕', topic: 'Reduce',
+            q: 'ما هي عملية Reduce وما أهم عملياتها؟',
+            a: '<strong>MPI_Reduce:</strong> تجمع قيمة من كل عملية وتطبّق عليها عملية رياضية/منطقية ثم تعيد النتيجة لعملية الـ root. أهم العمليات:<br>• <strong>MPI_SUM:</strong> مجموع الجميع<br>• <strong>MPI_MAX:</strong> القيمة العظمى<br>• <strong>MPI_MIN:</strong> القيمة الصغرى<br>• <strong>MPI_PROD:</strong> حاصل ضرب الجميع<br>• <strong>MPI_LAND:</strong> AND منطقي'
+        },
+        {
+            num: 5, icon: '🔄', topic: 'Allreduce',
+            q: 'ما الفرق بين MPI_Reduce وMPI_Allreduce؟',
+            a: '<strong>MPI_Reduce:</strong> النتيجة النهائية تذهب إلى عملية الـ root فقط.<br><strong>MPI_Allreduce:</strong> النتيجة النهائية تُوزَّع على <strong>جميع العمليات</strong>. مفيدة عندما تحتاج كل العمليات إلى معرفة الناتج الكلي.'
+        },
+        {
+            num: 6, icon: '🧮', topic: 'Barrier',
+            q: 'ما هي عملية Barrier وما وظيفتها؟',
+            a: '<strong>MPI_Barrier(comm):</strong> نقطة مزامنة تجبر جميع العمليات على <strong>الانتظار حتى تصل كل العمليات إلى هذه النقطة</strong>. لا تكملة أي عملية التنفيذ قبل أن تصل جميع الأخرى. تُستخدم لضمان ترتيب التنفيذ وتجنب حالات السباق.'
+        },
+        {
+            num: 7, icon: '📊', topic: 'Scatter vs Send',
+            q: 'لماذا يُفضَّل استخدام MPI_Scatter بدلاً من حلقة من MPI_Send؟',
+            a: 'استخدام MPI_Scatter أفضل لأنه:<br>• <strong>مُحسَّن</strong>: مبني داخلياً بخوارزميات اتصال فعّالة<br>• <strong>وقت تشغيل واحد</strong>: startup time واحد بدلاً من p أوقات تشغيل منفصلة<br>• <strong>أسهل قراءةً</strong> وأقل كوداً<br>• يضمن التوزيع الصحيح تلقائياً'
+        },
+        {
+            num: 8, icon: '🔁', topic: 'Scan',
+            q: 'ما هي عملية MPI_Scan؟',
+            a: '<strong>MPI_Scan</strong> (Prefix Reduce): تطبّق عملية الـ Reduce تدريجياً (Prefix). العملية ذات الـ rank=i تحصل على نتيجة تطبيق العملية على قيم العمليات من 0 إلى i. مثلاً مع MPI_SUM: العملية 0 تحصل على قيمتها فقط، العملية 1 تحصل على مجموع 0 و1، وهكذا.'
+        }
+    ],
+    quiz: [
+        { type:'tf', text:'في MPI_Bcast، كل عملية تحصل على جزء مختلف من البيانات.', answer:false, exp:'في Bcast كل عملية تحصل على نفس البيانات. في Scatter يحصل كل منها على جزء مختلف.' },
+        { type:'tf', text:'MPI_Gather هي عكس MPI_Scatter.', answer:true, exp:'Gather تجمع من الجميع إلى root، وScatter توزع من root إلى الجميع.' },
+        { type:'tf', text:'MPI_Barrier تُحرر العملية للمتابعة حال وصولها فقط دون انتظار البقية.', answer:false, exp:'Barrier تنتظر حتى تصل جميع العمليات إلى نفس النقطة.' },
+        { type:'tf', text:'MPI_Allreduce تُرجع النتيجة لجميع العمليات لا للـ root فقط.', answer:true, exp:'Allreduce توزع النتيجة على الجميع بخلاف Reduce.' },
+        { type:'tf', text:'MPI_Reduce تستطيع تطبيق عملية MPI_MAX لإيجاد القيمة الكبرى من جميع العمليات.', answer:true, exp:'MPI_Reduce تدعم MPI_MAX وMPI_MIN وMPI_SUM وغيرها.' },
+        { type:'mcq', text:'الدالة التي توزع بيانات من root على جميع العمليات بأجزاء متساوية هي:', opts:['MPI_Bcast','MPI_Gather','MPI_Scatter','MPI_Reduce'], answer:2, exp:'MPI_Scatter توزع على الجميع بأجزاء مختلفة.' },
+        { type:'mcq', text:'لمجموع قيمة من كل عملية وإرسال النتيجة للـ root فقط نستخدم:', opts:['MPI_Allreduce مع MPI_SUM','MPI_Reduce مع MPI_SUM','MPI_Gather','MPI_Scan'], answer:1, exp:'MPI_Reduce مع MPI_SUM تجمع القيم وترسل النتيجة للـ root.' },
+        { type:'mcq', text:'MPI_Barrier تُستخدم لـ:', opts:['إرسال رسالة لجميع العمليات','مزامنة جميع العمليات عند نقطة معينة','جمع البيانات من الجميع','توزيع البيانات على الجميع'], answer:1, exp:'Barrier نقطة مزامنة تنتظر وصول جميع العمليات.' },
+        { type:'mcq', text:'الفرق بين MPI_Reduce وMPI_Allreduce هو:', opts:['العملية المطبقة','Reduce للـ root فقط وAllreduce لجميع العمليات','نوع البيانات','عدد العمليات المشاركة'], answer:1, exp:'Allreduce توزع النتيجة على الجميع بخلاف Reduce.' },
+        { type:'mcq', text:'في MPI_Scatter إذا كان لديك 100 عنصر و4 عمليات، يحصل كل عملية على:', opts:['100 عنصر','50 عنصراً','25 عنصراً','10 عناصر'], answer:2, exp:'100/4 = 25 عنصراً لكل عملية.' }
+    ]
+},
+{
+    id: 'l4',
+    title: 'المحاضرة 4',
+    subtitle: 'الإرسال والاستقبال غير المتزامن',
+    desc: 'MPI_Isend، MPI_Irecv، MPI_Wait وعائلتها',
+    review: [
+        {
+            num: 1, icon: '⚡', topic: 'Non-Blocking',
+            q: 'ما هو الإرسال غير الحاجب (Non-Blocking Send) ولماذا يُستخدم؟',
+            a: '<strong>MPI_Isend</strong> (I = Immediate) ترسل الرسالة وتعود <strong>فوراً</strong> دون انتظار اكتمال الإرسال. الفائدة الرئيسية: يمكن للمعالج <strong>الاستمرار في الحساب</strong> بينما يتم نقل البيانات في الخلفية، مما يُقلل وقت الخمول ويحسّن الأداء.'
+        },
+        {
+            num: 2, icon: '📨', topic: 'MPI_Isend',
+            q: 'ما بارامترات MPI_Isend وكيف تختلف عن MPI_Send؟',
+            a: '<div class="code-block">MPI_Isend(buf, count, datatype, dest, tag, comm, &request)</div>مشابهة لـ MPI_Send مع إضافة بارامتر <strong>request</strong>: مؤشر يُستخدم لاحقاً مع دوال Wait/Test للتحقق من اكتمال العملية. البارامترات نفسها باستثناء إضافة request.'
+        },
+        {
+            num: 3, icon: '📩', topic: 'MPI_Irecv',
+            q: 'ما بارامترات MPI_Irecv؟',
+            a: '<div class="code-block">MPI_Irecv(buf, count, datatype, source, tag, comm, &request)</div>مشابهة لـ MPI_Recv مع إضافة <strong>request</strong>. تعود فوراً دون انتظار وصول الرسالة. يجب عدم قراءة المخزن buf حتى يتم التحقق من اكتمال الاستقبال عبر Wait أو Test.'
+        },
+        {
+            num: 4, icon: '⏸️', topic: 'MPI_Wait',
+            q: 'ما وظيفة MPI_Wait وما بارامتراتها؟',
+            a: '<div class="code-block">MPI_Wait(MPI_Request *request, MPI_Status *status)</div>تنتظر حتى <strong>تكتمل طلب واحد</strong> محدد (Isend أو Irecv). <strong>محجوبة</strong> (Blocking): تتوقف العملية حتى يكتمل الطلب المحدد. بعد اكتمالها يمكن الوصول للبيانات بأمان.'
+        },
+        {
+            num: 5, icon: '⏱️', topic: 'MPI_Waitsome',
+            q: 'ما الفرق بين MPI_Waitsome وMPI_Wait؟',
+            a: '<strong>MPI_Wait:</strong> تنتظر اكتمال طلب <em>واحد</em> محدد.<br><strong>MPI_Waitsome:</strong> تنتظر حتى يكتمل <em>عدد محدد من الطلبات</em>. تقبل مصفوفة من الطلبات وتعود عند اكتمال عدد معين منها. تُعيد مصفوفة بمؤشرات الطلبات المكتملة وحالاتها.'
+        },
+        {
+            num: 6, icon: '🔍', topic: 'MPI_Probe',
+            q: 'ما وظيفة MPI_Probe؟',
+            a: '<strong>MPI_Probe</strong> تتحقق من وجود رسالة واردة <strong>دون استقبالها فعلياً</strong>. تُعيد status يحتوي معلومات عن الرسالة (حجمها، مصدرها، علامتها). مفيدة لمعرفة حجم الرسالة قبل تخصيص مخزن الاستقبال.'
+        },
+        {
+            num: 7, icon: '🔄', topic: 'التداخل',
+            q: 'كيف يُستخدم Non-Blocking لتحسين الأداء بالتداخل بين الحساب والاتصال؟',
+            a: 'النمط المثالي:<br>1. <strong>MPI_Isend/Irecv</strong>: ابدأ الإرسال/الاستقبال<br>2. <strong>تنفيذ عمليات حسابية</strong> أثناء انتقال البيانات<br>3. <strong>MPI_Wait</strong>: انتظر اكتمال الاتصال<br>4. استخدم البيانات المستقبَلة<br>هذا يُداخِل (overlap) الحساب مع الاتصال، مما يُقلل الوقت الكلي.'
+        },
+        {
+            num: 8, icon: '⚠️', topic: 'تحذيرات',
+            q: 'ما الخطأ الذي يجب تجنبه عند استخدام MPI_Isend؟',
+            a: 'يجب <strong>عدم تعديل مخزن buf</strong> بعد استدعاء MPI_Isend حتى يُتحقق من اكتمال الإرسال عبر Wait أو Test. إذا عُدِّل المخزن قبل الاكتمال قد تُرسَل بيانات غير صحيحة. نفس الشيء مع Irecv: لا تقرأ buf حتى يتم التحقق من الاكتمال.'
+        }
+    ],
+    quiz: [
+        { type:'tf', text:'MPI_Isend تنتظر حتى يستلم المستقبل الرسالة قبل أن تعود.', answer:false, exp:'MPI_Isend تعود فوراً (Non-Blocking) دون انتظار الاستلام.' },
+        { type:'tf', text:'يمكن تعديل مخزن buf بعد MPI_Isend مباشرةً وقبل استدعاء MPI_Wait.', answer:false, exp:'يجب عدم تعديل buf حتى تُكمل MPI_Wait أو MPI_Test تأكيد اكتمال الإرسال.' },
+        { type:'tf', text:'MPI_Wait هي دالة حاجبة (Blocking) تنتظر اكتمال طلب معين.', answer:true, exp:'MPI_Wait تنتظر حتى يكتمل الطلب المحدد.' },
+        { type:'tf', text:'الهدف الأساسي من Non-Blocking هو التداخل بين الحساب والاتصال.', answer:true, exp:'يُمكّن المعالج من الحساب بينما تنتقل البيانات في الخلفية.' },
+        { type:'tf', text:'MPI_Probe تستقبل الرسالة وتُخزنها في المخزن مباشرةً.', answer:false, exp:'MPI_Probe تتحقق من وجود رسالة فقط دون استقبالها.' },
+        { type:'mcq', text:'الحرف I في MPI_Isend يرمز إلى:', opts:['Integer','Immediate','Internal','Iterative'], answer:1, exp:'I = Immediate، تعني أنها تعود فوراً.' },
+        { type:'mcq', text:'البارامتر الإضافي في MPI_Isend مقارنةً بـ MPI_Send هو:', opts:['status','tag','request','comm'], answer:2, exp:'request مؤشر يُستخدم مع Wait/Test للتحقق من الاكتمال.' },
+        { type:'mcq', text:'لانتظار اكتمال طلب واحد محدد من Non-Blocking نستخدم:', opts:['MPI_Probe','MPI_Waitsome','MPI_Wait','MPI_Barrier'], answer:2, exp:'MPI_Wait تنتظر اكتمال طلب واحد محدد.' },
+        { type:'mcq', text:'أفضل استخدام لـ Non-Blocking هو:', opts:['إرسال رسائل صغيرة جداً','التداخل بين الحساب والاتصال','تجنب استخدام MPI_Recv','إلغاء الرسائل المُرسَلة'], answer:1, exp:'الهدف الرئيسي هو التداخل بين الحساب والاتصال.' },
+        { type:'mcq', text:'MPI_Waitsome تنتظر:', opts:['اكتمال طلب واحد','اكتمال جميع الطلبات','اكتمال عدد معين من الطلبات','أي طلب كان'], answer:2, exp:'تنتظر حتى يكتمل عدد محدد من الطلبات من المصفوفة.' }
+    ]
+},
+{
+    id: 'l5',
+    title: 'المحاضرة 5',
+    subtitle: 'دوال Wait وTest المتقدمة',
+    desc: 'MPI_Waitany، MPI_Waitall، MPI_Test وعائلتها',
+    review: [
+        {
+            num: 1, icon: '🎯', topic: 'Waitany',
+            q: 'ما وظيفة MPI_Waitany وما بارامتراتها؟',
+            a: '<div class="code-block">MPI_Waitany(count, array_of_requests[], *index, *status)</div>تنتظر حتى تكتمل <strong>أي طلب واحد</strong> من مصفوفة الطلبات. تعود بـ index (موضع الطلب المكتمل في المصفوفة) وstatus. مفيدة عندما نريد معالجة أي نتيجة تصل أولاً.'
+        },
+        {
+            num: 2, icon: '✅', topic: 'Waitall',
+            q: 'ما وظيفة MPI_Waitall وكيف تختلف عن Waitany؟',
+            a: '<div class="code-block">MPI_Waitall(count, array_of_requests[], array_of_statuses[])</div>تنتظر حتى تكتمل <strong>جميع الطلبات</strong> في المصفوفة. تعود فقط بعد اكتمال الجميع. الفرق عن Waitany: Waitany تعود بمجرد اكتمال أي طلب واحد، أما Waitall فتنتظر اكتمال الجميع.'
+        },
+        {
+            num: 3, icon: '🔍', topic: 'MPI_Test',
+            q: 'ما وظيفة MPI_Test وكيف تختلف عن MPI_Wait؟',
+            a: '<div class="code-block">MPI_Test(MPI_Request *request, int *flag, MPI_Status *status)</div><strong>الفرق الأساسي:</strong> MPI_Test <em>غير حاجبة (Non-Blocking)</em> — تختبر الطلب وتعود فوراً بغض النظر عن الاكتمال.<br>• flag=1 (true): الطلب اكتمل<br>• flag=0 (false): الطلب لم يكتمل بعد<br>بخلاف MPI_Wait التي تنتظر حتى الاكتمال.'
+        },
+        {
+            num: 4, icon: '🔎', topic: 'Testsome',
+            q: 'ما بارامترات MPI_Testsome؟',
+            a: '<div class="code-block">MPI_Testsome(incount, array_of_requests[], &outcount, array_of_indices[], array_of_statuses[])</div>تختبر مجموعة طلبات وتعود فوراً بـ:<br>• <strong>outcount:</strong> عدد الطلبات المكتملة<br>• <strong>array_of_indices:</strong> مؤشرات الطلبات المكتملة<br>• <strong>array_of_statuses:</strong> حالات الطلبات المكتملة'
+        },
+        {
+            num: 5, icon: '🔑', topic: 'Testany',
+            q: 'ما الفرق بين MPI_Testany وMPI_Waitany؟',
+            a: '<strong>MPI_Waitany:</strong> حاجبة — تنتظر حتى يكتمل أي طلب.<br><strong>MPI_Testany:</strong> غير حاجبة — تختبر هل اكتمل أي طلب وتعود فوراً. إذا لم يكتمل شيء flag=false. إذا اكتمل طلب، تعيد index وstatus الخاص به.'
+        },
+        {
+            num: 6, icon: '🏁', topic: 'Testall',
+            q: 'متى تُعيد MPI_Testall القيمة true؟',
+            a: '<div class="code-block">MPI_Testall(count, array_of_requests[], &flag, array_of_statuses[])</div>تُعيد flag=true (1) فقط عندما تكون <strong>جميع الطلبات في المصفوفة قد اكتملت</strong>. إذا لم يكتمل ولو طلب واحد فإنها تعيد flag=false.'
+        },
+        {
+            num: 7, icon: '📋', topic: 'مقارنة',
+            q: 'متى تستخدم Wait ومتى تستخدم Test؟',
+            a: '<strong>Wait</strong>: عندما لا يمكنك المتابعة بدون اكتمال الاتصال — تنتظر وتوقف البرنامج.<br><strong>Test</strong>: عندما يمكنك فعل شيء مفيد آخر ريثما تنتظر — تختبر دورياً وتنفذ عمليات أخرى بينها. يُمكّن أسلوب Test من نمط الانتظار المنشغل (Busy Waiting) مع الاستفادة من الوقت.'
+        },
+        {
+            num: 8, icon: '⚖️', topic: 'المقارنة الشاملة',
+            q: 'قارن بين Wait/Waitany/Waitall/Waitsome بجملة واحدة لكل.',
+            a: '<ul><li><strong>MPI_Wait:</strong> تنتظر اكتمال <em>طلب واحد محدد</em>.</li><li><strong>MPI_Waitany:</strong> تنتظر اكتمال <em>أي طلب</em> من المصفوفة.</li><li><strong>MPI_Waitsome:</strong> تنتظر اكتمال <em>عدد معين</em> من الطلبات.</li><li><strong>MPI_Waitall:</strong> تنتظر اكتمال <em>جميع الطلبات</em> في المصفوفة.</li></ul>'
+        }
+    ],
+    quiz: [
+        { type:'tf', text:'MPI_Test هي دالة حاجبة تنتظر اكتمال الطلب.', answer:false, exp:'MPI_Test غير حاجبة، تعود فوراً بغض النظر عن الاكتمال.' },
+        { type:'tf', text:'MPI_Waitall تعود فقط بعد اكتمال جميع الطلبات في المصفوفة.', answer:true, exp:'Waitall تنتظر اكتمال الجميع.' },
+        { type:'tf', text:'MPI_Waitany تعيد index=0 دائماً عند اكتمال أي طلب.', answer:false, exp:'تعيد موضع الطلب المكتمل في المصفوفة وليس دائماً 0.' },
+        { type:'tf', text:'عند MPI_Testall إذا لم يكتمل طلب واحد فإنها تعيد flag=false.', answer:true, exp:'Testall تعيد true فقط إذا اكتملت جميع الطلبات.' },
+        { type:'tf', text:'MPI_Testsome وMPI_Waitsome يكافئان من حيث الغرض إلا أن Test غير حاجبة.', answer:true, exp:'نفس الغرض لكن Waitsome حاجبة وTestsome غير حاجبة.' },
+        { type:'mcq', text:'ما الدالة غير الحاجبة التي تختبر هل اكتمل أي طلب من المصفوفة؟', opts:['MPI_Waitany','MPI_Testany','MPI_Waitall','MPI_Test'], answer:1, exp:'MPI_Testany تختبر المصفوفة وتعود فوراً.' },
+        { type:'mcq', text:'MPI_Waitsome تنتظر حتى:', opts:['يكتمل طلب واحد','يكتمل عدد معين من الطلبات','يكتمل الجميع','أي طلب بأي ترتيب'], answer:1, exp:'تنتظر اكتمال عدد معين (incount) من الطلبات.' },
+        { type:'mcq', text:'أيهما مناسب عندما يمكنك عمل عمليات حسابية أثناء انتظار الاتصال؟', opts:['MPI_Wait','MPI_Waitall','MPI_Test','MPI_Barrier'], answer:2, exp:'MPI_Test تختبر دون انتظار وتعود فوراً فتسمح بالعمل في الأثناء.' },
+        { type:'mcq', text:'بارامتر outcount في MPI_Testsome يعني:', opts:['إجمالي عدد الطلبات','عدد الطلبات المكتملة حتى الآن','rank العملية المكتملة','حجم مصفوفة الحالات'], answer:1, exp:'outcount هو عدد الطلبات التي اكتملت.' },
+        { type:'mcq', text:'لانتظار أول نتيجة تصل من أي عملية slave في نموذج Master-Slave، الأنسب هو:', opts:['MPI_Waitall','MPI_Wait','MPI_Waitany','MPI_Barrier'], answer:2, exp:'Waitany تعود بمجرد وصول أي نتيجة أولاً.' }
+    ]
+},
+{
+    id: 'l6',
+    title: 'المحاضرة 6',
+    subtitle: 'قابلية التوازي في العمليات',
+    desc: 'تحليل العمليات القابلة للتفرع، ضرب المصفوفات، الاستقلالية والتبعية',
+    review: [
+        {
+            num: 1, icon: '🧩', topic: 'قابلية التفرع',
+            q: 'ما المعيار الذي يجعل عملية قابلة للتنفيذ التفرعي؟',
+            a: 'العملية قابلة للتفرع إذا كانت أجزاؤها <strong>مستقلة</strong> عن بعضها — أي لا تعتمد نتيجة جزء على نتيجة جزء آخر. إذا كان للعمليات <strong>تبعية (Dependency)</strong> بينها فلا يمكن تشغيلها بالتوازي.'
+        },
+        {
+            num: 2, icon: '➕', topic: 'جمع المصفوفات',
+            q: 'هل عملية Z = X + Y على مصفوفتين قابلة للتفرع؟ كيف؟',
+            a: '<strong>نعم، قابلة للتفرع تماماً.</strong> كل عنصر Zi = Xi + Yi مستقل عن باقي العناصر. يمكن تعيين كل معالج لحساب مجموعة من العناصر بشكل مستقل دون الحاجة للتواصل مع المعالجات الأخرى.'
+        },
+        {
+            num: 3, icon: '✖️', topic: 'ضرب المصفوفات',
+            q: 'كيف يتم تفرعة ضرب مصفوفتين Z = X * Y؟',
+            a: 'كل عنصر Zij في Z يُحسب بشكل مستقل عبر: Zij = Σ Xik * Ykj. يمكن تعيين كل معالج لحساب صف أو أكثر من Z بشكل مستقل. كل معالج يحتاج الصف المقابل من X وجميع أعمدة Y (أو الجزء المعين منها).'
+        },
+        {
+            num: 4, icon: '🔗', topic: 'التبعية',
+            q: 'ما هي تبعية البيانات (Data Dependency) وكيف تؤثر على التفرع؟',
+            a: 'تبعية البيانات تعني أن <strong>نتيجة عملية تعتمد على نتيجة عملية سابقة</strong>. مثال: إذا كان Z = X*Y + Z، فعملية الجمع تعتمد على نتيجة الضرب، لذا يجب أن تكتمل مرحلة الضرب قبل مرحلة الجمع — لا يمكن تشغيلهما بالتوازي.'
+        },
+        {
+            num: 5, icon: '📐', topic: 'مثال Z=X*Y+Z',
+            q: 'كيف نُفرِّع عملية Z = X * Y + Z رغم التبعية؟',
+            a: 'نقسّمها إلى <strong>مرحلتين</strong>:<br>1. <strong>المرحلة 1:</strong> T = X * Y (قابلة للتفرع — كل Tij مستقل)<br>2. <strong>المرحلة 2:</strong> Z = T + Z (قابلة للتفرع — كل Zij مستقل)<br>مزامنة بين المرحلتين ضرورية (Barrier) لضمان اكتمال المرحلة 1 قبل بدء المرحلة 2.'
+        },
+        {
+            num: 6, icon: '⚖️', topic: 'توزيع العمل',
+            q: 'ما المقصود بتوازن الحمل (Load Balancing) في التفرع؟',
+            a: 'توازن الحمل يعني <strong>توزيع العمل بشكل متساوٍ</strong> على جميع المعالجات حتى تنهي عملها في نفس الوقت تقريباً. إذا كان المعالجون غير متوازنين، ستنتهي بعضها مبكراً وتنتظر خاملة بينما تعمل الأخرى — مما يُقلل الكفاءة ويزيد وقت الخمول.'
+        },
+        {
+            num: 7, icon: '🔢', topic: 'Task Granularity',
+            q: 'ما المقصود بدقة المهمة (Task Granularity)؟',
+            a: '<strong>Granularity</strong> = حجم الحساب مقسوماً على حجم الاتصال.<br>• <strong>دقة خشنة (Coarse-grained):</strong> حساب كبير + اتصال قليل — أكفأ غالباً.<br>• <strong>دقة ناعمة (Fine-grained):</strong> حساب صغير + اتصال كثير — قد يُهيمن الاتصال على الوقت ويُقلل الكفاءة.'
+        },
+        {
+            num: 8, icon: '🌀', topic: 'Pipeline',
+            q: 'ما هو نمط Pipeline في البرمجة التفرعية؟',
+            a: '<strong>Pipeline</strong>: تسلسل من المعالجات حيث يُمرَّر البيانات من معالج إلى آخر بشكل متتابع. كل معالج يُنفذ مرحلة مختلفة من المعالجة. يُشبه خط التجميع في المصنع — رغم وجود تبعية بين المراحل يُحقق توازياً في المعالجة.'
+        }
+    ],
+    quiz: [
+        { type:'tf', text:'جمع مصفوفتين Z = X + Y قابل للتفرع لأن كل عنصر مستقل عن الآخرين.', answer:true, exp:'كل Zi = Xi + Yi مستقل تماماً.' },
+        { type:'tf', text:'إذا كانت هناك تبعية بيانات بين عمليتين، يمكن تنفيذهما بالتوازي دون أي إشكال.', answer:false, exp:'التبعية تعني أن إحداهما تحتاج نتيجة الأخرى — لا يمكن التوازي المباشر.' },
+        { type:'tf', text:'توازن الحمل يهدف إلى جعل جميع المعالجات تنهي عملها في نفس الوقت.', answer:true, exp:'التوازن يمنع بقاء معالجات خاملة وأخرى مشغولة.' },
+        { type:'tf', text:'الدقة الناعمة (Fine-grained) أكثر كفاءة دائماً من الدقة الخشنة.', answer:false, exp:'الدقة الخشنة غالباً أكفأ لأن الاتصال يكون أقل نسبةً للحساب.' },
+        { type:'tf', text:'نمط Pipeline يسمح بالتوازي حتى لو كانت المراحل تتبع بعضها.', answer:true, exp:'Pipeline يُحقق توازياً بتداخل المراحل حتى مع التبعية.' },
+        { type:'mcq', text:'في عملية Z = X * Y + Z، يجب أن تُنفَّذ مرحلة الضرب قبل الجمع بسبب:', opts:['حجم المصفوفة','تبعية البيانات (Data Dependency)','عدد المعالجات','نوع البيانات'], answer:1, exp:'نتيجة الجمع تعتمد على نتيجة الضرب — تبعية بيانات.' },
+        { type:'mcq', text:'لضمان اكتمال المرحلة الأولى قبل المرحلة الثانية نستخدم:', opts:['MPI_Bcast','MPI_Barrier','MPI_Reduce','MPI_Scatter'], answer:1, exp:'MPI_Barrier تمنع المتابعة حتى تنتهي جميع العمليات من المرحلة الأولى.' },
+        { type:'mcq', text:'في ضرب مصفوفتين Z = X * Y، الطريقة المثلى للتفرع هي:', opts:['تعيين كل عنصر لمعالج مختلف','تعيين كل صف لمعالج مختلف','إرسال المصفوفة الكاملة لكل معالج','عدم التفرع'], answer:1, exp:'تعيين صف كامل لكل معالج هو الأكثر شيوعاً وكفاءة.' },
+        { type:'mcq', text:'Granularity في البرمجة التفرعية تعني:', opts:['عدد المعالجات','حجم الحساب / حجم الاتصال','سرعة الشبكة','حجم البيانات الكلي'], answer:1, exp:'Granularity = نسبة الحساب للاتصال.' },
+        { type:'mcq', text:'أيهما قابل للتفرع المباشر دون مرحلتين؟', opts:['Z = X * Y + Z','Z = X + Y','المجموع التدريجي (prefix sum)','Z = cumsum(X)'], answer:1, exp:'Z = X + Y مستقل تماماً، كل عنصر يُحسب بشكل مستقل.' }
+    ]
+},
+{
+    id: 'l7',
+    title: 'المحاضرة 7',
+    subtitle: 'مقاييس الأداء التفرعي',
+    desc: 'Speedup، Efficiency، Overhead، قانون Amdahl',
+    review: [
+        {
+            num: 1, icon: '🚀', topic: 'Speedup',
+            q: 'ما هو Speedup وكيف يُحسب؟',
+            a: '<strong>Speedup (S)</strong> يقيس كم مرة يكون البرنامج التفرعي أسرع من التسلسلي:<br><strong>S = T₁ / Tₚ</strong><br>حيث T₁ = وقت التنفيذ على معالج واحد، Tₚ = وقت التنفيذ على p معالجات.<br>• S = p: تسريع مثالي<br>• S < p: تسريع أقل من المثالي (عادي)<br>• S > p: تسريع خارق (Superlinear، نادر)'
+        },
+        {
+            num: 2, icon: '📊', topic: 'Efficiency',
+            q: 'ما هي Efficiency وكيف تختلف عن Speedup؟',
+            a: '<strong>Efficiency (E)</strong> تقيس مدى استغلال كل معالج من وقته المتاح:<br><strong>E = S / p = T₁ / (p × Tₚ)</strong><br>• E = 1 (100%): استغلال مثالي<br>• E < 1: يوجد هدر في وقت المعالجات (بسبب الاتصال والخمول)<br>كلما زاد عدد المعالجات كلما انخفضت الكفاءة عادةً.'
+        },
+        {
+            num: 3, icon: '⚖️', topic: 'Overhead',
+            q: 'ما هو Parallel Overhead ومم يتكون؟',
+            a: '<strong>Overhead</strong> هو الوقت الإضافي الذي يستهلكه البرنامج التفرعي مقارنةً بالتسلسلي بسبب:<br>• <strong>وقت الاتصال:</strong> إرسال واستقبال البيانات<br>• <strong>وقت الخمول:</strong> انتظار المعالجات لبعضها<br>• <strong>وقت المزامنة:</strong> تنسيق العمليات<br>• <strong>تكرار الحساب:</strong> أي حسابات تُنجز في كل عملية'
+        },
+        {
+            num: 4, icon: '⚡', topic: 'قانون Amdahl',
+            q: 'اشرح قانون Amdahl وما الذي يعنيه عملياً؟',
+            a: '<strong>قانون Amdahl:</strong> يُحدد الحد الأقصى للتسريع بناءً على نسبة الجزء التسلسلي:<br><strong>S ≤ 1 / (f + (1-f)/p)</strong><br>حيث f = نسبة الجزء التسلسلي، (1-f) = نسبة الجزء القابل للتفرع.<br><strong>المعنى العملي:</strong> حتى لو كان p → ∞، الحد الأقصى للتسريع هو 1/f. مثلاً إذا كان 10% من البرنامج تسلسلياً، أقصى تسريع = 1/0.1 = 10x فقط.'
+        },
+        {
+            num: 5, icon: '🔢', topic: 'قانون Gustafson',
+            q: 'ما قانون Gustafson وكيف يختلف عن Amdahl؟',
+            a: '<strong>قانون Gustafson:</strong> يرى أنه مع زيادة عدد المعالجات يزداد حجم المشكلة أيضاً:<br><strong>S = p - f(p-1)</strong><br><strong>الفرق الرئيسي:</strong> Amdahl يفترض أن حجم المشكلة ثابت (fixed problem size)، بينما Gustafson يفترض أن الوقت ثابت (fixed time) وحجم المشكلة يكبر. Gustafson أكثر تفاؤلاً بإمكانيات التفرع.'
+        },
+        {
+            num: 6, icon: '📉', topic: 'Scalability',
+            q: 'ما المقصود بقابلية التوسع (Scalability)؟',
+            a: '<strong>Scalability</strong>: قدرة البرنامج التفرعي على الحفاظ على كفاءته عند زيادة عدد المعالجات.<br>• <strong>Strongly Scalable:</strong> الكفاءة ثابتة عند زيادة المعالجات مع نفس حجم المشكلة.<br>• <strong>Weakly Scalable:</strong> الكفاءة ثابتة عند زيادة المعالجات مع زيادة حجم المشكلة بنفس النسبة.'
+        },
+        {
+            num: 7, icon: '🏎️', topic: 'Speedup المثالي',
+            q: 'ما معنى التسريع الخطي (Linear Speedup) وهل يمكن تحقيقه؟',
+            a: '<strong>التسريع الخطي (Linear Speedup):</strong> S = p، أي استخدام p معالجات يُعطي تسريعاً بمقدار p ضعفاً. نادراً ما يُحقق في الواقع بسبب:<br>• Overhead الاتصال<br>• أجزاء تسلسلية في البرنامج (قانون Amdahl)<br>• وقت الخمول والمزامنة<br>يُستخدم كمرجع مثالي للمقارنة.'
+        },
+        {
+            num: 8, icon: '🔬', topic: 'Superlinear Speedup',
+            q: 'ما هو التسريع الخارق (Superlinear Speedup) وكيف يحدث؟',
+            a: '<strong>Superlinear Speedup:</strong> S > p، أي التسريع أكثر من خطي. يحدث نادراً بسبب:<br>• <strong>تأثير الذاكرة المخبئية (Cache):</strong> عند تقسيم البيانات قد تسع الذاكرة المخبئية لكل معالج، مما يُسرّع الوصول للبيانات بشكل كبير.<br>• <strong>خوارزميات البحث:</strong> إيجاد الحل في مجزأت أصغر قد يكون أسرع غير متوقع.'
+        }
+    ],
+    quiz: [
+        { type:'tf', text:'Speedup = T_p / T_1 (وقت التفرعي مقسوماً على وقت التسلسلي).', answer:false, exp:'Speedup = T₁ / Tₚ (وقت التسلسلي مقسوماً على وقت التفرعي).' },
+        { type:'tf', text:'وفق قانون Amdahl، إذا كان 20% من البرنامج تسلسلياً فأقصى تسريع ممكن هو 5×.', answer:true, exp:'S_max = 1/f = 1/0.2 = 5.' },
+        { type:'tf', text:'Efficiency = 1 (100%) يعني أن المعالجات تُستغل بشكل مثالي دون هدر.', answer:true, exp:'E=1 يعني لا overhead ولا خمول.' },
+        { type:'tf', text:'التسريع الخارق (Superlinear) مستحيل نظرياً ولا يحدث أبداً.', answer:false, exp:'نادر لكن يحدث، غالباً بسبب تأثيرات الذاكرة المخبئية.' },
+        { type:'tf', text:'قانون Gustafson أكثر تفاؤلاً من Amdahl لأنه يفترض أن حجم المشكلة يكبر مع زيادة المعالجات.', answer:true, exp:'Gustafson يفترض fixed time وليس fixed problem size.' },
+        { type:'mcq', text:'Speedup = 8 على 4 معالجات يعني أن الكفاءة (Efficiency) هي:', opts:['50%','100%','200%','25%'], answer:2, exp:'E = S/p = 8/4 = 2 أي 200%، وهذا Superlinear Speedup.' },
+        { type:'mcq', text:'الحد الأقصى للتسريع وفق Amdahl عندما f=0.25 هو:', opts:['4×','25×','∞','8×'], answer:0, exp:'S_max = 1/0.25 = 4.' },
+        { type:'mcq', text:'Parallel Overhead يشمل:', opts:['وقت الحساب فقط','وقت الاتصال والخمول والمزامنة','Speedup المثالي','حجم البيانات'], answer:1, exp:'Overhead = وقت الاتصال + الخمول + المزامنة.' },
+        { type:'mcq', text:'برنامج تفرعي ذو Efficiency منخفضة يعني:', opts:['الأداء ممتاز','هناك هدر كبير في وقت المعالجات','Speedup مثالي','حجم المشكلة صغير'], answer:1, exp:'كفاءة منخفضة = هدر كبير = overhead وخمول.' },
+        { type:'mcq', text:'الفرق الرئيسي بين Amdahl وGustafson هو:', opts:['نوع العمليات','الأول يثبّت حجم المشكلة والثاني يثبّت الوقت','عدد المعالجات','نوع الاتصال'], answer:1, exp:'Amdahl: حجم مشكلة ثابت. Gustafson: وقت ثابت وحجم متغير.' }
+    ]
+},
+{
+    id: 'l8',
+    title: 'المحاضرة 8',
+    subtitle: 'مثال: جمع الأرقام التفرعي',
+    desc: 'نموذج Master/Slave، التجزئة، Broadcast مقابل Partition، تحليل الزمن',
+    review: [
+        {
+            num: 1, icon: '👑', topic: 'Master/Slave',
+            q: 'ما هو نموذج Master/Slave في البرمجة التفرعية؟',
+            a: '<strong>نموذج Master/Slave (سيد/عبيد):</strong><br>• <strong>Master:</strong> يُوزّع العمل، يجمع النتائج، يُنسّق.<br>• <strong>Slaves:</strong> يستقبلون البيانات، يُنفذون الحسابات، يُعيدون النتائج.<br>في مثال جمع الأرقام: Master يُقسّم القائمة ويُرسل جزءاً لكل Slave، كل Slave يجمع جزءه ويُعيد المجموع الجزئي، Master يجمع المجاميع الجزئية.'
+        },
+        {
+            num: 2, icon: '✂️', topic: 'Partitioning',
+            q: 'كيف يتم تقسيم (Partition) بيانات جمع الأرقام على المعالجات؟',
+            a: 'إذا كان لدينا n رقم و p معالج:<br>• حجم كل مجموعة: <strong>S = n/p</strong><br>• كل Slave يحصل على S رقم<br>• Slave الأولى: أرقام 0 إلى S-1<br>• Slave الثانية: S إلى 2S-1<br>• وهكذا...<br>يُستخدم MPI_Send لإرسال كل مجموعة أو MPI_Scatter لتوزيع أكثر كفاءة.'
+        },
+        {
+            num: 3, icon: '📢', topic: 'Broadcast vs Partition',
+            q: 'ما الفرق بين أسلوب Broadcast وأسلوب Partition في إرسال البيانات؟',
+            a: '<strong>Partitioning (إرسال فردي):</strong> Master يُرسل لكل Slave جزءه فقط. تعقيد الاتصال: n/p عنصر لكل Slave × p = n عنصر إجمالاً.<br><strong>Broadcast:</strong> Master يُرسل القائمة كاملة لجميع الـ Slaves، وكل Slave يحدد جزءه بنفسه. أعلى تكلفة اتصال لكن startup time واحد فقط.<br><strong>الأفضل</strong>: يعتمد على نسبة startup time إلى tdata.'
+        },
+        {
+            num: 4, icon: '⏱️', topic: 'تحليل الزمن',
+            q: 'ما صيغة وقت الاتصال الإجمالي في نموذج Partitioning؟',
+            a: '<strong>وقت إرسال البيانات (tcomm1):</strong><br>tcomm1 = p × (t_startup + (n/p) × t_data)<br><br><strong>وقت استقبال النتائج (tcomm2):</strong><br>tcomm2 = p × (t_startup + t_data) <br>(كل Slave يُعيد مجموعاً جزئياً واحداً)<br><br>باستخدام Scatter وGather:<br>tcomm1 = t_startup + n × t_data<br>tcomm2 = t_startup + p × t_data'
+        },
+        {
+            num: 5, icon: '🔢', topic: 'وقت الحساب',
+            q: 'ما وقت الحساب الإجمالي في مثال جمع الأرقام؟',
+            a: '<strong>كل Slave:</strong> tcomp1 = n/p - 1 عملية جمع<br><strong>Master (تجميع النتائج):</strong> tcomp2 = p - 1 عملية جمع<br><br><strong>الوقت الإجمالي:</strong><br>tp = tcomm1 + tcomm2 + tcomp1 + tcomp2<br>= 2p·t_startup + (n+p)·t_data + n/p + p - 2<br>= O(n) (مع عدد محدد من المعالجات)'
+        },
+        {
+            num: 6, icon: '📊', topic: 'Broadcast مقابل Partition',
+            q: 'لماذا قد يكون Broadcast أفضل من حلقة Send فردية؟',
+            a: 'في حلقة من p عمليات Send: overhead يساوي p × t_startup<br>في Broadcast: overhead يساوي t_startup واحد فقط (مُحسَّن داخلياً بشجرة ثنائية أو آلية مشابهة).<br>إذا كان t_startup كبيراً نسبياً، يُوفر Broadcast وقتاً كبيراً حتى لو أُرسلت بيانات أكثر لكل عملية.'
+        },
+        {
+            num: 7, icon: '🌳', topic: 'Tree Reduction',
+            q: 'ما هي Tree Reduction وكيف تُحسّن أداء الـ Reduce؟',
+            a: '<strong>Tree Reduction:</strong> بدلاً من إرسال جميع النتائج للـ Master وجمعها خطياً، يتم الجمع على شكل <strong>شجرة ثنائية</strong>:<br>• في الجولة 1: كل زوج من المعالجات يجمع قيمتيهما<br>• في الجولة 2: النصف المتبقي يجمع<br>• وهكذا حتى تبقى نتيجة واحدة<br>التعقيد: O(log p) جولات بدلاً من O(p).'
+        },
+        {
+            num: 8, icon: '📌', topic: 'ملاحظة مهمة',
+            q: 'هل التعقيد الزمني للجمع التفرعي أفضل من التسلسلي؟',
+            a: 'للعدد نفسه من المعالجات p ثابتة: التعقيد الزمني التفرعي هو <strong>O(n)</strong> وهو نفس التسلسلي.<br>الفائدة الحقيقية تظهر في الجانب الحسابي: كل معالج يُنجز n/p عملية بدلاً من n، مما يجعله <strong>أسرع عملياً</strong> رغم تساوي التعقيد بسبب Overhead الاتصال.'
+        }
+    ],
+    quiz: [
+        { type:'tf', text:'في نموذج Master/Slave، يقوم Master بالحسابات الرئيسية ويُراقب Slaves.', answer:false, exp:'Master يُوزّع ويجمع، أما Slaves فهي من تُنفذ الحسابات الفعلية.' },
+        { type:'tf', text:'إذا كان n=1000 و p=10، يحصل كل Slave على 100 رقم.', answer:true, exp:'S = n/p = 1000/10 = 100.' },
+        { type:'tf', text:'استخدام MPI_Scatter بدلاً من حلقة MPI_Send يُقلل startup time الإجمالي.', answer:true, exp:'Scatter لها startup time واحد بدلاً من p أوقات تشغيل.' },
+        { type:'tf', text:'وقت الحساب في Master لتجميع p نتيجة هو p عملية جمع.', answer:false, exp:'يحتاج p-1 عملية جمع لتجميع p قيمة.' },
+        { type:'tf', text:'Tree Reduction تُقلل عدد جولات الاتصال من O(p) إلى O(log p).', answer:true, exp:'الشجرة الثنائية تُقلل الجولات لـ log p.' },
+        { type:'mcq', text:'إذا كان لدينا 1000 رقم و5 معالجات، يُرسل Master لكل Slave:', opts:['100 رقم','500 رقم','200 رقم','1000 رقم'], answer:2, exp:'1000/5 = 200 رقم لكل Slave.' },
+        { type:'mcq', text:'في نمط Broadcast، كل Slave يتلقى:', opts:['جزءه فقط','القائمة الكاملة ثم يحدد جزءه بنفسه','مجموع الجميع','لا شيء'], answer:1, exp:'Broadcast ترسل للجميع ثم كل Slave يحدد جزءه.' },
+        { type:'mcq', text:'tcomm2 (وقت استقبال النتائج) في Partitioning يُحسب بـ:', opts:['p × (t_startup + n/p × t_data)','p × (t_startup + t_data)','t_startup + p × t_data','n × t_data'], answer:1, exp:'كل Slave يُعيد قيمة واحدة: p × (startup + tdata).' },
+        { type:'mcq', text:'أيهما يُقلل startup time أكثر عند توزيع البيانات؟', opts:['حلقة MPI_Send','MPI_Scatter','MPI_Isend','MPI_Bcast للجزء'], answer:1, exp:'MPI_Scatter مُحسَّنة وتستخدم startup واحداً.' },
+        { type:'mcq', text:'التعقيد الزمني الإجمالي لمثال الجمع التفرعي مع p ثابتة هو:', opts:['O(log n)','O(n²)','O(n)','O(p)'], answer:2, exp:'الوقت الإجمالي O(n) مع p ثابتة.' }
+    ]
+},
+{
+    id: 'l9',
+    title: 'المحاضرة 9',
+    subtitle: 'معالجة الصور التفرعية',
+    desc: 'Bitmap/Pixmap، RGB، تحويلات الصور: إزاحة وتكبير ودوران',
+    review: [
+        {
+            num: 1, icon: '🖼️', topic: 'Bitmap',
+            q: 'ما هي الصورة النقطية (Bitmap/Pixmap) وكيف تُخزَّن؟',
+            a: 'الصورة النقطية هي الطريقة الأساسية لتخزين الصور ثنائية الأبعاد. كل <strong>بكسل (Pixel)</strong> يُمثّل نقطة في الصورة ويُخزَّن كرقم ثنائي في مصفوفة ثنائية الأبعاد:<br>• <strong>Bitmap أبيض/أسود:</strong> بت واحد لكل بكسل (1 = أبيض، 0 = أسود)<br>• <strong>رمادي:</strong> 8 بت = 256 درجة رمادية<br>• <strong>ملون RGB:</strong> 3 بايت لكل بكسل (أحمر + أخضر + أزرق)'
+        },
+        {
+            num: 2, icon: '🎨', topic: 'RGB',
+            q: 'كيف يُمثَّل اللون في نموذج RGB؟',
+            a: 'نموذج <strong>RGB (Red, Green, Blue)</strong>:<br>• كل لون أساسي (أحمر، أخضر، أزرق) يُمثَّل بـ <strong>8 بت</strong> = 256 مستوى<br>• كل بكسل = <strong>3 بايت</strong> (بايت للأحمر + بايت للأخضر + بايت للأزرق) = 24 بت<br>• عدد الألوان الممكنة: 256³ ≈ 16.7 مليون لون<br>يمكن استخدام <strong>Lookup Table</strong> للصور ذات 256 لوناً فقط لتوفير الذاكرة.'
+        },
+        {
+            num: 3, icon: '➡️', topic: 'Shifting',
+            q: 'ما هي عملية الإزاحة (Shifting) للصور وما معادلتها؟',
+            a: '<strong>الإزاحة (Translation/Shifting):</strong> نقل جميع بكسلات الصورة بمقدار (Δx, Δy):<br><br>X\' = X + ΔX<br>Y\' = Y + ΔY<br><br>حيث X\'، Y\' هي الإحداثيات الجديدة وX، Y هي الإحداثيات الأصلية. هذه العملية قابلة للتفرع تماماً لأن كل بكسل مستقل عن البقية.'
+        },
+        {
+            num: 4, icon: '🔍', topic: 'Scaling',
+            q: 'ما هي عملية التكبير/التصغير (Scaling) وما معادلتها؟',
+            a: '<strong>التكبير/التصغير (Scaling):</strong><br><br>X\' = X × Sx<br>Y\' = Y × Sy<br><br>• Sx و Sy > 1: تكبير الصورة<br>• 0 < Sx و Sy < 1: تصغير الصورة<br>• Sx ≠ Sy: تكبير/تصغير غير متساوٍ في الاتجاهين<br>كل بكسل مستقل → قابل للتفرع.'
+        },
+        {
+            num: 5, icon: '🔄', topic: 'Rotation',
+            q: 'ما هي عملية الدوران (Rotation) وما معادلتها؟',
+            a: '<strong>الدوران بزاوية θ حول الأصل:</strong><br><br>X\' = X·cos(θ) − Y·sin(θ)<br>Y\' = X·sin(θ) + Y·cos(θ)<br><br>كل بكسل يُحوَّل مستقلاً → <strong>قابل للتفرع بشكل مثالي</strong>. يُسند كل معالج مجموعة من البكسلات لتحويلها.'
+        },
+        {
+            num: 6, icon: '⚡', topic: 'التفرع في معالجة الصور',
+            q: 'لماذا معالجة الصور مثال مثالي للبرمجة التفرعية؟',
+            a: 'معالجة الصور قابلة للتفرع بامتياز لأن:<br>• كل <strong>بكسل مستقل</strong> عن البكسلات الأخرى (لا تبعيات في التحويلات الأساسية)<br>• يمكن تقسيم الصورة إلى <strong>أجزاء أو صفوف</strong> وإسنادها لمعالجات مختلفة<br>• <strong>نتيجة التحويل هي صورة نقطية جديدة</strong> يمكن بناؤها بالتوازي<br>• كمية الحساب كبيرة نسبياً مقارنة بالاتصال (Coarse-grained)'
+        },
+        {
+            num: 7, icon: '🗺️', topic: 'Lookup Table',
+            q: 'ما فائدة Lookup Table في معالجة الصور؟',
+            a: '<strong>Lookup Table (LUT)</strong>: جدول يُعيد تعريف الألوان بدلاً من تخزين قيم RGB الكاملة لكل بكسل. إذا كانت الصورة تحتوي 256 لوناً فقط، يخزّن كل بكسل <strong>رقم مؤشر (8 بت)</strong> يُشير إلى لونه في الجدول، مما يُقلل حجم الذاكرة من 24 بت لكل بكسل إلى 8 بت فقط.'
+        },
+        {
+            num: 8, icon: '📐', topic: 'تقسيم الصورة',
+            q: 'كيف يتم توزيع معالجة الصورة على المعالجات؟',
+            a: 'أسلوبان شائعان:<br>1. <strong>تقسيم الصفوف (Row Partitioning):</strong> كل معالج يحصل على مجموعة صفوف من الصورة ويُنفذ عليها التحويل.<br>2. <strong>تقسيم الكتل (Block Partitioning):</strong> تُقسَّم الصورة إلى مناطق مستطيلة.<br>كلا الأسلوبين يعطيان نتائج متطابقة لأن كل بكسل مستقل.'
+        }
+    ],
+    quiz: [
+        { type:'tf', text:'في صورة RGB، كل بكسل يحتاج 3 بايت (24 بت) لتمثيل لونه.', answer:true, exp:'3 بايت = بايت للأحمر + بايت للأخضر + بايت للأزرق.' },
+        { type:'tf', text:'عملية الإزاحة (Shifting) تُغيّر قيم ألوان البكسلات.', answer:false, exp:'الإزاحة تُغير موقع البكسلات فقط دون التأثير على ألوانها.' },
+        { type:'tf', text:'معالجة الصور قابلة للتفرع لأن كل بكسل مستقل عن البقية في التحويلات.', answer:true, exp:'استقلالية البكسلات هي السبب الرئيسي لسهولة التفرع.' },
+        { type:'tf', text:'عند Sx = Sy = 0.5 في Scaling، تُكبَّر الصورة إلى ضعف حجمها.', answer:false, exp:'Sx وSy بين 0 و1 يعني تصغير، وليس تكبير.' },
+        { type:'tf', text:'Lookup Table تُقلل حجم الذاكرة المطلوبة لتخزين الصورة ذات 256 لوناً.', answer:true, exp:'LUT تستخدم 8 بت لكل بكسل بدلاً من 24 بت.' },
+        { type:'mcq', text:'معادلة الإزاحة (Shifting) في اتجاه x هي:', opts:["X' = X × ΔX","X' = X + ΔX","X' = X − ΔX","X' = X / ΔX"], answer:1, exp:"X' = X + ΔX هي معادلة الإزاحة." },
+        { type:'mcq', text:'في نموذج RGB، عدد الألوان الممكنة هو:', opts:['256','65536','16.7 مليون تقريباً','1 مليون'], answer:2, exp:'256³ ≈ 16.7 مليون لون.' },
+        { type:'mcq', text:'عند تكبير الصورة في اتجاه x فقط، يكون:', opts:['Sx < 1، Sy = 1','Sx > 1، Sy = 1','Sx = Sy > 1','Sx = Sy < 1'], answer:1, exp:'Sx > 1 تكبير في x، Sy = 1 بدون تغيير في y.' },
+        { type:'mcq', text:'في عملية الدوران بزاوية θ، المعادلة الصحيحة لـ X\' هي:', opts:["X·cos(θ) + Y·sin(θ)","X·sin(θ) − Y·cos(θ)","X·cos(θ) − Y·sin(θ)","X·sin(θ) + Y·cos(θ)"], answer:2, exp:"X' = X·cos(θ) − Y·sin(θ)." },
+        { type:'mcq', text:'صورة رمادية (Grayscale) بـ 8 بت لكل بكسل تدعم:', opts:['2 لون','16 لون','256 مستوى رمادي','65536 مستوى'], answer:2, exp:'8 بت = 2⁸ = 256 مستوى.' }
+    ]
+},
+{
+    id: 'l10',
+    title: 'المحاضرة 10',
+    subtitle: 'مجموعة Mandelbrot',
+    desc: 'Static vs Dynamic Task Assignment، Work Pool، توازن الأحمال',
+    review: [
+        {
+            num: 1, icon: '🌀', topic: 'Mandelbrot',
+            q: 'ما هي مجموعة Mandelbrot ولماذا تُستخدم في البرمجة التفرعية؟',
+            a: 'مجموعة Mandelbrot هي مجموعة من الأعداد المركبة التي لا يتباعد فيها المتتالية z_{n+1} = z_n² + c عند التكرار. تُستخدم كمثال في البرمجة التفرعية لأن:<br>• حساب كل بكسل <strong>مستقل</strong> عن البقية<br>• <strong>عدد التكرارات يختلف اختلافاً كبيراً</strong> من بكسل إلى آخر<br>• تُبرز أهمية <strong>توازن الأحمال (Load Balancing)</strong>'
+        },
+        {
+            num: 2, icon: '📊', topic: 'Static Assignment',
+            q: 'ما هو التخصيص الثابت (Static Task Assignment) في Mandelbrot؟',
+            a: '<strong>Static Task Assignment:</strong> يتم توزيع العمل على المعالجات <strong>قبل بدء التنفيذ</strong>، ويظل التوزيع ثابتاً طوال التنفيذ.<br>• مثال: تقسيم الصورة إلى p شرائح متساوية، كل معالج يحصل على شريحة.<br>• <strong>مشكلة:</strong> إذا كانت بعض المناطق تحتاج تكرارات أكثر (مثل حدود المجموعة)، ستنهي بعض المعالجات عملها مبكراً وتظل خاملة.'
+        },
+        {
+            num: 3, icon: '⚡', topic: 'Dynamic Assignment',
+            q: 'ما هو التخصيص الديناميكي (Dynamic Task Assignment) ولماذا هو أفضل في Mandelbrot؟',
+            a: '<strong>Dynamic Task Assignment (Work Pool):</strong> المهام توضع في <strong>مجمع (Pool)</strong>، وكل معالج يأخذ مهمة جديدة حين يُنهي الحالية.<br>• <strong>الأفضلية:</strong> يُحقق توازناً أفضل للأحمال — المعالجات السريعة تأخذ مهاماً أكثر.<br>• <strong>آلية العمل:</strong> Master يُوزّع صفاً جديداً لكل Slave حين يُعيد نتيجة، حتى ينتهي العمل.'
+        },
+        {
+            num: 4, icon: '🏊', topic: 'Work Pool',
+            q: 'ما هو نمط Work Pool/Processor Farm؟',
+            a: '<strong>Work Pool (Processor Farm):</strong><br>1. Master يحتفظ بمجمع من المهام غير المنجزة (أرقام الصفوف)<br>2. كل Slave يُرسل طلباً لمهمة جديدة حين يُنهي العمل<br>3. Master يُرسل مهمة أو رسالة إنهاء (Terminator)<br>4. Slave يُرسل النتيجة ويطلب مهمة جديدة<br>هذا يضمن أن كل المعالجات مشغولة دائماً ما دام هناك عمل.'
+        },
+        {
+            num: 5, icon: '🏁', topic: 'Terminator',
+            q: 'ما هو Terminator Message في Work Pool؟',
+            a: '<strong>Terminator Message:</strong> رسالة خاصة يُرسلها Master للـ Slave لإخباره أنه <strong>لا توجد مهام إضافية</strong>. تُميَّز برسالة خاصة (مثلاً بـ Tag مختلف terminator_tag). عند استلامها، يتوقف الـ Slave عن طلب مهام جديدة وينهي تنفيذه. Master يُرسل p رسائل إنهاء عند انتهاء جميع الصفوف.'
+        },
+        {
+            num: 6, icon: '⚖️', topic: 'Load Balancing',
+            q: 'لماذا التخصيص الثابت سيئ لـ Mandelbrot؟',
+            a: 'لأن <strong>عدد التكرارات يختلف بشكل كبير</strong> من بكسل لآخر:<br>• البكسلات خارج المجموعة: تكرارات قليلة جداً<br>• البكسلات على حدود المجموعة: تكرارات كثيرة جداً<br>مع التخصيص الثابت، المعالجات التي تحصل على مناطق "سهلة" ستنتهي مبكراً وتظل <strong>خاملة</strong>، بينما المعالجات في المناطق "الصعبة" تعمل لوقت طويل.'
+        },
+        {
+            num: 7, icon: '🏷️', topic: 'Tags في Work Pool',
+            q: 'ما الـ Tags المستخدمة في كود Work Pool للـ Mandelbrot؟',
+            a: 'تُستخدم Tags لتمييز أنواع الرسائل المختلفة:<br>• <strong>data_tag:</strong> Master يُرسل رقم الصف لـ Slave<br>• <strong>result_tag:</strong> Slave يُعيد النتائج المحسوبة للـ Master<br>• <strong>terminator_tag:</strong> Master يُعلم Slave أنه لا توجد مهام بعد الآن<br>هذا التمييز يسمح لـ Master بالتعامل مع أنواع مختلفة من الرسائل بشكل صحيح.'
+        },
+        {
+            num: 8, icon: '🔄', topic: 'مقارنة',
+            q: 'قارن بين Static وDynamic Task Assignment في Mandelbrot.',
+            a: '<table style="width:100%;border-collapse:collapse;font-size:0.88rem"><tr style="background:#d4e8d8"><td style="padding:4px 8px;font-weight:700">الجانب</td><td style="padding:4px 8px;font-weight:700">Static</td><td style="padding:4px 8px;font-weight:700">Dynamic</td></tr><tr><td style="padding:4px 8px">توزيع العمل</td><td>مسبق وثابت</td><td>أثناء التنفيذ</td></tr><tr style="background:#f3f8fe"><td style="padding:4px 8px">توازن الحمل</td><td>ضعيف</td><td>ممتاز</td></tr><tr><td style="padding:4px 8px">Overhead</td><td>منخفض</td><td>أعلى قليلاً</td></tr><tr style="background:#f3f8fe"><td style="padding:4px 8px">الكفاءة</td><td>قد تكون منخفضة</td><td>عالية</td></tr></table>'
+        }
+    ],
+    quiz: [
+        { type:'tf', text:'في التخصيص الثابت لـ Mandelbrot، جميع المعالجات تنهي عملها في نفس الوقت.', answer:false, exp:'بسبب اختلاف التكرارات، بعض المعالجات تنهي مبكراً وتظل خاملة.' },
+        { type:'tf', text:'Work Pool يضمن أن كل المعالجات مشغولة ما دام هناك عمل.', answer:true, exp:'كل معالج يأخذ مهمة جديدة فور إنهاء الحالية.' },
+        { type:'tf', text:'Terminator Message يُرسل للـ Master من كل Slave عند الانتهاء.', answer:false, exp:'Master يُرسل Terminator للـ Slaves لإعلامهم بعدم وجود مهام إضافية.' },
+        { type:'tf', text:'التخصيص الديناميكي يُحقق توازناً أفضل للأحمال من الثابت في Mandelbrot.', answer:true, exp:'Dynamic يسمح للمعالجات السريعة بأخذ مهام أكثر.' },
+        { type:'tf', text:'في Mandelbrot، عدد التكرارات لكل بكسل متساوٍ دائماً.', answer:false, exp:'عدد التكرارات يختلف اختلافاً كبيراً من بكسل لآخر.' },
+        { type:'mcq', text:'المشكلة الرئيسية مع التخصيص الثابت في Mandelbrot هي:', opts:['صعوبة تقسيم الصورة','عدم توازن الأحمال وخمول بعض المعالجات','استهلاك كثير من الذاكرة','صعوبة البرمجة'], answer:1, exp:'عدم توازن الأحمال يتسبب في خمول المعالجات التي حصلت على مناطق سهلة.' },
+        { type:'mcq', text:'في Work Pool، من الذي يحتفظ بقائمة المهام غير المنجزة؟', opts:['جميع العمليات','أول Slave فقط','Master','آخر Slave'], answer:2, exp:'Master يحتفظ بمجمع المهام ويوزعها.' },
+        { type:'mcq', text:'data_tag في كود Mandelbrot يُستخدم لـ:', opts:['إرسال رسالة الإنهاء','إرسال رقم الصف من Master للـ Slave','استقبال نتيجة من Slave','مزامنة المعالجات'], answer:1, exp:'data_tag يُميّز رسالة البيانات (رقم الصف) من Master للـ Slave.' },
+        { type:'mcq', text:'الكفاءة المثالية (100%) في Mandelbrot تعني:', opts:['وقت الخمول = 0','عدد المعالجات = n','Speedup < 1','الـ Overhead = n'], answer:0, exp:'كفاءة 100% تعني أنه لا يوجد وقت خمول.' },
+        { type:'mcq', text:'في Work Pool، ماذا يفعل Slave عند استقبال Terminator؟', opts:['يطلب مهمة أخرى','يُرسل نتيجته للـ Master','يتوقف عن العمل وينهي تنفيذه','ينتظر Slave آخر'], answer:2, exp:'Terminator يعني لا مهام إضافية — ينهي Slave تنفيذه.' }
+    ]
+}
+];
 
-        statsEl.innerHTML = `
-            <span>📌 <strong>${section.label}</strong> — ${section.description}</span>
-            <span>صح/خطأ: <span class="num">${tf.length}</span></span>
-            <span>اختيار من متعدد: <span class="num">${mcq.length}</span></span>
-            <span>المجموع: <span class="num">${questions.length}</span></span>
-            ${!isQuizMode ? `<button class="test-btn" id="startQuizBtn">🧪 اختبر نفسك</button>` : ''}
-            ${resultHtml}
+// ================================================================
+//  عرض التبويبات
+// ================================================================
+function renderNav() {
+    const nav = document.getElementById('lectureNav');
+    LECTURES.forEach((lec, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'lec-tab' + (i === 0 ? ' active' : '');
+        btn.textContent = lec.title;
+        btn.onclick = () => switchLecture(i);
+        nav.appendChild(btn);
+    });
+}
+
+function switchLecture(idx) {
+    document.querySelectorAll('.lec-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+    document.querySelectorAll('.lecture-panel').forEach((p,i) => p.classList.toggle('active', i===idx));
+}
+
+// ================================================================
+//  بناء محتوى المحاضرة
+// ================================================================
+function renderLectures() {
+    const container = document.getElementById('lectureContent');
+    LECTURES.forEach((lec, li) => {
+        const panel = document.createElement('div');
+        panel.className = 'lecture-panel' + (li===0 ? ' active':'');
+        panel.id = 'panel-' + lec.id;
+        panel.innerHTML = `
+            <div class="lec-header">
+                <h2>${lec.title}: ${lec.subtitle}</h2>
+                <p>${lec.desc}</p>
+            </div>
+            <div class="mode-switcher">
+                <button class="mode-btn review active" onclick="switchMode(this,'review','${lec.id}')">📖 مراجعة (سؤال وجواب)</button>
+                <button class="mode-btn quiz" onclick="switchMode(this,'quiz','${lec.id}')">🎯 اختبر نفسك</button>
+            </div>
+            <div class="review-section active" id="review-${lec.id}">
+                ${buildReview(lec)}
+            </div>
+            <div class="quiz-section" id="quiz-${lec.id}">
+                ${buildQuiz(lec)}
+            </div>
         `;
+        container.appendChild(panel);
+    });
+}
 
-        const startBtn = document.getElementById('startQuizBtn');
-        if (startBtn) {
-            startBtn.addEventListener('click', () => {
-                if (isQuizMode) return;
-                isQuizMode = true;
-                quizSubmitted = false;
-                userAnswers = {};
-                renderStats();
-                renderQuestions();
-                renderTestActions();
-            });
-        }
+function switchMode(btn, mode, lecId) {
+    const panel = btn.closest('.lecture-panel');
+    panel.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    panel.querySelector('.review-section').classList.toggle('active', mode==='review');
+    panel.querySelector('.quiz-section').classList.toggle('active', mode==='quiz');
+}
+
+// ================================================================
+//  قسم المراجعة
+// ================================================================
+function buildReview(lec) {
+    return lec.review.map((item, i) => `
+        <div class="review-card">
+            <div class="review-q-header">
+                <span class="review-icon">${item.icon}</span>
+                <span class="review-num">س${item.num}</span>
+                <span class="review-topic">${item.topic}</span>
+            </div>
+            <div class="review-q">${item.q}</div>
+            <button class="reveal-btn" id="rbtn-${lec.id}-${i}" onclick="toggleAnswer('${lec.id}',${i})">
+                <span>💡</span> اعرض الإجابة
+            </button>
+            <div class="answer-box" id="ans-${lec.id}-${i}">${item.a}</div>
+        </div>
+    `).join('');
+}
+
+function toggleAnswer(lecId, idx) {
+    const box = document.getElementById(`ans-${lecId}-${idx}`);
+    const btn = document.getElementById(`rbtn-${lecId}-${idx}`);
+    const shown = box.classList.toggle('show');
+    btn.classList.toggle('revealed', shown);
+    btn.innerHTML = shown ? '<span>🙈</span> أخفِ الإجابة' : '<span>💡</span> اعرض الإجابة';
+}
+
+// ================================================================
+//  قسم الاختبار
+// ================================================================
+function buildQuiz(lec) {
+    const tf = lec.quiz.filter(q=>q.type==='tf').length;
+    const mcq = lec.quiz.filter(q=>q.type==='mcq').length;
+    const qHtml = lec.quiz.map((q,i) => buildQCard(lec.id, q, i)).join('');
+    return `
+        <div class="quiz-stats" id="qstats-${lec.id}">
+            <span>صح/خطأ: <span class="num">${tf}</span></span>
+            <span>اختيار متعدد: <span class="num">${mcq}</span></span>
+            <span>الإجمالي: <span class="num">${lec.quiz.length}</span></span>
+            <button class="quiz-btn" id="qbtn-${lec.id}" onclick="startQuiz('${lec.id}')">اختبر نفسك ▶</button>
+        </div>
+        <div id="result-${lec.id}"></div>
+        <div class="q-grid" id="qgrid-${lec.id}">${qHtml}</div>
+        <div class="quiz-footer">
+            <button class="quiz-btn stop" id="qfooter-${lec.id}" onclick="endQuiz('${lec.id}')" style="display:none">إنهاء الاختبار ✓</button>
+        </div>
+    `;
+}
+
+function buildQCard(lecId, q, i) {
+    let optsHtml = '';
+    if (q.type === 'tf') {
+        optsHtml = `<div class="tf-opts">
+            <label><input type="radio" name="q-${lecId}-${i}" value="true" disabled> صح ✓</label>
+            <label><input type="radio" name="q-${lecId}-${i}" value="false" disabled> خطأ ✗</label>
+        </div>`;
+    } else {
+        optsHtml = `<div class="mcq-opts">${q.opts.map((opt,j)=>`
+            <label><input type="radio" name="q-${lecId}-${i}" value="${j}" disabled> ${String.fromCharCode(65+j)}. ${opt}</label>
+        `).join('')}</div>`;
     }
+    return `
+        <div class="q-card" id="qcard-${lecId}-${i}">
+            <div class="q-head">
+                <span class="q-num">س${i+1}</span>
+                <span class="q-badge ${q.type==='tf'?'badge-tf':'badge-mcq'}">${q.type==='tf'?'صح / خطأ':'اختيار متعدد'}</span>
+            </div>
+            <div class="q-text">${q.text}</div>
+            ${optsHtml}
+            <div class="q-explanation" id="qexp-${lecId}-${i}"></div>
+        </div>
+    `;
+}
 
-    function renderTestActions() {
-        const container = document.getElementById('testActions');
-        if (!isQuizMode) {
-            container.innerHTML = '';
-            return;
+// ================================================================
+//  منطق الاختبار
+// ================================================================
+const quizStates = {};
+
+function startQuiz(lecId) {
+    quizStates[lecId] = { active: true };
+    const grid = document.getElementById(`qgrid-${lecId}`);
+    grid.classList.add('quiz-mode');
+    grid.querySelectorAll('input[type="radio"]').forEach(r => { r.disabled = false; r.checked = false; });
+    grid.querySelectorAll('.q-card').forEach(c => { c.classList.remove('correct','wrong'); });
+    grid.querySelectorAll('.q-explanation').forEach(e => { e.classList.remove('show'); e.innerHTML=''; });
+    document.getElementById(`result-${lecId}`).innerHTML = '';
+    const btn = document.getElementById(`qbtn-${lecId}`);
+    btn.textContent = '🔄 إعادة البدء';
+    const footer = document.getElementById(`qfooter-${lecId}`);
+    footer.style.display = 'block';
+    footer.innerHTML = 'إنهاء الاختبار ✓';
+    footer.className = 'quiz-btn stop';
+    footer.onclick = () => endQuiz(lecId);
+}
+
+function endQuiz(lecId) {
+    const lec = LECTURES.find(l => l.id === lecId);
+    let correct = 0;
+    lec.quiz.forEach((q, i) => {
+        const selected = document.querySelector(`input[name="q-${lecId}-${i}"]:checked`);
+        const card = document.getElementById(`qcard-${lecId}-${i}`);
+        const expEl = document.getElementById(`qexp-${lecId}-${i}`);
+        let isCorrect = false;
+        let correctStr = '';
+        if (q.type === 'tf') {
+            const ans = q.answer ? 'true' : 'false';
+            correctStr = q.answer ? 'صح ✓' : 'خطأ ✗';
+            isCorrect = selected && selected.value === ans;
+        } else {
+            correctStr = String.fromCharCode(65+q.answer) + '. ' + q.opts[q.answer];
+            isCorrect = selected && parseInt(selected.value) === q.answer;
         }
+        if (isCorrect) { correct++; card.classList.add('correct'); }
+        else { card.classList.add('wrong'); }
+        expEl.innerHTML = `<span class="q-correct-tag ${isCorrect?'tag-correct':'tag-wrong'}">${isCorrect?'✓ صحيح':'✗ خطأ'}</span> الإجابة الصحيحة: <strong>${correctStr}</strong>${q.exp ? ' — ' + q.exp : ''}`;
+        expEl.classList.add('show');
+        document.querySelectorAll(`input[name="q-${lecId}-${i}"]`).forEach(r => r.disabled = true);
+    });
+    const total = lec.quiz.length;
+    const pct = Math.round(correct/total*100);
+    const resultEl = document.getElementById(`result-${lecId}`);
+    const emoji = pct>=80 ? '🏆' : pct>=60 ? '👍' : '💪';
+    const msg = pct>=80 ? 'ممتاز! أداء رائع' : pct>=60 ? 'جيد! راجع الأسئلة الخاطئة' : 'تحتاج مراجعة أكثر';
+    const bannerClass = pct<60 ? 'result-banner fail' : 'result-banner';
+    resultEl.innerHTML = `<div class="${bannerClass}" style="margin-bottom:1rem">
+        ${emoji} نتيجتك: ${correct} / ${total} (${pct}%) — ${msg}
+    </div>`;
+    const footer = document.getElementById(`qfooter-${lecId}`);
+    footer.textContent = '🔄 إعادة الاختبار';
+    footer.className = 'quiz-btn';
+    footer.onclick = () => startQuiz(lecId);
+}
 
-        const endBtnHtml = `<button class="test-btn active-test" id="endQuizBtn">📝 إنهاء الاختبار</button>`;
-        container.innerHTML = endBtnHtml;
-
-        const endBtn = document.getElementById('endQuizBtn');
-        if (endBtn) {
-            endBtn.addEventListener('click', () => {
-                if (!isQuizMode) return;
-                if (quizSubmitted) {
-                    if (!confirm('تم احتساب النتيجة بالفعل. هل تريد إعادة الاختبار؟')) return;
-                    quizSubmitted = false;
-                    userAnswers = {};
-                    renderStats();
-                    renderQuestions();
-                    renderTestActions();
-                    return;
-                }
-                quizSubmitted = true;
-                renderStats();
-                renderQuestions();
-                renderTestActions();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-        }
-    }
-
-    function calculateResults() {
-        const questions = getQuestionsForSection(currentSection);
-        let correct = 0;
-        let total = 0;
-        questions.forEach(q => {
-            const key = `${q.section}-${q.num}`;
-            const userAns = userAnswers[key];
-            if (userAns !== undefined && userAns !== null && userAns !== '') {
-                total++;
-                if (q.type === 'tf') {
-                    if (userAns === q.answer.toString()) correct++;
-                } else if (q.type === 'mcq') {
-                    if (userAns === q.answer) correct++;
-                }
-            }
-        });
-        const percentage = total > 0 ? Math.round((correct / total) * 100) : 0;
-        return { correct, total, percentage };
-    }
-
-    function renderQuestions() {
-        const questions = getQuestionsForSection(currentSection);
-        const container = document.getElementById('questionList');
-        if (!questions.length) {
-            container.innerHTML = '<p style="padding:2rem;">لا توجد أسئلة لهذا القسم</p>';
-            return;
-        }
-
-        container.innerHTML = questions.map((q, idx) => {
-            const key = `${q.section}-${q.num}`;
-            const userVal = userAnswers[key] || '';
-
-            let optionsHtml = '';
-            let answerDisplay = '';
-            let explanationHtml = '';
-            let cardClass = '';
-
-            if (quizSubmitted) {
-                const isCorrect = (() => {
-                    if (q.type === 'tf') return userVal === q.answer.toString();
-                    if (q.type === 'mcq') return userVal === q.answer;
-                    return false;
-                })();
-                cardClass = isCorrect ? 'correct' : 'wrong';
-                const isUnanswered = userVal === '' || userVal === undefined;
-                if (isUnanswered) cardClass = 'wrong';
-            }
-
-            if (q.type === 'tf') {
-                const checkedTrue = userVal === 'true' ? 'checked' : '';
-                const checkedFalse = userVal === 'false' ? 'checked' : '';
-                const disabled = quizSubmitted ? 'disabled' : '';
-                optionsHtml = `
-                    <div class="tf-options">
-                        <label><input type="radio" name="tf-${key}" value="true" ${checkedTrue} ${disabled} onchange="handleAnswer('${key}', 'true')"> صحيح</label>
-                        <label><input type="radio" name="tf-${key}" value="false" ${checkedFalse} ${disabled} onchange="handleAnswer('${key}', 'false')"> خطأ</label>
-                    </div>
-                `;
-                if (quizSubmitted) {
-                    const isCorrect = userVal === q.answer.toString();
-                    answerDisplay = `<span class="tf-answer">${isCorrect ? '✅' : '❌'} ${q.answer ? 'صحيح' : 'خطأ'}</span>`;
-                } else {
-                    answerDisplay = `<span class="tf-answer">${userVal ? (userVal === 'true' ? 'صحيح' : 'خطأ') : 'لم تُجب'}</span>`;
-                }
-            } else if (q.type === 'mcq') {
-                const opts = q.options;
-                const letters = ['A', 'B', 'C', 'D'];
-                const disabled = quizSubmitted ? 'disabled' : '';
-                optionsHtml = `<div class="options">${letters.map(l => `
-                    <label><input type="radio" name="mcq-${key}" value="${l}" ${userVal === l ? 'checked' : ''} ${disabled} onchange="handleAnswer('${key}', '${l}')"> ${l}. ${opts[l] || ''}</label>
-                `).join('')}</div>`;
-                if (quizSubmitted) {
-                    const isCorrect = userVal === q.answer;
-                    answerDisplay = `<span class="mcq-answer">${isCorrect ? '✅' : '❌'} الإجابة: ${q.answer || '(غير محددة)'}</span>`;
-                } else {
-                    answerDisplay = `<span class="mcq-answer">${userVal ? `المختار: ${userVal}` : 'لم تُجب'}</span>`;
-                }
-                if (q.note) answerDisplay += ` <span style="font-size:0.8rem;color:#3b6e8f;">${q.note}</span>`;
-            }
-
-            if (q.explanation && quizSubmitted) {
-                explanationHtml = `<div class="explanation"><strong>📘 شرح:</strong> ${q.explanation}</div>`;
-            }
-
-            const modeClass = isQuizMode ? 'quiz-mode' : '';
-
-            return `
-                <div class="question-card ${cardClass} ${modeClass}">
-                    <div class="q-header">
-                        <span class="q-num">سؤال ${q.num}</span>
-                        <span class="q-type">${q.type === 'tf' ? 'صح/خطأ' : 'اختيار من متعدد'}</span>
-                        ${answerDisplay}
-                    </div>
-                    <div class="q-text">${q.text}</div>
-                    ${optionsHtml}
-                    ${explanationHtml}
-                </div>
-            `;
-        }).join('');
-
-        window.handleAnswer = function(key, value) {
-            if (isQuizMode && !quizSubmitted) {
-                userAnswers[key] = value;
-                renderQuestions();
-                renderStats();
-            }
-        };
-    }
-
-    window.handleAnswer = function(key, value) {
-        if (isQuizMode && !quizSubmitted) {
-            userAnswers[key] = value;
-            renderQuestions();
-            renderStats();
-        }
-    };
-
-    function init() {
-        renderTabs();
-        renderStats();
-        renderQuestions();
-        renderTestActions();
-    }
-
-    init();
+// ================================================================
+//  التشغيل
+// ================================================================
+renderNav();
+renderLectures();
 </script>
 </body>
 </html>
