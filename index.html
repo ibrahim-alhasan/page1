@@ -274,6 +274,30 @@
         .badge-tf { background: #dce8f5; color: #1a4a6b; }
         .badge-mcq { background: #e0f0e8; color: #0b4e33; }
         .q-text { font-size: 0.97rem; font-weight: 600; line-height: 1.7; margin-bottom: 0.8rem; color: #0d2a3e; }
+         .exam-question-intro { line-height: 1.9; }
+         .exam-code {
+             direction: ltr;
+             text-align: left;
+             white-space: pre-wrap;
+             background: #f1f7f4;
+             border: 1px solid #c6dfd2;
+             border-left: 4px solid var(--accent);
+             border-radius: 10px;
+             padding: 0.9rem 1.1rem;
+             margin: 0.9rem 0;
+             color: #173b32;
+             font-family: 'Courier New', monospace;
+             font-size: 0.92rem;
+             font-weight: 700;
+             line-height: 1.8;
+             overflow-x: auto;
+         }
+         .exam-question-label {
+             display: block;
+             margin-top: 0.7rem;
+             color: var(--primary);
+             font-weight: 800;
+         }
         .tf-opts {
             display: flex;
             gap: 2rem;
@@ -1164,7 +1188,7 @@ const LECTURES = [
         { type:'tf', text:'تُسهم Cache coherence Protocols في ضمان تناسق قراءة وكتابة المعالجات من الذاكرة المشتركة.', answer:true, exp:'Cache coherence تضمن أن جميع المعالجات ترى نفس القيم المحدّثة في الذاكرة المشتركة.' },
         { type:'tf', text:'تُعدّ MPI_Isend() من عمليات الاتصال الجماعي (Collective) في MPI.', answer:false, exp:'MPI_Isend هي عملية إرسال غير متزامنة (Non-blocking) نقطة-نقطة، وليست جماعية (Collective).' },
 
-         { type:'mcq', text:'بفرض أننا أردنا استخدام استراتيجية فرق (Divide and Conquer) لإيجاد مجموع مجموعة من الأعداد، فإننا نقوم بتقسيم مجموعة الأعداد إلى p مجاميع. عند الـ Master يقوم الـ Master بجمع القيم العائدة من قبل p من Slaves (حيث تتم عملية جمع الأعداد عند كل Slave).\n\nفي هذه الحالة يتم تحديد عمل الـ Master في خوارزمية فرق وتسيد وفق الخوارزمية التالية:\n\nS = n / p ;\n......(3)......\nsum = 0;\nfor (i = 0; i < p; i++)\n......(4)......\nsum = sum + Part_sum;\n\nالسؤال 11: التابع الصحيح لتعبئة الفراغ رقم (3) هو:', opts:['bcast(numbers, s, P_slave_group);','for (i = 0, x = 0; i < p; i++, x = x + s) Send(&numbers[x], s, pi);','for (i = 0; i < p; i++) { scatter(numbers, &s, Pgroup, root=master); }','recv(&part_sum, PANY);'], answer:1, exp:'الفراغ (3) يأتي بعد S=n/p، ويحتاج إلى توزيع أجزاء الأعداد على العمليات التابعة. في استراتيجية Divide and Conquer يتم إرسال كل جزء إلى Slave باستخدام Send.' },
+         { type:'mcq', text:'<div class="exam-question-intro">بفرض أننا أردنا استخدام استراتيجية فرق (Divide and Conquer) لإيجاد مجموع مجموعة من الأعداد، فإننا نقوم بتقسيم مجموعة الأعداد إلى p مجاميع. عند الـ Master يقوم الـ Master بجمع القيم العائدة من قبل p من Slaves (حيث تتم عملية جمع الأعداد عند كل Slave).<br><br>في هذه الحالة يتم تحديد عمل الـ Master في خوارزمية فرق وتسيد وفق الخوارزمية التالية:</div><pre class="exam-code">S = n / p;\n\n......(3)......\n\nsum = 0;\nfor (i = 0; i &lt; p; i++) {\n    ......(4)......\n    sum = sum + Part_sum;\n}</pre><span class="exam-question-label">السؤال 11: التابع الصحيح لتعبئة الفراغ رقم (3) هو:</span>', opts:['bcast(numbers, s, P_slave_group);','for (i = 0, x = 0; i < p; i++, x = x + s) Send(&amp;numbers[x], s, pi);','for (i = 0; i < p; i++) { scatter(numbers, &amp;s, Pgroup, root=master); }','recv(&amp;part_sum, PANY);'], answer:1, exp:'الفراغ (3) يأتي بعد S=n/p، ويحتاج إلى توزيع أجزاء الأعداد على العمليات التابعة. في استراتيجية Divide and Conquer يتم إرسال كل جزء إلى Slave باستخدام Send.' },
         { type:'mcq', text:'نتيجة تطبيق MPI_Alltoall على 4 عمليات (44 = 22×2) هي أن كل عملية j تستقبل:', opts:['نفس البيانات التي أرسلتها','العنصر الأول فقط من كل العمليات الأخرى','العنصر j من كل عملية i (تبادل منظور)','نفس البيانات من p0 فقط'], answer:2, exp:'MPI_Alltoall: العملية j تستقبل من كل عملية i العنصر j المخصص لها — تُقلب المصفوفة بشكل منظور.' },
         { type:'mcq', text:'في كود Work Pool لـ Mandelbrot، الشيفرة الصحيحة للفراغ رقم (2) في كود الـ Slave (إرسال النتيجة للـ Master) هي:', opts:['send(&row, Pslave, terminator_tag);','recv(&slave, &r, color, PANY, result_tag);','send(&l, &y, color, Pmaster, result_tag);','recv(&y, Pmaster, source_tag);'], answer:2, exp:'الـ Slave بعد حساب ألوان الصف يُرسل النتائج إلى Pmaster باستخدام result_tag.' },
         { type:'mcq', text:'في كود Work Pool لـ Mandelbrot، الشيفرة الصحيحة للفراغ رقم (2) في كود الـ Master (استقبال النتائج من أي Slave) هي:', opts:['send(&row, Pslave, terminator_tag);','recv(&slave, &r, color, PANY, result_tag);','send(&l, &row, result_tag);','recv(&y, Pmaster, ANYTAG, source_tag);'], answer:3, exp:'الـ Master يستقبل من أي Slave باستخدام ANYTAG لاستقبال النتائج من أي عملية.' },
