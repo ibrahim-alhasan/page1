@@ -342,9 +342,83 @@
              color: var(--primary);
              margin-right: 0.25rem;
          }
+         .matrix-pair {
+             display: flex;
+             align-items: flex-start;
+             justify-content: center;
+             gap: 1.2rem;
+             direction: ltr;
+             margin: 0.8rem 0;
+             flex-wrap: wrap;
+         }
+         .matrix-label {
+             display: block;
+             color: var(--primary);
+             font-family: 'Segoe UI', Tahoma, sans-serif;
+             font-size: 0.78rem;
+             font-weight: 800;
+             text-align: center;
+             margin-bottom: 0.25rem;
+         }
+         .matrix {
+             display: grid;
+             grid-template-columns: repeat(5, minmax(2rem, 2.7rem));
+             border: 1px solid #b9d1d6;
+             border-radius: 7px;
+             overflow: hidden;
+             background: #fff;
+             box-shadow: 0 2px 7px rgba(20,70,80,0.08);
+         }
+         .matrix span {
+             padding: 0.22rem 0.25rem;
+             border-right: 1px solid #d7e5e7;
+             border-bottom: 1px solid #d7e5e7;
+             color: #234353;
+             font-family: 'Courier New', monospace;
+             font-size: 0.76rem;
+             font-weight: 700;
+             text-align: center;
+             line-height: 1.25;
+         }
+         .matrix span:nth-child(5n) { border-right: 0; }
+         .matrix span:nth-last-child(-n+5) { border-bottom: 0; }
+         .matrix-result .matrix span {
+             background: #f0f8f4;
+             color: #0b5940;
+         }
+         .matrix-option {
+             display: flex;
+             align-items: flex-start;
+             gap: 0.5rem;
+             min-height: 9.8rem;
+             padding: 0.55rem;
+             direction: ltr;
+         }
+         .matrix-option > strong {
+             flex: 0 0 auto;
+             padding-top: 0.15rem;
+             font-family: 'Segoe UI', Tahoma, sans-serif;
+         }
+         .matrix-option .matrix {
+             grid-template-columns: repeat(5, minmax(1.4rem, 1.9rem));
+             flex: 1;
+         }
+         .matrix-option .matrix span {
+             padding: 0.16rem 0.1rem;
+             font-size: 0.62rem;
+         }
+         .matrix-option-text {
+             color: #234353;
+             font-family: 'Segoe UI', Tahoma, sans-serif;
+             font-size: 0.75rem;
+             font-weight: 700;
+             line-height: 1.5;
+         }
          @media (max-width: 600px) {
              .source-options { grid-template-columns: 1fr; }
              .source-option { font-size: 0.74rem; }
+             .matrix-pair { gap: 0.7rem; }
+             .matrix { grid-template-columns: repeat(5, minmax(1.8rem, 2.3rem)); }
          }
         .tf-opts {
             display: flex;
@@ -1169,9 +1243,9 @@ const LECTURES = [
             a: '<span style="color:#136348;font-weight:800;">الإجابة الصحيحة: C. إرسال المعالج p0 لقيمتي المتحولين val1 و val2 إلى المعالج p1 واستقبالهما من قبل المعالج p1</span><br><br>بعد تبديل التعليمتين، يصبح ترتيب الاتصال متوافقاً بين المعالجين، فيتم إرسال القيم واستقبالهما بنجاح.'
         },
         {
-            num: 17, icon: '📊', topic: 'Efficiency – الكفاءة',
-            q: '[اختيار متعدد] T_seq=6ث، Speedup=2، 5 معالجات — ما T_par وما Efficiency؟',
-            a: '<span style="color:#136348;font-weight:800;">الإجابة: T_par = 3ث، E = 0.4</span><br><br><strong>الحل:</strong><br><ul><li>T_par = T_seq / S = 6 / 2 = <strong>3 ثوانٍ</strong></li><li>E = S / p = 2 / 5 = <strong>0.4</strong> (أي 40%)</li></ul><br>كفاءة 40% تعني أن 60% من طاقة المعالجات تُهدر في Overhead والخمول.'
+            num: 17, icon: '🔄', topic: 'MPI_Alltoall – Transpose',
+            q: '<div class="source-question"><div class="source-intro">نتج تطبيق التابع <strong>MPI_Alltoall</strong> على البيانات الموجودة في الجانب الأيسر هو:</div><div class="matrix-pair"><div><span class="matrix-label">البيانات الأصلية</span><div class="matrix"><span>0</span><span>2</span><span>7</span><span>4</span><span>0</span><span>-8</span><span>8</span><span>-9</span><span>9</span><span>10</span><span>-5</span><span>6</span><span>1</span><span>9</span><span>5</span><span>7</span><span>6</span><span>3</span><span>1</span><span>-5</span><span>1</span><span>2</span><span>3</span><span>2</span><span>1</span></div></div><div class="matrix-result"><span class="matrix-label">الناتج الصحيح</span><div class="matrix"><span>0</span><span>-8</span><span>-5</span><span>7</span><span>1</span><span>2</span><span>8</span><span>6</span><span>6</span><span>2</span><span>7</span><span>-9</span><span>1</span><span>3</span><span>3</span><span>4</span><span>9</span><span>9</span><span>1</span><span>2</span><span>0</span><span>10</span><span>5</span><span>-5</span><span>1</span></div></div></div><span class="exam-question-label">17. اختر الناتج الصحيح:</span><div class="source-options"><div class="source-option matrix-option"><strong>A.</strong><div class="matrix"><span>0</span><span>-8</span><span>-5</span><span>7</span><span>1</span><span>2</span><span>8</span><span>6</span><span>6</span><span>2</span><span>7</span><span>-9</span><span>1</span><span>3</span><span>3</span><span>4</span><span>9</span><span>9</span><span>1</span><span>2</span><span>0</span><span>10</span><span>5</span><span>-5</span><span>1</span></div></div><div class="source-option matrix-option"><strong>B.</strong><div class="matrix"><span>-5</span><span>24</span><span>5</span><span>25</span><span>11</span><span>-5</span><span>24</span><span>5</span><span>25</span><span>11</span><span>-5</span><span>24</span><span>5</span><span>25</span><span>11</span><span>-5</span><span>24</span><span>5</span><span>25</span><span>11</span><span>-5</span><span>24</span><span>5</span><span>25</span><span>11</span></div></div><div class="source-option matrix-option"><strong>C.</strong><div class="matrix"><span>0</span><span>2</span><span>7</span><span>4</span><span>0</span><span>2</span><span>8</span><span>6</span><span>6</span><span>2</span><span>7</span><span>9</span><span>1</span><span>3</span><span>3</span><span>4</span><span>9</span><span>9</span><span>1</span><span>2</span><span>0</span><span>10</span><span>5</span><span>-5</span><span>1</span></div></div><div class="source-option matrix-option"><strong>D.</strong><div class="matrix-option-text">-5&nbsp;&nbsp;24&nbsp;&nbsp;5&nbsp;&nbsp;25&nbsp;&nbsp;11</div></div></div></div>',
+            a: '<span style="color:#136348;font-weight:800;">الإجابة الصحيحة: A</span><br><br>تقوم <strong>MPI_Alltoall</strong> بتبادل البيانات بين جميع العمليات، فيستقبل كل صف عناصر العمود المناظر من المصفوفة الأصلية؛ أي أن الناتج هو <strong>Transpose</strong> للمصفوفة.'
         },
         {
             num: 18, icon: '🏎️', topic: 'قانون Gustafson',
@@ -1242,7 +1316,7 @@ const LECTURES = [
         { type:'mcq', text:'التابع الصحيح لتعبئة الفراغ رقم (2) هو:', opts:['send(&row, Pslave, terminator_tag);','recv(&slave, &r, color, PANY, result_tag);','send(&l, &r, color, Pmaster, result_tag);','recv(&y, Pmaster, ANYTAG, source_tag);'], answer:1, exp:'الإجابة B: recv(&slave, &r, color, PANY, result_tag); — يستقبل الـ Master النتيجة من أي Slave باستخدام PANY ووسم result_tag.' },
         { type:'mcq', text:'ينتج عن تنفيذ التعليمات مع عدم استخدام <strong>system buffer</strong>:<pre class="exam-code">switch (my) {<br>case 0 :<br>    MPI_Bcast(val1, count, type, 0, comm);<br>    MPI_Send(val2, count, type, 1, tag, comm); break;<br>case 1:<br>    MPI_Recv(val2, count, type, 0, tag, comm, &amp;status);<br>    MPI_Bcast(val1, count, type, 0, comm); }</pre>', opts:['طباعة قيمتي val1 و val2','لا ينفذ نتيجة وجود حالة قفل','إرسال المعالج p0 لقيمتي المتحولين val1 و val2 إلى المعالج p1 واستقبالهما من قبل المعالج p1','إرسال p0 لقيمة المتحول val1 إلى المعالج p1 واستقباله من قبل المعالج p1 فقط'], answer:1, exp:'الإجابة B: لا ينفذ نتيجة وجود حالة قفل (Deadlock)، لأن ترتيب عمليات الاتصال الحاجبة يمنع التنفيذ من الاستمرار.' },
         { type:'mcq', text:'لدى المبرمج وضع التعليمة ذات الترقيم (5) مكان التعليمة رقم (6) والتعليمة (6) مكان (5) في الشيفرة السابقة، ينتج عن التبديل:', opts:['طباعة قيمة المتحول val2 فقط','لا ينفذ نتيجة وجود حالة قفل','إرسال المعالج p0 لقيمتي المتحولين val1 و val2 إلى المعالج p1 واستقبالهما من قبل المعالج p1','إرسال p0 لقيمة المتحول val1 إلى المعالج p1 واستقباله من قبل المعالج p1 فقط'], answer:2, exp:'الإجابة C: يؤدي تبديل التعليمتين إلى ترتيب اتصال صحيح، فيرسل p0 قيمتي val1 وval2 إلى p1 ويستقبلهما p1.' },
-        { type:'mcq', text:'نتيجة تطبيق MPI_Alltoall على البيانات الموضحة في الجانب الأيسر (كل عملية تملك 4 عناصر):', opts:['Process 0 تستقبل العناصر الأولى من كل عملية','Process 0 تستقبل العناصر الأخيرة فقط','كل عملية تستقبل العناصر المقابلة من جميع العمليات الأخرى (transpose)','لا يحدث أي تغيير'], answer:0, exp:'بعد MPI_Alltoall كل عملية p تستقبل العنصر p من كل العمليات — أي العمود الأول يصل لـ p0.' },
+        { type:'mcq', text:'<div class="source-question"><div class="source-intro">نتج تطبيق التابع <strong>MPI_Alltoall</strong> على البيانات الموجودة في الجانب الأيسر هو:</div><div class="matrix-pair"><div><span class="matrix-label">البيانات الأصلية</span><div class="matrix"><span>0</span><span>2</span><span>7</span><span>4</span><span>0</span><span>-8</span><span>8</span><span>-9</span><span>9</span><span>10</span><span>-5</span><span>6</span><span>1</span><span>9</span><span>5</span><span>7</span><span>6</span><span>3</span><span>1</span><span>-5</span><span>1</span><span>2</span><span>3</span><span>2</span><span>1</span></div></div></div><span class="exam-question-label">17. اختر الناتج الصحيح:</span></div>', opts:['<div class="matrix-option"><strong>A.</strong><div class="matrix"><span>0</span><span>-8</span><span>-5</span><span>7</span><span>1</span><span>2</span><span>8</span><span>6</span><span>6</span><span>2</span><span>7</span><span>-9</span><span>1</span><span>3</span><span>3</span><span>4</span><span>9</span><span>9</span><span>1</span><span>2</span><span>0</span><span>10</span><span>5</span><span>-5</span><span>1</span></div></div>','<div class="matrix-option"><strong>B.</strong><div class="matrix"><span>-5</span><span>24</span><span>5</span><span>25</span><span>11</span><span>-5</span><span>24</span><span>5</span><span>25</span><span>11</span><span>-5</span><span>24</span><span>5</span><span>25</span><span>11</span><span>-5</span><span>24</span><span>5</span><span>25</span><span>11</span><span>-5</span><span>24</span><span>5</span><span>25</span><span>11</span></div></div>','<div class="matrix-option"><strong>C.</strong><div class="matrix"><span>0</span><span>2</span><span>7</span><span>4</span><span>0</span><span>2</span><span>8</span><span>6</span><span>6</span><span>2</span><span>7</span><span>9</span><span>1</span><span>3</span><span>3</span><span>4</span><span>9</span><span>9</span><span>1</span><span>2</span><span>0</span><span>10</span><span>5</span><span>-5</span><span>1</span></div></div>','<div class="matrix-option"><strong>D.</strong><span class="matrix-option-text">-5&nbsp;&nbsp;24&nbsp;&nbsp;5&nbsp;&nbsp;25&nbsp;&nbsp;11</span></div>'], answer:0, exp:'الإجابة A: MPI_Alltoall تعيد توزيع العنصر j من كل عملية i إلى العملية j، ولذلك يكون الناتج هو Transpose للمصفوفة الأصلية.' },
         { type:'mcq', text:'نتيجة تطبيق MPI_Reduce_scatter على القيم الموضحة في الشكل هي:', opts:['كل عملية تحتفظ ببياناتها الأصلية','كل عملية تستقبل مجموع chunk المخصص لها من جميع العمليات','كل العمليات تستقبل نفس المجموع الكلي','كل عملية تستقبل بيانات العملية التالية فقط'], answer:1, exp:'MPI_Reduce_scatter: تُجري Reduce على كل chunk ثم توزع الناتج — كل عملية تستقبل مجموع chunk_i الخاص بها.' },
         { type:'mcq', text:'كلفة التنفيذ التفرعي (Cost) لمهمة على نظام مؤلف من 5 معالجات، زمن تنفيذها التسلسلي = 6 ثوانٍ وSpeedup = 3، هي:', opts:['cost = 10','cost = 3','cost = 15','cost = 18'], answer:0, exp:'T_par = T_seq / Speedup = 6/3 = 2 ثانية؛ Cost = p × T_par = 5 × 2 = 10.' },
         { type:'mcq', text:'يمثّل برنامج Secure Program بأنه:', opts:['يُنفّذ عملية الإرسال أولاً ثم يليها الاستقبال دائماً','يعمل في بيئة حواسيب مترابطة عبر MPI بيئة فقط','يلتزم بتحقيق صحة المراسلة مهما كان حجم system buffers كافياً أم لا','كل ما سبق صحيح'], answer:3, exp:'Secure Program يلتزم بإيصال الرسالة بغض النظر عن حجم buffers — وتصف كل الخيارات خصائصه الصحيحة.' },
@@ -1260,7 +1334,7 @@ const LECTURES = [
         { type:'mcq', text:'ما الذي يُشير إليه قانون Amdahl\'s Law؟', opts:['نسبة Speedup تزداد خطياً مع زيادة عدد المعالجات بلا قيود','كلما زادت المعالجات كلما زاد الـ Speedup دون حدود نظرية','يُحدّد الحد الأقصى للـ Speedup بناءً على نسبة الجزء التسلسلي من البرنامج','نسبة الكفاءة تساوي دائماً 1 مع زيادة عدد المعالجات'], answer:2, exp:'قانون Amdahl: S_max = 1/(1−f) حيث f نسبة الجزء القابل للتوازي. يضع حداً أقصى للـ Speedup تحدده نسبة الجزء التسلسلي.' },
         { type:'mcq', text:'تُعدّ دالة MPI_Sendrecv من نوع:', opts:['اتصال غير متزامن (Non-blocking) بدون انتظار','اتصال متزامن (Blocking) يجمع الإرسال والاستقبال في تعليمة واحدة','اتصال جماعي (Collective) يشمل جميع العمليات','اتصال من نوع Scatter/Gather فقط'], answer:1, exp:'MPI_Sendrecv دالة Blocking تُنفّذ الإرسال والاستقبال معاً في تعليمة واحدة لتجنّب Deadlock.' },
         { type:'mcq', text:'صمّم المبرمج Secure Program على 4 معالجات بحيث يُرسل كل معالج ويستقبل في نفس الوقت. الترتيب الصحيح للمراحل:', opts:['Phase 1: p0→p1 و p2→p3، Phase 2: p1→p2 و p3→p0، Phase 3: p0→p3، Phase 4: p1→p0 و p3→p2','يتم كل الإرسال في Phase واحدة ثم كل الاستقبال في Phase أخرى','Phase 1: جميع المعالجات ترسل معاً، Phase 2: جميعها تستقبل معاً','كل ما سبق خاطئ'], answer:0, exp:'Secure Program يُنظّم الاتصالات على مراحل تضمن عدم Deadlock؛ كل Phase تُرسَل فيها رسائل آمنة بدون انتظار دائري.' },
-        { type:'mcq', text:'إذا كان 75% من الكود قابلاً للتوازي وعدد المعالجات = 5، فإن Speedup وفق قانون Amdahl هو:', opts:['0.5','2.5','5.2','4.0'], answer:1, exp:'S = 1 / ((1−0.75) + 0.75/5) = 1 / (0.25 + 0.15) = 1 / 0.40 = 2.5' },
+        { type:'mcq', text:'نتيجة تطبيق MPI_Alltoall على البيانات الموضحة في الجانب الأيسر (كل عملية تملك 4 عناصر):', opts:['Process 0 تستقبل العناصر الأولى من كل عملية','Process 0 تستقبل العناصر الأخيرة فقط','كل عملية تستقبل العناصر المقابلة من جميع العمليات الأخرى (transpose)','لا يحدث أي تغيير'], answer:0, exp:'بعد MPI_Alltoall كل عملية p تستقبل العنصر p من كل العمليات — أي العمود الأول يصل لـ p0.' },
         { type:'mcq', text:'في الكود: if(myrank==0){*sec2=25; MPI_Recv(one,count,MPI_INT,1,tag,comm); MPI_Isend(one,count,MPI_INT,1,tag,comm,&status);} else if(myrank==1){MPI_Irecv(sec2,count,MPI_INT,0,tag,comm,&status); MPI_Isend(one,count,MPI_INT,0,tag,comm);} ماذا يُرسل p1 ويستقبل؟', opts:['يُرسل p1 القيمة (5) ويستقبل (25)','يُرسل p1 القيمة (25) ويستقبل (25)','يُرسل p1 القيمة (25) ويستقبل (5)','كل ما سبق خاطئ'], answer:2, exp:'p0 يُرسل one إلى p1 وp1 يستقبل sec2=25 من p0. إذاً p1 يُرسل القيمة 25 (لأن sec2=25) ويستقبل one الذي يحمل القيمة 5.' },
 
         /* ══════════ أسئلة من الامتحان – إضافة ══════════ */
