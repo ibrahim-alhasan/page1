@@ -1009,29 +1009,147 @@ const LECTURES = [
 },
 {
     id: 'exam2025d',
-    title: ' دورة 2025',
-    subtitle: 'نموذج الامتحان D',
+    title: '📄 دورة 2025',
+    subtitle: 'نموذج الامتحان D – مراجعة شاملة',
     desc: 'امتحان شامل – 36 سؤالاً (10 صح/خطأ + 26 اختيار متعدد) – 70 درجة – 90 دقيقة',
     review: [
+        /* ═══════════ الجزء الأول: صح / خطأ ═══════════ */
         {
-            num: 1, icon: '📋', topic: 'تعليمات الامتحان',
-            q: 'ما موضوعات هذا الامتحان وكيف يتوزع؟',
-            a: 'هذا نموذج امتحان شامل للبرمجة التفرعية (النظري) – النموذج D.<br><ul><li><strong>الجزء الأول:</strong> 10 أسئلة صح/خطأ</li><li><strong>الجزء الثاني:</strong> 26 سؤال اختيار من متعدد</li><li><strong>المجموع:</strong> 36 سؤالاً – 70 درجة – 90 دقيقة</li></ul><br>يشمل الامتحان: Secure Program، MPI (Bcast/Alltoall/Reduce_scatter/Sendrecv)، Work Pool/Mandelbrot، Deadlock، SMP وMPMD، مقاييس الأداء (Speedup/Efficiency/Cost)، قانون Amdahl وGustafson، واتصالات غير المتزامنة.'
+            num: 1, icon: '🔐', topic: 'Secure Program',
+            q: '[صح/خطأ] يُركّز برنامج Secure Program على تحسين أداء البرمجة التفرعية وتقليل وقت الاتصال بين المعالجات فقط.',
+            a: '<span style="color:#b13e3e;font-weight:800;">✗ خطأ</span><br><strong>Secure Program</strong> لا يقتصر هدفه على تحسين الأداء. بل يلتزم بإيصال الرسالة <strong>بغض النظر</strong> عن حجم system buffers — أي يضمن صحة الاتصال حتى لو كانت مخازن النظام صغيرة.<br><br>• يُنظّم الإرسال والاستقبال بترتيب لا يُسبّب Deadlock.<br>• يضمن وصول كل رسالة دون الاعتماد على سعة المخازن.'
         },
         {
-            num: 2, icon: '🔐', topic: 'Secure Program',
-            q: 'ما المقصود ببرنامج Secure Program في MPI؟',
-            a: '<strong>Secure Program:</strong> برنامج MPI يلتزم بإيصال الرسالة بشكل صحيح <strong>بغض النظر</strong> عن حجم system buffers.<br>• يُنفّذ الإرسال والاستقبال بترتيب لا يُسبّب Deadlock.<br>• يضمن وصول كل رسالة دون الاعتماد على سعة مخازن النظام.'
+            num: 2, icon: '🔄', topic: 'Blocking / Deadlock',
+            q: '[صح/خطأ] في التنفيذ التسلسلي (Blocking) تُنفَّذ عملية الإرسال (Send) دائماً قبل الاستقبال (Receive).',
+            a: '<span style="color:#b13e3e;font-weight:800;">✗ خطأ</span><br>الترتيب يعتمد على الكود المكتوب وليس حتمياً. إذا كان <strong>كلا الطرفين</strong> يبدأ بـ Blocking Send في نفس الوقت وينتظران الآخر للاستقبال، ينشأ <strong>Deadlock</strong> (انتظار دائري).<br><br>الحل: ترتيب Secure — أحدهما يُرسل أولاً والآخر يستقبل أولاً.'
         },
         {
-            num: 3, icon: '⚡', topic: 'قانون Amdahl',
-            q: 'ما قانون Amdahl وكيف يُحسب؟',
-            a: '<strong>قانون Amdahl:</strong> يُحدّد الحد الأقصى للـ Speedup بناءً على نسبة الجزء التسلسلي:<br><code>S = 1 / ((1 - f) + f/p)</code><br>حيث f = نسبة الجزء القابل للتوازي، p = عدد المعالجات.<br><strong>الحد الأقصى النظري:</strong> S_max = 1/(1-f)<br>مثال: 75% قابل للتوازي على 5 معالجات: S = 1/(0.25 + 0.15) = 2.5'
+            num: 3, icon: '⚙️', topic: 'Process Instance',
+            q: '[صح/خطأ] يُنتج كل Process نسخة مستقلة من متغيراته الخاصة (instance) عند تشغيله.',
+            a: '<span style="color:#136348;font-weight:800;">✓ صح</span><br>كل <strong>Process</strong> يعمل على فضاء عنوان (Address Space) مستقل تماماً. له نسخته الخاصة من كل متغير في الكود — لا يشاركها مع أي عملية أخرى. هذا هو الفرق الجوهري بين Process وThread.'
         },
         {
-            num: 4, icon: '📐', topic: 'مقاييس الأداء',
-            q: 'ما الفرق بين Speedup وEfficiency وCost في البرمجة التفرعية؟',
-            a: '<ul><li><strong>Speedup:</strong> S = T_seq / T_par (مقدار تسريع التنفيذ)</li><li><strong>Efficiency:</strong> E = S / p (كفاءة استخدام المعالجات، المثالي = 1)</li><li><strong>Cost:</strong> C = p × T_par (كلفة الموارد المستخدمة)</li></ul><br>مثال: T_seq=6ث، speedup=2، p=5 → T_par=3ث، E=0.4، Cost=15'
+            num: 4, icon: '⏱️', topic: 'MPI_Test',
+            q: '[صح/خطأ] تنتظر دالة MPI_Test حتى اكتمال عملية الاتصال غير المتزامنة قبل المتابعة.',
+            a: '<span style="color:#b13e3e;font-weight:800;">✗ خطأ</span><br><strong>MPI_Test</strong> هي دالة <strong>غير حاجبة (Non-blocking)</strong> — تفحص فقط هل اكتملت العملية وتعود فوراً بدون انتظار.<br><br>• <code>flag = true</code>: اكتملت العملية<br>• <code>flag = false</code>: لم تكتمل بعد<br><br>أما <strong>MPI_Wait</strong> فهي الحاجبة التي توقف التنفيذ حتى الاكتمال.'
+        },
+        {
+            num: 5, icon: '🖥️', topic: 'Process / ذاكرة',
+            q: '[صح/خطأ] يعمل كل Process على نسخة مستقلة من البرنامج ذات مساحة ذاكرة خاصة به.',
+            a: '<span style="color:#136348;font-weight:800;">✓ صح</span><br>كل Process له سياق تنفيذ مستقل وذاكرة خاصة لا يشاركها. يختلف عن Thread الذي يشترك في الذاكرة مع الخيوط الأخرى داخل نفس العملية.'
+        },
+        {
+            num: 6, icon: '📢', topic: 'MPI_Bcast',
+            q: '[صح/خطأ] تُرسل MPI_Bcast البيانات من المعالج الجذر (Root) إلى جميع العمليات الأخرى في المجموعة.',
+            a: '<span style="color:#136348;font-weight:800;">✓ صح</span><br><strong>MPI_Bcast</strong> عملية إذاعة جماعية (Collective):<br>• جميع العمليات تستدعيها في نفس الوقت<br>• عملية الـ root تُرسل البيانات<br>• باقي العمليات تستقبل نفس البيانات<br><br><div style="background:#e0f0e8;border-radius:8px;padding:0.5rem 0.9rem;font-family:monospace;direction:ltr;text-align:left;margin-top:0.4rem">MPI_Bcast(buf, count, type, root, comm)</div>'
+        },
+        {
+            num: 7, icon: '🔗', topic: 'MPI_Allreduce – Collective',
+            q: '[صح/خطأ] يُعدّ MPI_Allreduce من عمليات الاتصال الجماعي (Collective Communication) في MPI.',
+            a: '<span style="color:#136348;font-weight:800;">✓ صح</span><br><strong>MPI_Allreduce</strong> تُجري عملية تقليل (Reduce) — مثل MPI_SUM — ثم تُوزّع الناتج على <strong>جميع العمليات</strong>. تنتمي لعائلة Collective لأن جميع العمليات يجب أن تستدعيها.'
+        },
+        {
+            num: 8, icon: '💤', topic: 'Idle Time',
+            q: '[صح/خطأ] مفهوم Idle time هو الزمن الذي تبقى فيه المعالجات في انتظار ولا تنجز أي عمل مفيد.',
+            a: '<span style="color:#136348;font-weight:800;">✓ صح</span><br><strong>Idle Time</strong> = وقت الخمول — أحد التحديات الرئيسية في البرمجة التفرعية.<br><br>يحدث بسبب:<br>• انتظار رسائل من عمليات أخرى<br>• عدم توازن الأحمال (Load Imbalance)<br>• نقاط المزامنة (Barrier)<br><br>تقليل Idle Time يُحسّن الكفاءة (Efficiency).'
+        },
+        {
+            num: 9, icon: '💾', topic: 'Cache Coherence',
+            q: '[صح/خطأ] تُسهم Cache coherence Protocols في ضمان تناسق قراءة وكتابة المعالجات من الذاكرة المشتركة.',
+            a: '<span style="color:#136348;font-weight:800;">✓ صح</span><br><strong>Cache Coherence Protocols</strong> ضرورية في أنظمة SMP (الذاكرة المشتركة):<br><br>• تضمن أن جميع المعالجات ترى <strong>أحدث نسخة</strong> من البيانات<br>• تمنع قراءة قيمة قديمة من ذاكرة مخبئية محلية<br>• مثال: بروتوكول MESI، MOESI'
+        },
+        {
+            num: 10, icon: '📡', topic: 'MPI_Isend – نوع الاتصال',
+            q: '[صح/خطأ] تُعدّ MPI_Isend() من عمليات الاتصال الجماعي (Collective) في MPI.',
+            a: '<span style="color:#b13e3e;font-weight:800;">✗ خطأ</span><br><strong>MPI_Isend</strong> هي عملية <strong>نقطة لنقطة (Point-to-Point)</strong> غير متزامنة (Non-blocking) — ترسل لعملية واحدة محددة بـ rank.<br><br>العمليات الجماعية (Collective) تشمل: MPI_Bcast، MPI_Scatter، MPI_Gather، MPI_Reduce، MPI_Allreduce — وكلها تتطلب مشاركة جميع العمليات.'
+        },
+
+        /* ═══════════ الجزء الثاني: اختيار من متعدد – موضوعات الامتحان ═══════════ */
+        {
+            num: 11, icon: '🔐', topic: 'Secure Program – تعريف',
+            q: '[اختيار متعدد] ما الوصف الصحيح لبرنامج Secure Program في MPI؟',
+            a: '<span style="color:#136348;font-weight:800;">الإجابة: كل الخصائص صحيحة معاً</span><br><ul><li>يلتزم بتحقيق صحة المراسلة مهما كان حجم system buffers كافياً أم لا</li><li>يُرتّب الإرسال والاستقبال بترتيب آمن يتجنّب Deadlock</li><li>يعمل في بيئة MPI الموزّعة</li></ul><br><strong>الفكرة الجوهرية:</strong> لا يعتمد صحة تشغيله على سعة مخازن النظام.'
+        },
+        {
+            num: 12, icon: '🔀', topic: 'MPI_Alltoall',
+            q: '[اختيار متعدد] في MPI_Alltoall، ماذا تستقبل كل عملية j من العملية i؟',
+            a: '<span style="color:#136348;font-weight:800;">الإجابة: العنصر j من كل عملية i (تبادل منظور – Transpose)</span><br><br>MPI_Alltoall تُنفّذ "تبادل الكل مع الكل":<br>• كل عملية i ترسل chunk رقم j إلى العملية j<br>• النتيجة: تبديل (transpose) كامل للبيانات<br><br><strong>مثال (4 عمليات، كل منها 4 عناصر):</strong><br>p0 تستقبل العنصر_0 من [p0,p1,p2,p3]<br>p1 تستقبل العنصر_1 من [p0,p1,p2,p3]'
+        },
+        {
+            num: 13, icon: '🌀', topic: 'Work Pool – Slave كود',
+            q: '[اختيار متعدد] في كود Work Pool لـ Mandelbrot، ما الشيفرة الصحيحة للـ Slave لإرسال النتيجة للـ Master؟',
+            a: '<span style="color:#136348;font-weight:800;">الإجابة: <code>send(&amp;l, &amp;y, color, Pmaster, result_tag)</code></span><br><br>منطق كود Slave في Work Pool:<br><div style="background:#e0f0e8;border-radius:8px;padding:0.5rem 0.9rem;font-family:monospace;direction:ltr;text-align:left;margin-top:0.4rem">recv(&y, Pmaster, ANYTAG, source_tag);   // استقبل رقم الصف<br>/* احسب ألوان الصف */<br>send(&l, &y, color, Pmaster, result_tag); // أرسل النتيجة</div><br>الـ Slave يستقبل رقم الصف ويُرسل النتائج المحسوبة إلى Master.'
+        },
+        {
+            num: 14, icon: '👑', topic: 'Work Pool – Master كود',
+            q: '[اختيار متعدد] في كود Work Pool لـ Mandelbrot، ما الشيفرة الصحيحة للـ Master لاستقبال النتائج من أي Slave؟',
+            a: '<span style="color:#136348;font-weight:800;">الإجابة: <code>recv(&amp;slave, &amp;r, color, PANY, result_tag)</code></span><br><br>Master يجب أن يستقبل من <strong>أي Slave</strong> (لا من نفسه ولا من عملية محددة):<br><div style="background:#e0f0e8;border-radius:8px;padding:0.5rem 0.9rem;font-family:monospace;direction:ltr;text-align:left;margin-top:0.4rem">recv(&slave, &r, color, PANY, result_tag);</div><br><strong>شرح البارامترات:</strong><br>• <code>PANY</code> = <code>MPI_ANY_SOURCE</code>: يستقبل من <strong>أي مصدر</strong> (أي Slave أنهى عمله أولاً)<br>• <code>result_tag</code>: يُحدّد أن هذه رسالة نتيجة (وليس أي رسالة)<br><br><strong>الفرق المهم:</strong><br>• <code>source</code> يحدّد <em>من أين</em> تأتي الرسالة → نستخدم <code>PANY</code> لأننا لا نعرف أي Slave ينتهي أولاً<br>• <code>tag</code> يحدّد <em>نوع</em> الرسالة → نستخدم <code>result_tag</code> لقبول نتائج فقط وليس كل الرسائل'
+        },
+        {
+            num: 15, icon: '💀', topic: 'Deadlock – شروطه',
+            q: '[اختيار متعدد] في حالة Deadlock، أي الشروط تتحقق؟',
+            a: '<span style="color:#136348;font-weight:800;">الإجابة: جميع الشروط تتحقق معاً</span><br><ul><li><strong>الانتظار الدائري:</strong> عمليات تنتظر موارد تحتجزها عمليات أخرى</li><li><strong>عدم الإفراج:</strong> العملية غير قادرة على تحرير مورد حتى تكتمل</li><li><strong>الحجز مع الانتظار:</strong> عملية تحجز مورداً وتنتظر مورداً آخر</li><li><strong>عدم الاستباق:</strong> لا يمكن سحب المورد قسراً</li></ul><br>في MPI: يحدث عندما يبدأ عدة عمليات بـ Blocking Send ولا يستقبل أحد.'
+        },
+        {
+            num: 16, icon: '💰', topic: 'Cost – كلفة التنفيذ',
+            q: '[اختيار متعدد] كلفة التنفيذ (Cost) لمهمة: T_seq=6ث، Speedup=3، 5 معالجات — ما قيمة Cost؟',
+            a: '<span style="color:#136348;font-weight:800;">الإجابة: Cost = 10</span><br><br><strong>الحل:</strong><br><ul><li>T_par = T_seq / Speedup = 6 / 3 = <strong>2 ثانية</strong></li><li>Cost = p × T_par = 5 × 2 = <strong>10</strong></li></ul><br><strong>معادلات مقاييس الأداء:</strong><br>• Speedup S = T_seq / T_par<br>• Efficiency E = S / p<br>• Cost C = p × T_par'
+        },
+        {
+            num: 17, icon: '📊', topic: 'Efficiency – الكفاءة',
+            q: '[اختيار متعدد] T_seq=6ث، Speedup=2، 5 معالجات — ما T_par وما Efficiency؟',
+            a: '<span style="color:#136348;font-weight:800;">الإجابة: T_par = 3ث، E = 0.4</span><br><br><strong>الحل:</strong><br><ul><li>T_par = T_seq / S = 6 / 2 = <strong>3 ثوانٍ</strong></li><li>E = S / p = 2 / 5 = <strong>0.4</strong> (أي 40%)</li></ul><br>كفاءة 40% تعني أن 60% من طاقة المعالجات تُهدر في Overhead والخمول.'
+        },
+        {
+            num: 18, icon: '🏎️', topic: 'قانون Gustafson',
+            q: '[اختيار متعدد] نظام من 5 معالجات، Overhead=0.8 (80% قابل للتوازي). ما أعلى Speedup وفق قانون Gustafson؟',
+            a: '<span style="color:#136348;font-weight:800;">الإجابة: S = 4.2</span><br><br><strong>قانون Gustafson:</strong> S = p − (1−f) × (p−1)<br><br>حيث f = نسبة الجزء التسلسلي = 1 − Overhead = 1 − 0.8 = 0.2<br><br><strong>الحل:</strong><br>S = 5 − 0.2 × (5−1) = 5 − 0.2 × 4 = 5 − 0.8 = <strong>4.2</strong><br><br><em>Gustafson أكثر تفاؤلاً من Amdahl لأنه يفترض أن حجم المشكلة يكبر مع المعالجات.</em>'
+        },
+        {
+            num: 19, icon: '⚡', topic: 'قانون Amdahl',
+            q: '[اختيار متعدد] 75% من الكود قابل للتوازي، 5 معالجات. ما Speedup وفق قانون Amdahl؟',
+            a: '<span style="color:#136348;font-weight:800;">الإجابة: S = 2.5</span><br><br><strong>قانون Amdahl:</strong> S = 1 / ((1−f) + f/p)<br><br>حيث f = 0.75، p = 5<br><br><strong>الحل:</strong><br>S = 1 / (0.25 + 0.75/5) = 1 / (0.25 + 0.15) = 1 / 0.40 = <strong>2.5</strong><br><br><em>قانون Amdahl يُحدّد الحد الأقصى: S_max = 1/(1−f) = 1/0.25 = 4 عند p→∞</em>'
+        },
+        {
+            num: 20, icon: '🖥️', topic: 'SMP – نظام التعدد المتناظر',
+            q: '[اختيار متعدد] ما ميزة نظام SMP مقارنة بالنظام أحادي المعالج؟',
+            a: '<span style="color:#136348;font-weight:800;">الإجابة: كافة المعالجات تؤدي أي عمل (تماثل كامل)</span><br><br><strong>SMP (Symmetric Multiprocessing):</strong><br>• معالجات متعددة <strong>متماثلة</strong> متصلة بذاكرة مشتركة<br>• أي معالج يستطيع أداء أي مهمة<br>• يشتركون في نفس الذاكرة الرئيسية<br>• يتطلب Cache Coherence لضمان تناسق البيانات<br><br>يختلف عن NUMA حيث كل معالج له ذاكرة محلية أسرع.'
+        },
+        {
+            num: 21, icon: '📋', topic: 'MPMD – برمجة متعددة',
+            q: '[اختيار متعدد] ما معنى نموذج MPMD؟',
+            a: '<span style="color:#136348;font-weight:800;">الإجابة: كل معالج يُنفّذ برنامجاً مختلفاً على بيانات مختلفة</span><br><br><strong>MPMD = Multiple Program Multiple Data</strong><br><br>مقارنة بالنماذج الأخرى:<br>• <strong>SPMD:</strong> Single Program Multiple Data — نفس البرنامج على بيانات مختلفة (الأكثر شيوعاً في MPI)<br>• <strong>MPMD:</strong> برامج مختلفة على بيانات مختلفة (مثل Master/Slave بكودين منفصلين)<br>• <strong>SIMD:</strong> نفس التعليمة على بيانات متعددة (تصنيف Flynn)'
+        },
+        {
+            num: 22, icon: '🎯', topic: 'Embarrassingly Parallel',
+            q: '[اختيار متعدد] ما المقصود بـ Embarrassingly Parallel؟',
+            a: '<span style="color:#136348;font-weight:800;">الإجابة: مهام مستقلة تماماً لا تحتاج مزامنة أو تواصل</span><br><br><strong>Embarrassingly Parallel (توازي محرج):</strong><br>• المهام مستقلة <strong>تماماً</strong> عن بعضها<br>• لا تحتاج أي اتصال أو مزامنة بين المعالجات<br>• سهل التفرعة بدرجة تُحرج (embarrassing!)<br><br><strong>أمثلة:</strong> تحويل الصور (كل بكسل مستقل)، توليد أرقام عشوائية، Monte Carlo.'
+        },
+        {
+            num: 23, icon: '⏳', topic: 'MPI_Waitall',
+            q: '[اختيار متعدد] ما الدالة التي تنتظر اكتمال جميع الاتصالات غير المتزامنة في مصفوفة طلبات؟',
+            a: '<span style="color:#136348;font-weight:800;">الإجابة: MPI_Waitall(4, req, status)</span><br><br><strong>مقارنة دوال Wait:</strong><br><ul><li><strong>MPI_Wait:</strong> تنتظر طلباً واحداً محدداً</li><li><strong>MPI_Waitall(n, req, status):</strong> تنتظر حتى تكتمل <em>جميع</em> الطلبات في المصفوفة</li><li><strong>MPI_Waitany(n, req, &idx, status):</strong> تنتظر أول طلب يكتمل</li><li><strong>MPI_Waitsome(n, req, &out, idx, status):</strong> تنتظر اكتمال عدد معين منها</li></ul>'
+        },
+        {
+            num: 24, icon: '↔️', topic: 'MPI_Sendrecv',
+            q: '[اختيار متعدد] ما نوع دالة MPI_Sendrecv؟',
+            a: '<span style="color:#136348;font-weight:800;">الإجابة: اتصال Blocking يجمع الإرسال والاستقبال في تعليمة واحدة</span><br><br><strong>MPI_Sendrecv</strong> تُحل مشكلة Deadlock في التبادل الثنائي:<br><div style="background:#e0f0e8;border-radius:8px;padding:0.5rem 0.9rem;font-family:monospace;direction:ltr;text-align:left;margin-top:0.4rem">MPI_Sendrecv(sendbuf, scount, stype, dest,   stag,<br>             recvbuf, rcount, rtype, source, rtag,<br>             comm, &status)</div><br>• تُنفّذ إرسال واستقبال معاً بشكل آمن<br>• تتجنّب Deadlock تلقائياً<br>• Blocking (تنتظر اكتمال كليهما)'
+        },
+        {
+            num: 25, icon: '🌳', topic: 'MPI_Reduce_scatter',
+            q: '[اختيار متعدد] ما الذي تُنجزه MPI_Reduce_scatter؟',
+            a: '<span style="color:#136348;font-weight:800;">الإجابة: كل عملية تستقبل مجموع chunk المخصص لها من جميع العمليات</span><br><br><strong>MPI_Reduce_scatter = Reduce + Scatter في خطوة واحدة:</strong><br>1. تُجري Reduce على كل عنصر (مثل مجموع)<br>2. توزع النتائج — كل عملية i تستقبل نتيجة chunk_i<br><br>أكثر كفاءة من استدعاء MPI_Reduce ثم MPI_Scatter منفصلتين.'
+        },
+        {
+            num: 26, icon: '🔬', topic: 'Divide & Conquer – الاتصال',
+            q: '[اختيار متعدد] في استراتيجية Divide and Conquer، ما حجم البيانات المُرسَلة في كل اتصال بين المعالجات؟',
+            a: '<span style="color:#136348;font-weight:800;">الإجابة: [N / ((p-1)×p)] × tdata</span><br><br>في D&amp;C:<br>• المشكلة تُقسَّم بشكل متكرر<br>• في كل مستوى يتقلّص حجم البيانات<br>• الحجم الكلي للاتصال = [N/((p-1)×p)] × tdata<br><br>يختلف عن التقسيم البسيط (Partitioning) حيث الحجم = N/p.'
+        },
+        {
+            num: 27, icon: '🔢', topic: 'قياس الأداء – شمولية',
+            q: '[اختيار متعدد] ما المقاييس المستخدمة في تقييم أداء الأنظمة التفرعية؟',
+            a: '<span style="color:#136348;font-weight:800;">الإجابة: جميع المقاييس تُستخدم معاً</span><br><ul><li><strong>Speedup (S = T_seq/T_par):</strong> مقدار التسريع</li><li><strong>Efficiency (E = S/p):</strong> كفاءة استخدام المعالجات</li><li><strong>Cost (C = p × T_par):</strong> كلفة الموارد</li><li><strong>Total Parallel Overhead:</strong> الوقت الإضافي (اتصال + خمول + مزامنة)</li><li><strong>Execution Time:</strong> الزمن الفعلي للتنفيذ</li></ul>'
         }
     ],
     quiz: [
