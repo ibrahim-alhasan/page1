@@ -298,6 +298,54 @@
              color: var(--primary);
              font-weight: 800;
          }
+         .source-question {
+             background: linear-gradient(135deg, #fbfdff 0%, #f1f8f5 100%);
+             border: 1px solid #c9dfe0;
+             border-radius: 14px;
+             padding: 0.9rem 1rem;
+             margin-top: 0.35rem;
+         }
+         .source-question .source-intro {
+             color: #25495b;
+             font-size: 0.92rem;
+             line-height: 1.9;
+             margin-bottom: 0.5rem;
+         }
+         .source-question .exam-code {
+             margin: 0.7rem 0;
+             background: #fff;
+             border-left-color: var(--primary);
+             font-size: 0.84rem;
+             line-height: 1.65;
+         }
+         .source-options {
+             display: grid;
+             grid-template-columns: repeat(2, minmax(0, 1fr));
+             gap: 0.45rem 0.7rem;
+             direction: ltr;
+             margin-top: 0.7rem;
+         }
+         .source-option {
+             display: block;
+             padding: 0.48rem 0.65rem;
+             background: rgba(255,255,255,0.82);
+             border: 1px solid #d5e2e5;
+             border-radius: 8px;
+             color: #203d4b;
+             font-family: 'Courier New', monospace;
+             font-size: 0.78rem;
+             line-height: 1.45;
+             text-align: left;
+             direction: ltr;
+         }
+         .source-option strong {
+             color: var(--primary);
+             margin-right: 0.25rem;
+         }
+         @media (max-width: 600px) {
+             .source-options { grid-template-columns: 1fr; }
+             .source-option { font-size: 0.74rem; }
+         }
         .tf-opts {
             display: flex;
             gap: 2rem;
@@ -1102,13 +1150,13 @@ const LECTURES = [
         },
         {
             num: 13, icon: '🌀', topic: 'Work Pool – Slave كود',
-            q: '[اختيار متعدد] في كود Work Pool لـ Mandelbrot، ما الشيفرة الصحيحة للـ Slave لإرسال النتيجة للـ Master؟',
-            a: '<span style="color:#136348;font-weight:800;">الإجابة: <code>send(&amp;l, &amp;y, color, Pmaster, result_tag)</code></span><br><br>منطق كود Slave في Work Pool:<br><div style="background:#e0f0e8;border-radius:8px;padding:0.5rem 0.9rem;font-family:monospace;direction:ltr;text-align:left;margin-top:0.4rem">recv(&y, Pmaster, ANYTAG, source_tag);   // استقبل رقم الصف<br>/* احسب ألوان الصف */<br>send(&l, &y, color, Pmaster, result_tag); // أرسل النتيجة</div><br>الـ Slave يستقبل رقم الصف ويُرسل النتائج المحسوبة إلى Master.'
+            q: '<div class="source-question"><div class="source-intro">لدينا الحل التفرعي لتوليد صورة <strong>Mandelbrot</strong> باستخدام تخصيص ديناميكي للمهام (<strong>Dynamic Task Assignment</strong>)؛ حيث يقوم كل Slave بمعالجة صف من البكسلات وحساب القيمة اللونية لكل بكسل، مع إعادة النتيجة وفق الخوارزمية التالية:</div><pre class="exam-code">recv(&amp;y, Pmaster, ANYTAG, source_tag);<br>While(source_tag == data_tag){<br>  c.imag = imag_min+((float)y*scale_imag);<br>  for(x=0; x&lt;disp_width; x++){<br>    c.real = real_min+((float)x*scale_imag);<br>    color[x] = cal_pixel(c);}<br>  ......(1)........<br>  ......(2)........ }</pre><span class="exam-question-label">13. التابع الصحيح لتعبئة الفراغ رقم (1) هو:</span><div class="source-options"><div class="source-option"><strong>A.</strong> send(&amp;row, Pslave, terminator_tag);</div><div class="source-option"><strong>B.</strong> recv(&amp;slave, &amp;r, color, PANY, result_tag);</div><div class="source-option"><strong>C.</strong> send(&amp;l, &amp;y, color, Pmaster, result_tag);</div><div class="source-option"><strong>D.</strong> recv(&amp;y, Pmaster, ANYTAG, source_tag);</div></div></div>',
+            a: '<span style="color:#136348;font-weight:800;">الإجابة الصحيحة: C. <code>send(&amp;l, &amp;y, color, Pmaster, result_tag);</code></span><br><br>بعد حساب ألوان الصف، يرسل الـ Slave النتيجة إلى الـ Master باستخدام <code>result_tag</code>.'
         },
         {
             num: 14, icon: '👑', topic: 'Work Pool – Master كود',
-            q: '[اختيار متعدد] في كود Work Pool لـ Mandelbrot، ما الشيفرة الصحيحة للـ Master لاستقبال النتائج من أي Slave؟',
-            a: '<span style="color:#136348;font-weight:800;">الإجابة: <code>recv(&amp;slave, &amp;r, color, PANY, result_tag)</code></span><br><br>Master يجب أن يستقبل من <strong>أي Slave</strong> (لا من نفسه ولا من عملية محددة):<br><div style="background:#e0f0e8;border-radius:8px;padding:0.5rem 0.9rem;font-family:monospace;direction:ltr;text-align:left;margin-top:0.4rem">recv(&slave, &r, color, PANY, result_tag);</div><br><strong>شرح البارامترات:</strong><br>• <code>PANY</code> = <code>MPI_ANY_SOURCE</code>: يستقبل من <strong>أي مصدر</strong> (أي Slave أنهى عمله أولاً)<br>• <code>result_tag</code>: يُحدّد أن هذه رسالة نتيجة (وليس أي رسالة)<br><br><strong>الفرق المهم:</strong><br>• <code>source</code> يحدّد <em>من أين</em> تأتي الرسالة → نستخدم <code>PANY</code> لأننا لا نعرف أي Slave ينتهي أولاً<br>• <code>tag</code> يحدّد <em>نوع</em> الرسالة → نستخدم <code>result_tag</code> لقبول نتائج فقط وليس كل الرسائل'
+            q: '<div class="source-question"><span class="exam-question-label">14. التابع الصحيح لتعبئة الفراغ رقم (2) هو:</span><div class="source-options"><div class="source-option"><strong>A.</strong> send(&amp;row, Pslave, terminator_tag);</div><div class="source-option"><strong>B.</strong> recv(&amp;slave, &amp;r, color, PANY, result_tag);</div><div class="source-option"><strong>C.</strong> send(&amp;l, &amp;r, color, Pmaster, result_tag);</div><div class="source-option"><strong>D.</strong> recv(&amp;y, Pmaster, ANYTAG, source_tag);</div></div></div>',
+            a: '<span style="color:#136348;font-weight:800;">الإجابة الصحيحة: B. <code>recv(&amp;slave, &amp;r, color, PANY, result_tag);</code></span><br><br>يستقبل الـ Master النتيجة من أي Slave باستخدام <code>PANY</code>، ثم يميّز رسالة النتيجة بواسطة <code>result_tag</code>.'
         },
         {
             num: 15, icon: '💀', topic: 'Deadlock – شروطه',
@@ -1190,8 +1238,8 @@ const LECTURES = [
 
          { type:'mcq', text:'<div class="exam-question-intro">بفرض أننا أردنا استخدام استراتيجية فرق (Divide and Conquer) لإيجاد مجموع مجموعة من الأعداد، فإننا نقوم بتقسيم مجموعة الأعداد إلى p مجاميع. عند الـ Master يقوم الـ Master بجمع القيم العائدة من قبل p من Slaves (حيث تتم عملية جمع الأعداد عند كل Slave).<br><br>في هذه الحالة يتم تحديد عمل الـ Master في خوارزمية فرق وتسيد وفق الخوارزمية التالية:</div><pre class="exam-code">S = n / p;\n\n......(3)......\n\nsum = 0;\nfor (i = 0; i &lt; p; i++) {\n    ......(4)......\n    sum = sum + Part_sum;\n}</pre><span class="exam-question-label">السؤال 11: التابع الصحيح لتعبئة الفراغ رقم (3) هو:</span>', opts:['bcast(numbers, s, P_slave_group);','for (i = 0, x = 0; i < p; i++, x = x + s) Send(&amp;numbers[x], s, pi);','for (i = 0; i < p; i++) { scatter(numbers, &amp;s, Pgroup, root=master); }','recv(&amp;part_sum, PANY);'], answer:1, exp:'الفراغ (3) يأتي بعد S=n/p، ويحتاج إلى توزيع أجزاء الأعداد على العمليات التابعة. في استراتيجية Divide and Conquer يتم إرسال كل جزء إلى Slave باستخدام Send.' },
          { type:'mcq', text:'ما التابع الصحيح لتعبئة الفراغ رقم (4) هو؟', opts:['bcast(numbers, s, Pslave_group);','Send(&numbers[x], s, pii);','recv(&part_sum, PANY);','reduce_add(&sum, &part_sum, P_group, root=master);'], answer:2, exp:'الإجابة الصحيحة هي C: recv(&part_sum, PANY); إذ يستقبل الـ Master المجموع الجزئي part_sum من أي Slave داخل الحلقة.' },
-        { type:'mcq', text:'في كود Work Pool لـ Mandelbrot، الشيفرة الصحيحة للفراغ رقم (2) في كود الـ Slave (إرسال النتيجة للـ Master) هي:', opts:['send(&row, Pslave, terminator_tag);','recv(&slave, &r, color, PANY, result_tag);','send(&l, &y, color, Pmaster, result_tag);','recv(&y, Pmaster, source_tag);'], answer:2, exp:'الـ Slave بعد حساب ألوان الصف يُرسل النتائج إلى Pmaster باستخدام result_tag.' },
-        { type:'mcq', text:'في كود Work Pool لـ Mandelbrot، الشيفرة الصحيحة للفراغ رقم (2) في كود الـ Master (استقبال النتائج من أي Slave) هي:', opts:['send(&row, Pslave, terminator_tag);','recv(&slave, &r, color, PANY, result_tag);','send(&l, &row, result_tag);','recv(&y, Pmaster, ANYTAG, source_tag);'], answer:3, exp:'الـ Master يستقبل من أي Slave باستخدام ANYTAG لاستقبال النتائج من أي عملية.' },
+        { type:'mcq', text:'لدينا الحل التفرعي لتوليد صورة Mandelbrot باستخدام تخصيص ديناميكي للمهام (Dynamic Task Assignment):<pre class="exam-code">recv(&amp;y, Pmaster, ANYTAG, source_tag);<br>While(source_tag == data_tag){<br>  c.imag = imag_min+((float)y*scale_imag);<br>  for(x=0; x&lt;disp_width; x++){<br>    c.real = real_min+((float)x*scale_imag);<br>    color[x] = cal_pixel(c);}<br>  ......(1)........<br>  ......(2)........ }</pre>التابع الصحيح لتعبئة الفراغ رقم (1) هو:', opts:['send(&row, Pslave, terminator_tag);','recv(&slave, &r, color, PANY, result_tag);','send(&l, &y, color, Pmaster, result_tag);','recv(&y, Pmaster, ANYTAG, source_tag);'], answer:2, exp:'الإجابة C: send(&l, &y, color, Pmaster, result_tag); — بعد حساب ألوان الصف يرسل الـ Slave النتيجة إلى الـ Master.' },
+        { type:'mcq', text:'التابع الصحيح لتعبئة الفراغ رقم (2) هو:', opts:['send(&row, Pslave, terminator_tag);','recv(&slave, &r, color, PANY, result_tag);','send(&l, &r, color, Pmaster, result_tag);','recv(&y, Pmaster, ANYTAG, source_tag);'], answer:1, exp:'الإجابة B: recv(&slave, &r, color, PANY, result_tag); — يستقبل الـ Master النتيجة من أي Slave باستخدام PANY ووسم result_tag.' },
         { type:'mcq', text:'ينتج من تنفيذ الكود التالي مع system buffer دون استخدام switch:\n{ case 0: system buffer استخدام عدم تنفيذ التعليمات } — الإجابة الوحيدة الصحيحة للفراغ رقم (0) هي:', opts:['MPI_Send(val2, count, MPI_INT, 1, tag, comm)','MPI_Bcast(val1, count, type, 0, comm)','MPI_Barrier(comm)','MPI_Reduce(val1, val2, count, type, MPI_SUM, 0, comm)'], answer:1, exp:'الفراغ يتطلب MPI_Bcast لإذاعة val1 من p0 إلى جميع العمليات.' },
         { type:'mcq', text:'لو تمّ تبديل التعليمة رقم (6) مكان التعليمة رقم (5) في الكود المعطى، ماذا سيحدث؟', opts:['لا ينتج أي نتيجة لوجود حالة Deadlock','لا تنتج نتيجة صحيحة بسبب تغيير الترتيب','ستتم طباعة قيمة val بشكل صحيح من قبل p0','إرسال قيمة val بنجاح دون انتظار استقبال'], answer:2, exp:'التبديل يجعل p0 يُرسل أولاً ثم يستقبل، مما يُتيح طباعة القيمة بشكل صحيح.' },
         { type:'mcq', text:'نتيجة تطبيق MPI_Alltoall على البيانات الموضحة في الجانب الأيسر (كل عملية تملك 4 عناصر):', opts:['Process 0 تستقبل العناصر الأولى من كل عملية','Process 0 تستقبل العناصر الأخيرة فقط','كل عملية تستقبل العناصر المقابلة من جميع العمليات الأخرى (transpose)','لا يحدث أي تغيير'], answer:0, exp:'بعد MPI_Alltoall كل عملية p تستقبل العنصر p من كل العمليات — أي العمود الأول يصل لـ p0.' },
