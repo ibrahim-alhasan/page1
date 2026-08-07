@@ -2494,43 +2494,43 @@
               type: "tf",
               text: " يؤدي التنفيذ التفرعي الى تحسين اداء وفعاليةالبرمجية دوما  حيث ان كافة المهام البرمجية تبدي تحسن لدى تنفيذها تفرعيا .",
               answer: false,
-              exp: "Secure Program يلتزم بإيصال الرسالة بغض النظر عن حجم System Buffers، ولا يقتصر هدفه على تحسين الأداء فحسب.",
+              exp: " ليست كل المسائل قابلة للتفرع بالدرجة نفسها، وقد تصبح كلفة التوزيع واالتصال أكبر من كلفة التنفيذ التسلسلي.",
             },
             {
               type: "tf",
               text: " في التابع MPI-Waitsome(2,array1,0,array2,status)  تعتبرالمصفوفة array1  عن طلبات العمليات المنجزة كاملة بنجاح    .",
               answer: false,
-              exp: "الترتيب يعتمد على الكود، وعكسه قد يُفضي إلى Deadlock إذا كلا الطرفين ينتظران الآخر.",
+              exp: " array1   هي مصفوفة الطلبات الداخلة، أما عدد وفهارس الطلبات التي اكتملت فتعود في معاملات الخرج .",
             },
             {
               type: "tf",
               text: "يدل مفهوم process على instace من البرنامج الحالي المنفذ   ",
               answer: true,
-              exp: "كل Process يعمل على فضاء عنوان مستقل تماماً عن بقية العمليات.",
+              exp: "لعملية هي مثيل لبرنامج قيد التشغيل وله موارده وفضاء عناوين",
             },
             {
               type: "tf",
               text: "تأخذ القيمة المعادة من التابع MPI_Test  القيمة واحد عندما تكون كافة العمليات الاتصال المحددة في الطلبية مكتملة.",
               answer: false,
-              exp: "MPI_Test تفحص فقط هل اكتملت دون انتظار. MPI_Wait هي التي تُوقف التنفيذ حتى الاكتمال.",
+              exp: " تفحص الدالة الطلب المحدد المرتبط بها فقط، وال تعني القيمة 1 اكتمال جميع اتصالات البرنامج  ",
             },
             {
               type: "tf",
               text: " يعتبر مفهوم العنقود عن مجموعة حواسيب كاملة موصلة بينيا يعمل بعضها مع بعض كمورد حوسبة كما لو كانت حاسوبا واحدا",
               answer: true,
-              exp: "كل Process له سياق تنفيذ وذاكرة مستقلة لا يشاركها مع العمليات الأخرى.",
+              exp: " هذا هو مفهوم الـCluster: عقد كاملة مرتبطة بشبكة وتتعاون لتنفيذ العمل",
             },
             {
               type: "tf",
               text: " نظام النفاد اللا منتظم الى الذاكرة المشتركة     NUMA  يكون متعدد المعالجات ذو ذاكرة مشتركة  يتغير فيه زمن نفاذمعالج الى كلمة في الذاكرة",
               answer: true,
-              exp: "MPI_Bcast هي عملية إذاعة جماعية تُوزّع البيانات من المعالج الجذر على كافة العمليات.",
+              exp: "  النفاذ غير متماثل؛ الذاكرة المحلية أسرع من الذاكرة البعيدة   ",
             },
             {
               type: "tf",
               text: "عند تنفيذ التابع MPI_Bcast من قبل العملية التي تتضمن البيانات فإنها تقوم بارسال الرسالةالى كافة المهام العمليات الاخرى",
               answer: true,
-              exp: "MPI_Allreduce تُجري عملية تقليل وتوزع الناتج على جميع العمليات — وهي عملية جماعية.",
+              exp: "   الجذر يرسل نسخة من البيانات إلى كل العمليات في المتصل",
             },
             {
               type: "tf",
@@ -2540,9 +2540,9 @@
             },
             {
               type: "tf",
-              text: "تسمح Cache coherence Protocols بتنفيذ البرنامج بشكل صحيح مع ضمان تعامل المعالجاتمع القيم ذاتها المخبأة محليا        .",
+              text: "تسمح Cache coherence Protocols بتنفيذ البرنامج بشكل صحيح مع ضمان تعامل المعالجات مع القيم ذاتها المخبأة محليا        .",
               answer: true,
-              exp: "Cache coherence تضمن أن جميع المعالجات ترى نفس القيم المحدّثة في الذاكرة المشتركة.",
+              exp: "Cache coherence   وظيفتها حل مشكلة وجود نسخ مختلفة من البيانات المشتركة في الخابيات  ",
             },
             {
               type: "tf",
@@ -2596,8 +2596,8 @@
                 "send(&l, &r, color, Pmaster, result_tag);",
                 "recv(&y, Pmaster, ANYTAG, source_tag);",
               ],
-              answer: 1,
-              exp: "الإجابة B: recv(&slave, &r, color, PANY, result_tag); — يستقبل الـ Master النتيجة من أي Slave باستخدام PANY ووسم result_tag.",
+              answer: 3,
+              exp: "الإجابة d:- ANY_TAG يسمح بتمييز وسم العمل عن وسم اإلنهاء .",
             },
             {
               type: "mcq",
@@ -2638,9 +2638,9 @@
 
             {
               type: "mcq",
-              text: '[اختيار متعدد] إن نتائج تنفيذ التابع MPL_Reduce_scatter على المعالجات الموضحة في الشكل التالي هو:<br><br><div style="background:#f8fafc;border:1px solid #d9e1e7;border-radius:16px;padding:1rem;margin:0.7rem 0;direction:ltr;text-align:left;font-family:Arial, sans-serif;font-size:0.95rem;line-height:1.6"><div style="display:grid;grid-template-columns:repeat(4,minmax(5rem,1fr));gap:0.75rem;text-align:center;color:#0b3b4f;font-weight:800;margin-bottom:0.85rem"><div>Process 1</div><div>Process 2</div><div>Process 3</div><div>Process 4</div></div><div style="display:grid;grid-template-columns:repeat(4,minmax(5rem,1fr));gap:0.75rem;text-align:center;color:#0b3b4f;font-weight:700"><div>13<br>12<br>11<br>10</div><div>13<br>12<br>11<br>10</div><div>13<br>12<br>11<br>10</div><div>13<br>12<br>11<br>10</div></div></div>',
+              text: '[اختيار متعدد] إن نتائج تنفيذ التابع MPL_Reduce_scatter على المعالجات الموضحة في الشكل التالي هو:<br><br><div style="background:#f8fafc;border:1px solid #d9e1e7;border-radius:16px;padding:1rem;margin:0.7rem 0;direction:ltr;text-align:left;font-family:Arial, sans-serif;font-size:0.95rem;line-height:1.6"><div style="display:grid;grid-template-columns:repeat(4,minmax(5rem,1fr));gap:0.75rem;text-align:center;color:#0b3b4f;font-weight:800;margin-bottom:0.85rem"><div>Process 1</div><div>Process 2</div><div>Process 3</div><div>Process 4</div></div><div style="display:grid;grid-template-columns:repeat(4,minmax(5rem,1fr));gap:0.75rem;text-align:center;color:#0b3b4f;font-weight:700"><div>10<br>11<br>12<br>13</div><div>10<br>11<br>12<br>13</div><div>10<br>11<br>12<br>13</div><div>10<br>11<br>12<br>13</div></div></div>',
               opts: [
-                '<div style="direction:ltr;text-align:left;font-family:Arial, sans-serif;font-size:0.9rem;line-height:1.8"><div style="display:grid;grid-template-columns:repeat(4,minmax(4rem,1fr));gap:0.5rem;text-align:center;font-weight:700;margin-bottom:0.3rem"><div>Process 1</div><div>Process 2</div><div>Process 3</div><div>Process 4</div></div><div style="display:grid;grid-template-columns:repeat(4,minmax(4rem,1fr));gap:0.5rem;text-align:center;font-weight:700;color:#0b5940"><div>52</div><div>48</div><div>44</div><div>40</div></div></div>',
+                '<div style="direction:ltr;text-align:left;font-family:Arial, sans-serif;font-size:0.9rem;line-height:1.8"><div style="display:grid;grid-template-columns:repeat(4,minmax(4rem,1fr));gap:0.5rem;text-align:center;font-weight:700;margin-bottom:0.3rem"><div>Process 1</div><div>Process 2</div><div>Process 3</div><div>Process 4</div></div><div style="display:grid;grid-template-columns:repeat(4,minmax(4rem,1fr));gap:0.5rem;text-align:center;font-weight:700;color:#0b5940"><div>40</div><div>44</div><div>48</div><div>52</div></div></div>',
                 '<div style="direction:ltr;text-align:left;font-family:Arial, sans-serif;font-size:0.9rem;line-height:1.8"><div style="display:grid;grid-template-columns:repeat(4,minmax(4rem,1fr));gap:0.5rem;text-align:center;font-weight:700;margin-bottom:0.3rem"><div>Process 1</div><div>Process 2</div><div>Process 3</div><div>Process 4</div></div><div style="display:grid;grid-template-columns:repeat(4,minmax(4rem,1fr));gap:0.5rem;text-align:center;font-weight:700;color:#0b5940"><div>13</div><div>12</div><div>11</div><div>10</div></div></div>',
                 '<div style="direction:ltr;text-align:left;font-family:Arial, sans-serif;font-size:0.9rem;line-height:1.8"><div style="display:grid;grid-template-columns:repeat(4,minmax(4rem,1fr));gap:0.5rem;text-align:center;font-weight:700;margin-bottom:0.3rem"><div>Process 1</div><div>Process 2</div><div>Process 3</div><div>Process 4</div></div><div style="display:grid;grid-template-columns:repeat(4,minmax(4rem,1fr));gap:0.5rem;text-align:center;font-weight:700;color:#0b5940"><div>46</div><div>46</div><div>46</div><div>46</div></div></div>',
                 "كل ما سبق غير صحيح.",
@@ -2665,8 +2665,8 @@
                 "ينفذ بشكل صحيح سواء كان حجم system buffers كافياً أم لا",
                 "كل ما سبق صحيح",
               ],
-              answer: 2,
-              exp: "Secure Program يضمن صحة المراسلة حتى لو لم تكن مخازن النظام كافية. لا يعتمد فقط على بيئة MPI، ولا يعني أن الإرسال يجب أن يتم دائماً قبل الاستقبال.",
+              answer: 3,
+              exp: "مل ما سبق",
             },
             {
               type: "mcq",
@@ -2689,8 +2689,8 @@
                 "[N/p] × tdata",
                 "كل ما سبق غير صحيح",
               ],
-              answer: 0,
-              exp: "في D&C حجم البيانات في كل مستوى يتقلّص تدريجياً؛ الحجم الكلي للاتصال = [N/((p-1)×p)] × tdata..",
+              answer: 1,
+              exp: "..",
             },
             {
               type: "mcq",
@@ -2780,8 +2780,8 @@
                 "T0=7ث، E=0.2",
                 "T0=8ث، E=0.6",
               ],
-              answer: 3,
-              exp: "T_par = T_seq / Speedup = 6/2 = 3 ثوانٍ؛ E = Speedup / p = 2/5 = 0.4.",
+              answer: 0,
+              exp: "E=2/5=0.4  T0=5×3-6=9",
             },
             {
               type: "mcq",
@@ -2804,8 +2804,8 @@
                 "   تعتبر إحدى معايير قياس سرعة التنفيذ وإداء الشفرة البرمجية. ",
                 "  تعطي قيمة دقيقة عن مقدار Overhead Parallelism خلال التنفيذ.",
               ],
-              answer: 2,
-              exp: "قانون Amdahl: S_max = 1/(1−f) حيث f نسبة الجزء القابل للتوازي. يضع حداً أقصى للـ Speedup تحدده نسبة الجزء التسلسلي.",
+              answer: 3,
+              exp: " قانون أمدال يقدّر حد التسريع من النسب، وال يحسب كلفة االتصال والمزامنة الفعلية بدقة",
             },
             {
               type: "mcq",
@@ -2841,8 +2841,8 @@
                 "5.2  ",
                 " كل ما سبق خاطئ ",
               ],
-              answer: 0,
-              exp: "بعد MPI_Alltoall كل عملية p تستقبل العنصر p من كل العمليات — أي العمود الأول يصل لـ p0.",
+              answer: 1,
+              exp: ".2=1/0.5=)0.25+0.75/3(/1.",
             },
               {
       type: "mcq",
@@ -2866,8 +2866,8 @@ else if(myrank == 1) {
         " التنفيذ دون تحديد ما تم استقباله من p1 اذا  (25) ام (5)",
         "كل ما سبق خاطئ"
       ],
-      answer: 0,
-      exp: "p0 يُرسل sec2=25 (MPI_Isend يُبدأ قبل تغيير القيمة إلى 5) → p1 يستقبل 25. أما one1 فقيمتها 5 → p1 يُرسل 5. الإجابة: P1 يُرسل 5 ويستقبل 25."
+      answer: 2,
+      exp: ""
     },
 
             /* ══════════ أسئلة من الامتحان – إضافة ══════════ */
