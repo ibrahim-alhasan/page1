@@ -1013,6 +1013,13 @@
               q: "ما المعلومات التي يحتويها كائن MPI_Status؟",
               a: "يحتوي كائن MPI_Status على:<br>• <strong>MPI_SOURCE:</strong> rank المُرسِل الفعلي<br>• <strong>MPI_TAG:</strong> علامة الرسالة المستقبَلة<br>• <strong>MPI_ERROR:</strong> رمز الخطأ إن وُجد<br>وتُستخدم الدالة <strong>MPI_Get_count</strong> للحصول على عدد العناصر المستقبَلة.",
             },
+            {
+              num: 9,
+              icon: "📊",
+              topic: "𝑠𝑦𝑚𝑚𝑒𝑡𝑟𝑖𝑐 𝑀𝑢𝑙𝑡𝑖𝑝𝑟𝑜𝑐𝑒𝑠𝑠𝑜𝑟",
+              q: "  الأنظمة متعددة المعالجات:",
+              a: "يحتوي   على:<br>• <strong>SMP</strong>  (متماثلة المعالجات): معالجات متماثلة تشترك في مسرى أو شبكة اتصال. المشكلة الأساسية هي تناسق البيانات لأن لكل معالج ذاكرة خاصة، ما قد يؤدي إلى نسخ غير متطابقة. تُستخدم بروتوكولات اتساق الخيارات لحل هذه المشكلة  <br>• <strong>العنقود :</strong>    (Cluster): مجموعة من حواسيب كاملة (مستقلة بذاتها) تعمل معاً كموارد حوسبة موحدة، وكأنها حاسوب واحد<br>•     <strong>NUMA </strong>     (نفاذ غير منتظم للذاكرة): نظام متعدد المعالجات بذاكرة مشتركة، لكن زمن الوصول إلى الذاكرة يختلف حسب موقعها النسبي من المعالج. .",
+            },
           ],
           quiz: [
             {
@@ -2737,9 +2744,9 @@
               type: "mcq",
               text: "في عملية قياس أداء الأنظمة التفرعية يُستخدم:",
               opts: [
-                "Efficiency & Cost فقط",
-                "Total Parallel Overhead فقط",
-                "Execution Time & Speedup فقط",
+                "Efficiency & Cost ",
+                "Total Parallel Overhead ",
+                "Execution Time & Speedup ",
                 "كل ما سبق صحيح",
               ],
               answer: 3,
@@ -2747,7 +2754,7 @@
             },
             {
               type: "mcq",
-              text: "الدالة المستخدمة لانتظار اكتمال جميع الاتصالات غير المتزامنة (Non-blocking) المحددة في مصفوفة الطلبات هي:",
+              text: " التابع الذي يسمح بالتأكد من إكمال كافة المهام المحلية ضمن الاتصالات من النوع non-blocking هو::",
               opts: [
                 "MPI_Waitany(4, req, 0, status)",
                 "MPI_Waitall(4, req, status)",
@@ -2759,95 +2766,109 @@
             },
             {
               type: "mcq",
-              text: "إذا كان لدينا شيفرة قابلة للتنفيذ التسلسلي بنسبة N=scores وبالتفرعي قيمة Overhead=0.8، يكون أعلى Speedup وفق قانون Gustafson's Law على نظام من 5 معالجات:",
-              opts: ["0.5", "3", "5.2", "4.2"],
+              text: "إذا كان لدينا شيفرة قابلة للتنفيذ التسلسلي بنسبة  25% على  N=3cores و قيمة Overhead=0.8، يكون  Speedup وفق قانون Gustafson's Law ",
+              opts: ["1", "3", "8", "2"],
               answer: 3,
               exp: "Gustafson: S = p − (1−f)×(p−1). إذا Overhead=0.8 فنسبة التسلسلي=0.2: S = 5 − 0.2×4 = 5 − 0.8 = 4.2.",
             },
             {
               type: "mcq",
-              text: "استغرق تنفيذ مهمة معينة على نظام تسلسلي 6 ثوانٍ وتقدير Speedup=2 على نظام من 5 معالجات. أي من المعطيات التالية صحيح؟",
+              text: "   استغرق تنفيذ مهمة معينة على  التسلسل 6 ثوانٍ ولدى تنفيذها على  نظام من 5  معالجاتSpeedup=2   .أي  المعطيات التالية صحيح؟ ",
               opts: [
-                "T_par=7ث، E=0.4",
-                "T_par=8ث، E=0.6",
-                "T_par=9ث، E=0.6",
-                "T_par=3ث، E=0.4",
+                "T0=9ث، E=0.4",
+                "T0=4ث، E=0.6",
+                "T0=7ث، E=0.2",
+                "T0=8ث، E=0.6",
               ],
               answer: 3,
               exp: "T_par = T_seq / Speedup = 6/2 = 3 ثوانٍ؛ E = Speedup / p = 2/5 = 0.4.",
             },
             {
               type: "mcq",
-              text: "يُقصد بمصطلح Embarrassingly Parallel أن:",
+              text: " نقصد بمصطلح Embarrassingly Parallel هو عملية",
               opts: [
-                "المهام تستلزم تزامناً مستمراً بين المعالجات",
-                "المهام تستلزم تبادل بيانات متكرراً وكثيفاً بين المعالجات",
-                "المهام قابلة للتوازي الكامل ولا تحتاج إلى مزامنة أو اتصال بين المعالجات",
-                "المهام تحتاج إلى قواعد بيانات موزعة خاصة",
+                "معالجة القضايا التفرعية الضخمة باعتماد قواعد البيانات الموزعة على عدة معالجات.",
+                " استعمال معالجات متعددة في ذاكرة مشتركة لزيادة أداء النظام. ",
+                "   تقسيم المشكلة إلى أجزاء مستقلة كليا قادرة على إنجاز عدة عمليات تفرعية في الوقت ذاته بشكل أمثلي دون اعتمادها للبيانات بينها.",
+                "  دمج عدة مراحل تفرعية بمرحلة معالجة واحدة لتنفيذها.",
               ],
               answer: 2,
               exp: "Embarrassingly Parallel: مهام مستقلة تماماً لا تحتاج إلى أي مزامنة أو تبادل بيانات بين المعالجات.",
             },
             {
               type: "mcq",
-              text: "ما الذي يُشير إليه قانون Amdahl's Law؟",
+              text: "  تمتاز طريقة Amdahl's Law بكل مما يلي: ماعدا:",
               opts: [
-                "نسبة Speedup تزداد خطياً مع زيادة عدد المعالجات بلا قيود",
-                "كلما زادت المعالجات كلما زاد الـ Speedup دون حدود نظرية",
-                "يُحدّد الحد الأقصى للـ Speedup بناءً على نسبة الجزء التسلسلي من البرنامج",
-                "نسبة الكفاءة تساوي دائماً 1 مع زيادة عدد المعالجات",
+                "  أثبت أن سرعة التنفيذ التفرغي لا تزداد خطيا بزيادة عدد المعالجات التي يتم التنفيذ عليها   ",
+                "  تراعي نسب التنفيذ التفرغي التسلسلي والتفرعي للشفرة دون مراعاة الفترات الزمنية المستغرقة للانتقال بين حالات التنفيذ.  ",
+                "   تعتبر إحدى معايير قياس سرعة التنفيذ وإداء الشفرة البرمجية. ",
+                "  تعطي قيمة دقيقة عن مقدار Overhead Parallelism خلال التنفيذ.",
               ],
               answer: 2,
               exp: "قانون Amdahl: S_max = 1/(1−f) حيث f نسبة الجزء القابل للتوازي. يضع حداً أقصى للـ Speedup تحدده نسبة الجزء التسلسلي.",
             },
             {
               type: "mcq",
-              text: "تُعدّ دالة MPI_Sendrecv من نوع:",
+              text: "  يمتاز التابع MPI_Sendrecv بمايلي، ما عدا:  :",
               opts: [
-                "اتصال غير متزامن (Non-blocking) بدون انتظار",
-                "اتصال متزامن (Blocking) يجمع الإرسال والاستقبال في تعليمة واحدة",
-                "اتصال جماعي (Collective) يشمل جميع العمليات",
-                "اتصال من نوع Scatter/Gather فقط",
+                " يستخدم في الاتصالات المتزامنة والتي لا يحدث فيها قفل Blocking. ",
+                " ضمان عدم حدوث القفل بغض النظر عن الترتيب الذي يتم وقفه إجراء عمليتي الاستقبال والإرسال.",
+                "  يتم القفل وقفه في حال تطابق حيز التخزين  Buffer الخاص بعمليتي الإرسال والاستقبال.",
+                "  يقيد الدمج بين عمليتي الإرسال والاستقبال باستدعاء واحد.",
               ],
               answer: 1,
               exp: "MPI_Sendrecv دالة Blocking تُنفّذ الإرسال والاستقبال معاً في تعليمة واحدة لتجنّب Deadlock.",
             },
+           {
+  type: "mcq",
+  text: '<div class="exam-question-intro"><strong>34. يتم التنفيذ على 4 معالجات لتحقيق Secure Program، وفق الآلية الآتية:</strong></div>',
+  opts: [
+    '<div style="overflow-x:auto;margin:0.5rem 0;"><table style="width:100%;border-collapse:collapse;font-size:0.8rem;text-align:center;background:#f8fafc;border-radius:8px;overflow:hidden;border:1px solid #d9e1e7;"><thead><tr style="background:#1a5e7e;color:white;"><th style="padding:0.4rem 0.3rem;border:1px solid #d9e1e7;min-width:50px;">المرحلة</th><th style="padding:0.4rem 0.3rem;border:1px solid #d9e1e7;min-width:70px;">المعالج 0</th><th style="padding:0.4rem 0.3rem;border:1px solid #d9e1e7;min-width:70px;">المعالج 1</th><th style="padding:0.4rem 0.3rem;border:1px solid #d9e1e7;min-width:70px;">المعالج 2</th><th style="padding:0.4rem 0.3rem;border:1px solid #d9e1e7;min-width:70px;">المعالج 3</th></tr></thead><tbody><tr style="background:#ffffff;"><td style="border:1px solid #d9e1e7;font-weight:700;background:#f0f6fb;">1</td><td style="border:1px solid #d9e1e7;font-family:monospace;font-size:0.7rem;color:#b13e3e;">MPI_Send() → 1</td><td style="border:1px solid #d9e1e7;font-family:monospace;font-size:0.7rem;color:#1a5e7e;">MPI_Recv() ← 0</td><td style="border:1px solid #d9e1e7;font-family:monospace;font-size:0.7rem;color:#b13e3e;">MPI_Send() → 3</td><td style="border:1px solid #d9e1e7;font-family:monospace;font-size:0.7rem;color:#1a5e7e;">MPI_Recv() ← 2</td></tr><tr style="background:#ffffff;"><td style="border:1px solid #d9e1e7;font-weight:700;background:#f0f6fb;">2</td><td style="border:1px solid #d9e1e7;font-family:monospace;font-size:0.7rem;color:#1a5e7e;">MPI_Recv() ← 3</td><td style="border:1px solid #d9e1e7;font-family:monospace;font-size:0.7rem;color:#b13e3e;">MPI_Send() → 2</td><td style="border:1px solid #d9e1e7;font-family:monospace;font-size:0.7rem;color:#1a5e7e;">MPI_Recv() ← 1</td><td style="border:1px solid #d9e1e7;font-family:monospace;font-size:0.7rem;color:#b13e3e;">MPI_Send() → 0</td></tr></tbody></table></div>',
+    '<div style="overflow-x:auto;margin:0.5rem 0;"><table style="width:100%;border-collapse:collapse;font-size:0.8rem;text-align:center;background:#f8fafc;border-radius:8px;overflow:hidden;border:1px solid #d9e1e7;"><thead><tr style="background:#1a5e7e;color:white;"><th style="padding:0.4rem 0.3rem;border:1px solid #d9e1e7;min-width:50px;">المرحلة</th><th style="padding:0.4rem 0.3rem;border:1px solid #d9e1e7;min-width:70px;">المعالج 0</th><th style="padding:0.4rem 0.3rem;border:1px solid #d9e1e7;min-width:70px;">المعالج 1</th><th style="padding:0.4rem 0.3rem;border:1px solid #d9e1e7;min-width:70px;">المعالج 2</th><th style="padding:0.4rem 0.3rem;border:1px solid #d9e1e7;min-width:70px;">المعالج 3</th></tr></thead><tbody><tr style="background:#f8fafc;"><td style="border:1px solid #d9e1e7;font-weight:700;background:#f0f6fb;">1</td><td style="border:1px solid #d9e1e7;font-family:monospace;font-size:0.7rem;color:#1a5e7e;">MPI_Recv() ← 3</td><td style="border:1px solid #d9e1e7;font-family:monospace;font-size:0.7rem;color:#b13e3e;">MPI_Send() → 2</td><td style="border:1px solid #d9e1e7;font-family:monospace;font-size:0.7rem;color:#1a5e7e;">MPI_Recv() ← 1</td><td style="border:1px solid #d9e1e7;font-family:monospace;font-size:0.7rem;color:#b13e3e;">MPI_Send() → 0</td></tr><tr style="background:#f8fafc;"><td style="border:1px solid #d9e1e7;font-weight:700;background:#f0f6fb;">2</td><td style="border:1px solid #d9e1e7;font-family:monospace;font-size:0.7rem;color:#b13e3e;">MPI_Send() → 1</td><td style="border:1px solid #d9e1e7;font-family:monospace;font-size:0.7rem;color:#1a5e7e;">MPI_Recv() ← 0</td><td style="border:1px solid #d9e1e7;font-family:monospace;font-size:0.7rem;color:#b13e3e;">MPI_Send() → 3</td><td style="border:1px solid #d9e1e7;font-family:monospace;font-size:0.7rem;color:#1a5e7e;">MPI_Recv() ← 2</td></tr></tbody></table></div>',
+    '<div style="overflow-x:auto;margin:0.5rem 0;"><table style="width:100%;border-collapse:collapse;font-size:0.8rem;text-align:center;background:#f8fafc;border-radius:8px;overflow:hidden;border:1px solid #d9e1e7;"><thead><tr style="background:#1a5e7e;color:white;"><th style="padding:0.4rem 0.3rem;border:1px solid #d9e1e7;min-width:50px;">المرحلة</th><th style="padding:0.4rem 0.3rem;border:1px solid #d9e1e7;min-width:70px;">المعالج 0</th><th style="padding:0.4rem 0.3rem;border:1px solid #d9e1e7;min-width:70px;">المعالج 1</th><th style="padding:0.4rem 0.3rem;border:1px solid #d9e1e7;min-width:70px;">المعالج 2</th><th style="padding:0.4rem 0.3rem;border:1px solid #d9e1e7;min-width:70px;">المعالج 3</th></tr></thead><tbody><tr style="background:#ffffff;"><td style="border:1px solid #d9e1e7;font-weight:700;background:#f0f6fb;">1</td><td style="border:1px solid #d9e1e7;font-family:monospace;font-size:0.7rem;color:#b13e3e;">MPI_Send() → 1</td><td style="border:1px solid #d9e1e7;font-family:monospace;font-size:0.7rem;color:#b13e3e;">MPI_Send() → 3</td><td style="border:1px solid #d9e1e7;font-family:monospace;font-size:0.7rem;color:#1a5e7e;">MPI_Recv() ← 0</td><td style="border:1px solid #d9e1e7;font-family:monospace;font-size:0.7rem;color:#1a5e7e;">MPI_Recv() ← 2</td></tr><tr style="background:#ffffff;"><td style="border:1px solid #d9e1e7;font-weight:700;background:#f0f6fb;">2</td><td style="border:1px solid #d9e1e7;font-family:monospace;font-size:0.7rem;color:#1a5e7e;">MPI_Recv() ← 3</td><td style="border:1px solid #d9e1e7;font-family:monospace;font-size:0.7rem;color:#1a5e7e;">MPI_Recv() ← 1</td><td style="border:1px solid #d9e1e7;font-family:monospace;font-size:0.7rem;color:#b13e3e;">MPI_Send() → 2</td><td style="border:1px solid #d9e1e7;font-family:monospace;font-size:0.7rem;color:#b13e3e;">MPI_Send() → 0</td></tr></tbody></table></div>',
+    "كل ما سبق لا يمثل الآلية الصحيحة لتحقيق ذلك"
+  ],
+  answer: 0,
+  exp: "الخيار A هو الآلية الصحيحة لتحقيق Secure Program لأنه يُرتّب عمليات الإرسال والاستقبال بحيث لا يحدث Deadlock. في المرحلة الأولى: P0→P1 و P2→P3، وفي المرحلة الثانية: P3→P0 و P1→P2. هذا الترتيب يضمن أن كل عملية تُرسل وتستقبل دون انتظار دائري."
+},
             {
               type: "mcq",
-              text: "صمّم المبرمج Secure Program على 4 معالجات بحيث يُرسل كل معالج ويستقبل في نفس الوقت. الترتيب الصحيح للمراحل:",
+              text: " ",
+              text: "  إذا كان لدينا شيفرة برمجية قابلة للتنفيذ التفرعي بنسبة 75% على عدد 3 cores، تكون قيمة Speedup وفق Amdahl's Law:",
               opts: [
-                "Phase 1: p0→p1 و p2→p3، Phase 2: p1→p2 و p3→p0، Phase 3: p0→p3، Phase 4: p1→p0 و p3→p2",
-                "يتم كل الإرسال في Phase واحدة ثم كل الاستقبال في Phase أخرى",
-                "Phase 1: جميع المعالجات ترسل معاً، Phase 2: جميعها تستقبل معاً",
-                "كل ما سبق خاطئ",
-              ],
-              answer: 0,
-              exp: "Secure Program يُنظّم الاتصالات على مراحل تضمن عدم Deadlock؛ كل Phase تُرسَل فيها رسائل آمنة بدون انتظار دائري.",
-            },
-            {
-              type: "mcq",
-              text: "نتيجة تطبيق MPI_Alltoall على البيانات الموضحة في الجانب الأيسر (كل عملية تملك 4 عناصر):",
-              opts: [
-                "Process 0 تستقبل العناصر الأولى من كل عملية",
-                "Process 0 تستقبل العناصر الأخيرة فقط",
-                "كل عملية تستقبل العناصر المقابلة من جميع العمليات الأخرى (transpose)",
-                "لا يحدث أي تغيير",
+                "0.5  ",
+                " 2 ",
+                "5.2  ",
+                " كل ما سبق خاطئ ",
               ],
               answer: 0,
               exp: "بعد MPI_Alltoall كل عملية p تستقبل العنصر p من كل العمليات — أي العمود الأول يصل لـ p0.",
             },
-            {
-              type: "mcq",
-              text: "في الكود: if(myrank==0){*sec2=25; MPI_Recv(one,count,MPI_INT,1,tag,comm); MPI_Isend(one,count,MPI_INT,1,tag,comm,&status);} else if(myrank==1){MPI_Irecv(sec2,count,MPI_INT,0,tag,comm,&status); MPI_Isend(one,count,MPI_INT,0,tag,comm);} ماذا يُرسل p1 ويستقبل؟",
-              opts: [
-                "يُرسل p1 القيمة (5) ويستقبل (25)",
-                "يُرسل p1 القيمة (25) ويستقبل (25)",
-                "يُرسل p1 القيمة (25) ويستقبل (5)",
-                "كل ما سبق خاطئ",
-              ],
-              answer: 2,
-              exp: "p0 يُرسل one إلى p1 وp1 يستقبل sec2=25 من p0. إذاً p1 يُرسل القيمة 25 (لأن sec2=25) ويستقبل one الذي يحمل القيمة 5.",
-            },
+              {
+      type: "mcq",
+      text: `ينتج عن تنفيذ التعليمات البرمجية التالية :<br><br>
+<pre class="exam-code">
+if(myrank == 0) {
+    *sec2 = 25;
+    MPI_Isend(sec2, count, MPI_INT, 1, tag, comm);
+    MPI_Irecv(one1, count, MPI_INT, 1, tag, comm, &status);
+    *sec2 = 5;
+}
+else if(myrank == 1) {
+    MPI_Irecv(sec2, count, MPI_INT, 0, tag, comm, &status);
+    MPI_Isend(one1, count, MPI_INT, 0, tag, comm);
+}
+</pre>
+<br>  `,
+      opts: [
+        " التنفيذ واستقبال P1 قيمة (25)",
+        "تنفيذ واستقبال P1 قيمة (5)",
+        " التنفيذ دون تحديد ما تم استقباله من p1 اذا  (25) ام (5)",
+        "كل ما سبق خاطئ"
+      ],
+      answer: 0,
+      exp: "p0 يُرسل sec2=25 (MPI_Isend يُبدأ قبل تغيير القيمة إلى 5) → p1 يستقبل 25. أما one1 فقيمتها 5 → p1 يُرسل 5. الإجابة: P1 يُرسل 5 ويستقبل 25."
+    },
 
             /* ══════════ أسئلة من الامتحان – إضافة ══════════ */
 
